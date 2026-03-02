@@ -9,7 +9,7 @@
         <properties>
             <!-- crea/aggiorna schema -->
             <property name="jakarta.persistence.schema-generation.database.action"
-                      value="create"/>
+                      value="drop-and-create"/>
 
             <!-- debug -->
             <property name="hibernate.show_sql" value="true"/>
