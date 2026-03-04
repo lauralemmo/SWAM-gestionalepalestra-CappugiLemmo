@@ -17,6 +17,7 @@ public class Athlete extends User{
     @OneToOne(cascade = CascadeType.ALL , orphanRemoval = true)
     private WorkoutPlan workoutPlan;
     @OneToMany
+    @JoinColumn(name = "athlete_id")
     private ArrayList<Booking> bookings;
 
 
