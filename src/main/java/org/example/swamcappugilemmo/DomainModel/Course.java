@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class Course {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idCourse;
+    private Long idCourse;
     private String name;
     private int numMembers;
     private int numMax;
@@ -22,6 +22,7 @@ public class Course {
     @JoinColumn(name = "personal_trainer_code")
     private PersonalTrainer personalTrainer;
 
+
     public Course(String name, int numMembers, int numMax) {
         this.name = name;
         this.numMembers = numMembers;
@@ -30,16 +31,16 @@ public class Course {
         this.occurrences = new ArrayList<>();
     }
 
-    protected Course() {
-
-    }
+    protected Course() {}
 
 
-    public int getId() {
+
+
+    public Long getId() {
         return idCourse;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.idCourse = id;
     }
 

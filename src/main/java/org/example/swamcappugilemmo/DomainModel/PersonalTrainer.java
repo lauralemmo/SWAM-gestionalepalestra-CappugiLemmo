@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 @Entity
+@Table(name = "personalTrainer")
 public class PersonalTrainer extends User {
     private int salary;
     private boolean active = false;
@@ -22,8 +23,9 @@ public class PersonalTrainer extends User {
     //Il "personalTrainer" è il nome dell'attributo in Course che fa riferimento a PersonalTrainer
     private ArrayList<Course> courses;
 
+
     public PersonalTrainer(String name, String surname, String username, String password, String email, String phone_number, String tax_code,
-                           LocalDate birth_date, int salary, LocalDate startDate, LocalDate endDate, Date date, String personalTrainer) {
+                           LocalDate birth_date, int salary, LocalDate startDate, LocalDate endDate) {
         super(name, surname, username, password, email, phone_number, tax_code, birth_date);
         this.salary = salary;
         this.startDate = startDate;
@@ -32,9 +34,10 @@ public class PersonalTrainer extends User {
         this.courses = new ArrayList<>();
     }
 
-    protected PersonalTrainer() {
+    protected PersonalTrainer() {}
 
-    }
+
+
 
     public int getSalary() {
         return salary;

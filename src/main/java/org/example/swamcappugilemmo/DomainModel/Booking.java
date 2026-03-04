@@ -11,11 +11,14 @@ public class Booking {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idBooking;
     private LocalDate date;
-    //private Course course;
+    @OneToOne
+    private Course course;
 
-    public Booking(Long idBooking, LocalDate date) {
+
+    public Booking(Long idBooking, LocalDate date, Course course) {
         this.idBooking = idBooking;
         this.date = date;
+        this.course = course;
     }
 
     protected Booking() {}
