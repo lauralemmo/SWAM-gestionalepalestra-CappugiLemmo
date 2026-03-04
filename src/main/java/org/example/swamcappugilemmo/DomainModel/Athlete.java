@@ -14,7 +14,7 @@ public class Athlete extends User{
     private String weight;
     @Embedded
     private Subscription subscription;
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL , orphanRemoval = true)
     private WorkoutPlan workoutPlan;
     @OneToMany
     private ArrayList<Booking> bookings;

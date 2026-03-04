@@ -19,37 +19,13 @@ public class WorkoutPlan {
     @JoinColumn(name = "personal_trainer_tax_code")
     private PersonalTrainer personalTrainer;
 
-    public PersonalTrainer getPersonalTrainer() {
-        return personalTrainer;
-    }
-
-    public void setPersonalTrainer(PersonalTrainer personalTrainer) {
+    public WorkoutPlan(LocalDate date, ArrayList<ExerciseWorkoutPlan> exercises, PersonalTrainer personalTrainer) {
+        this.date = date;
+        this.exercises = exercises;
         this.personalTrainer = personalTrainer;
     }
 
-    public WorkoutPlan(LocalDate date) {
-        this.date = date;
-        this.exercises = new ArrayList<>();
-    }
-
-    public WorkoutPlan(int idWorkoutPlan, LocalDate date, String personalTrainerName) {
-        this.idWorkoutPlan = idWorkoutPlan;
-        this.personalTrainerName = personalTrainerName;
-        this.date = date;
-        this.exercises = new ArrayList<>();
-    }
-
-    public WorkoutPlan(String personalTrainer) {
-        this.personalTrainerName = personalTrainer;
-        this.exercises = new ArrayList<>();
-    }
-
-    protected WorkoutPlan() {
-        this.exercises = new ArrayList<>();
-    }
-
-
-
+    protected WorkoutPlan() {}
 
     public void addExercise(ExerciseWorkoutPlan exercise) {
         this.exercises.add(exercise);
@@ -79,14 +55,20 @@ public class WorkoutPlan {
         this.exercises = exercises;
     }
 
+    public void setPersonalTrainer(PersonalTrainer personalTrainer) {
+        this.personalTrainer = personalTrainer;
+    }
+
     public String getPersonalTrainerName() {
         return personalTrainerName;
+    }
+
+    public PersonalTrainer getPersonalTrainer() {
+        return personalTrainer;
     }
 
     public void setPersonalTrainerName(String personalTrainerName) {
         this.personalTrainerName = personalTrainerName;
     }
-    public void setPersonalTrainerName(PersonalTrainer pt) {
-        this.personalTrainerName = pt.getName();
-    }
+
 }

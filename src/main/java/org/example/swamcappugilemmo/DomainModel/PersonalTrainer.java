@@ -87,8 +87,6 @@ public class PersonalTrainer extends User {
         this.courses = courses;
     }
 
-    public String getPersonalTrainerName() {
-        return this.getName() + " " + this.getSurname();
-    }
+    public String getPersonalTrainerName() {return this.getName();}
 
 }
