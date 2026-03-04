@@ -17,9 +17,9 @@ public class WorkoutPlan {
     @JoinColumn(name = "personal_trainer_tax_code")
     private PersonalTrainer personalTrainer;
 
-    public WorkoutPlan(LocalDate date, ArrayList<ExerciseWorkoutPlan> exercises, PersonalTrainer personalTrainer) {
+    public WorkoutPlan(LocalDate date, PersonalTrainer personalTrainer) {
         this.date = date;
-        this.exercises = exercises;
+        this.exercises = new ArrayList<>();
         this.personalTrainer = personalTrainer;
     }
 
@@ -57,16 +57,8 @@ public class WorkoutPlan {
         this.personalTrainer = personalTrainer;
     }
 
-    public String getPersonalTrainerName() {
-        return personalTrainerName;
-    }
-
     public PersonalTrainer getPersonalTrainer() {
         return personalTrainer;
-    }
-
-    public void setPersonalTrainerName(String personalTrainerName) {
-        this.personalTrainerName = personalTrainerName;
     }
 
 }

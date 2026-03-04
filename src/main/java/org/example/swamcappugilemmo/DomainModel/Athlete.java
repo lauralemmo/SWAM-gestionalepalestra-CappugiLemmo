@@ -33,8 +33,8 @@ public class Athlete extends User{
     protected Athlete() {}
 
 
-    public void createWorkoutPlan(Long idWorkoutPlan, LocalDate date, PersonalTrainer personalTrainer){
-        this.workoutPlan = new WorkoutPlan(idWorkoutPlan, date, personalTrainer);
+    public void createWorkoutPlan(LocalDate date, PersonalTrainer personalTrainer){
+        this.workoutPlan = new WorkoutPlan(date, personalTrainer);
     }
 
 }
