@@ -94,3 +94,4 @@ public class Course {
     public boolean isBookable() {
         return this.personalTrainer != null && this.numMembers < this.numMax;
     }
+}

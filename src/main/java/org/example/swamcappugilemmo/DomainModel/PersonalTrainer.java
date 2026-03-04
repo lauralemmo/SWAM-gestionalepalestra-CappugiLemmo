@@ -83,4 +83,9 @@ public class PersonalTrainer extends User {
     public void setCourses(ArrayList<Course> courses) {
         this.courses = courses;
     }
+
+    public String getPersonalTrainerName() {
+        return this.getName() + " " + this.getSurname();
+    }
+
 }
