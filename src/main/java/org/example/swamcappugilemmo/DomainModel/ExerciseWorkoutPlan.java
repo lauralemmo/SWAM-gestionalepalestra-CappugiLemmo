@@ -18,18 +18,7 @@ public class ExerciseWorkoutPlan {
     //nome della colonna nella tabella ExerciseWorkoutPlan che fa riferimento a WorkoutPlan
     private WorkoutPlan workoutPlan;
 
-    public ExerciseWorkoutPlan(int idEW, int numSeries, int numRepetitions, double weight, Exercise exercise, WorkoutPlan workoutPlan) {
-        this.idEW = idEW;
-        this.numSeries = numSeries;
-        this.numRepetitions = numRepetitions;
-        this.weight = weight;
-        this.exercise = exercise;
-        this.workoutPlan = workoutPlan;
-    }
-
-    //Costruttore senza idEW per permettere a JPA di generarlo automaticamente
     public ExerciseWorkoutPlan(int numSeries, int numRepetitions, double weight, Exercise exercise, WorkoutPlan workoutPlan) {
-        this.idEW = idEW;
         this.numSeries = numSeries;
         this.numRepetitions = numRepetitions;
         this.weight = weight;

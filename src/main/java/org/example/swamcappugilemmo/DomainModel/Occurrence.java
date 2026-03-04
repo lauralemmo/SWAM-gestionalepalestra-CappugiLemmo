@@ -13,7 +13,6 @@ public class Occurrence {
     private int idOccurrence;*/
 
     private LocalDate date;
-
     private LocalTime hours;
 
     public Occurrence(LocalDate date, LocalTime hours) {
