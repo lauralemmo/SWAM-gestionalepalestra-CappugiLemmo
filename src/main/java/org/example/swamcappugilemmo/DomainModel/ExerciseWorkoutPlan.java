@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 public class ExerciseWorkoutPlan {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idEW;
+    private Long idEW;
     private int numSeries;
     private int numRepetitions;
     private double weight;
@@ -18,6 +18,7 @@ public class ExerciseWorkoutPlan {
     //nome della colonna nella tabella ExerciseWorkoutPlan che fa riferimento a WorkoutPlan
     private WorkoutPlan workoutPlan;
 
+
     public ExerciseWorkoutPlan(int numSeries, int numRepetitions, double weight, Exercise exercise, WorkoutPlan workoutPlan) {
         this.numSeries = numSeries;
         this.numRepetitions = numRepetitions;
@@ -26,16 +27,16 @@ public class ExerciseWorkoutPlan {
         this.workoutPlan = workoutPlan;
     }
 
-    protected ExerciseWorkoutPlan() {
-
-    }
+    protected ExerciseWorkoutPlan() {}
 
 
-    public int getIdEW() {
+
+
+    public Long getIdEW() {
         return idEW;
     }
 
-    public void setIdEW(int idEW) {
+    public void setIdEW(Long idEW) {
         this.idEW = idEW;
     }
 

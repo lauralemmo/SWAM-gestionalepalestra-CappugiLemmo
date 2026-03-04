@@ -8,13 +8,11 @@ import java.util.ArrayList;
 public class WorkoutPlan {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idWorkoutPlan;
+    private Long idWorkoutPlan;
     private LocalDate date;
     //mappedby indica che la relazione è gestita dal lato "ExerciseWorkoutPlan" attraverso l'attributo "workoutPlan"
     @OneToMany(mappedBy = "workoutPlan", cascade = CascadeType.ALL, orphanRemoval = true) //orphanRemoval per rimuovere gli esercizi associati quando si elimina il piano
     private ArrayList<ExerciseWorkoutPlan> exercises;
-    private String personalTrainerName; // nome del personal trainer che ha creato il piano (è una stringa per semplici
-    // tà) Se teniamo così possiamo rimuovere l'associazione con PersonalTrainer
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "personal_trainer_tax_code")
     private PersonalTrainer personalTrainer;
@@ -31,11 +29,11 @@ public class WorkoutPlan {
         this.exercises.add(exercise);
     }
 
-    public int getIdWorkoutPlan() {
+    public Long getIdWorkoutPlan() {
         return idWorkoutPlan;
     }
 
-    public void setIdWorkoutPlan(int idWorkoutPlan) {
+    public void setIdWorkoutPlan(Long idWorkoutPlan) {
         this.idWorkoutPlan = idWorkoutPlan;
     }
 
