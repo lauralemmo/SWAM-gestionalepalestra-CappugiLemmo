@@ -5,30 +5,33 @@ import jakarta.persistence.*;
 import java.util.ArrayList;
 
 @Entity
+@Table(name = "course")
 public class Course {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idCourse;
+
     private String name;
     private int numMembers;
     private int numMax;
-    boolean isBookable;
-    @OneToMany
-    private ArrayList<Booking> bookings;
-    @ElementCollection
-    @CollectionTable(name = "course_occurrences", joinColumns = @JoinColumn(name = "course_id"))
+
+    //@ElementCollection
+    //@CollectionTable(name = "course_occurrences", joinColumns = @JoinColumn(name = "course_id"))
+    @OneToMany(mappedBy = "course")
     private ArrayList<Occurrence> occurrences;
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "personal_trainer_code")
+    @JoinColumn(name = "personal_trainer_tax_code")
     private PersonalTrainer personalTrainer;
 
 
-    public Course(String name, int numMembers, int numMax) {
+
+    public Course(String name, int numMembers, int numMax, PersonalTrainer personalTrainer) {
         this.name = name;
         this.numMembers = numMembers;
         this.numMax = numMax;
-        this.bookings = new ArrayList<>();
         this.occurrences = new ArrayList<>();
+        this.personalTrainer = personalTrainer;
     }
 
     protected Course() {}
@@ -66,14 +69,6 @@ public class Course {
 
     public void setNumMax(int numMax) {
         this.numMax = numMax;
-    }
-
-    public ArrayList<Booking> getBookings() {
-        return bookings;
-    }
-
-    public void setBookings(ArrayList<Booking> bookings) {
-        this.bookings = bookings;
     }
 
     public ArrayList<Occurrence> getOccurrences() {

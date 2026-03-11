@@ -6,24 +6,33 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Objects;
 
-@Embeddable
+@Entity
+@Table(name = "occurrence")
 public class Occurrence {
-   /* @Id Se è Annotato come @Embeddable non può avere un Id
+    //Se è Annotato come @Embeddable non può avere un Id
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idOccurrence;*/
+    private Long idOccurrence;
 
     private LocalDate date;
     private LocalTime hours;
 
-    public Occurrence(LocalDate date, LocalTime hours) {
+    @ManyToOne
+    @JoinColumn(name = "course_id")
+    private Course course;
+
+
+
+    public Occurrence(LocalDate date, LocalTime hours, Course course) {
         this.date = date;
         this.hours = hours;
-
+        this.course =  course;
     }
 
-    protected Occurrence() {
+    protected Occurrence() {}
 
-    }
+
+
 
     public LocalDate getDate() {
         return date;
