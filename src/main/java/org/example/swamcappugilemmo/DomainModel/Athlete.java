@@ -12,12 +12,12 @@ import java.util.ArrayList;
 public class Athlete extends User{
     private String height;
     private String weight;
-    @Embedded
-    private Subscription subscription;
+    @ElementCollection
+    @CollectionTable(name = "subscription", joinColumns = @JoinColumn(name = "athlete_id"))
+    private ArrayList<Subscription> subscription;
     @OneToOne(cascade = CascadeType.ALL , orphanRemoval = true)
     private WorkoutPlan workoutPlan;
-    @OneToMany
-    @JoinColumn(name = "athlete_id")
+    @OneToMany(mappedBy = "athlete", cascade = CascadeType.ALL, orphanRemoval = true)
     private ArrayList<Booking> bookings;
 
 
@@ -26,7 +26,8 @@ public class Athlete extends User{
         super(name, surname, username, password, email, phone_number, tax_code, birth_date);
         this.height = height;
         this.weight = weight;
-        this.subscription = subscription;
+        this.subscription = new ArrayList<>();
+        this.subscription.add(subscription);
         this.bookings = new ArrayList<>();
     }
 
