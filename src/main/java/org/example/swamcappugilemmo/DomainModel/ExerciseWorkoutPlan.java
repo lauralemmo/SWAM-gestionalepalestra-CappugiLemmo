@@ -2,29 +2,28 @@ package org.example.swamcappugilemmo.DomainModel;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "exerciseWorkoutPlan")
 public class ExerciseWorkoutPlan {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idEW;
+
     private int numSeries;
     private int numRepetitions;
     private double weight;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "exercise_id")
     //nome della colonna nella tabella ExerciseWorkoutPlan che fa riferimento a Exercise
     private Exercise exercise;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "workout_plan_id")
-    //nome della colonna nella tabella ExerciseWorkoutPlan che fa riferimento a WorkoutPlan
-    private WorkoutPlan workoutPlan;
 
 
-    public ExerciseWorkoutPlan(int numSeries, int numRepetitions, double weight, Exercise exercise, WorkoutPlan workoutPlan) {
+
+    public ExerciseWorkoutPlan(int numSeries, int numRepetitions, double weight, Exercise exercise) {
         this.numSeries = numSeries;
         this.numRepetitions = numRepetitions;
         this.weight = weight;
         this.exercise = exercise;
-        this.workoutPlan = workoutPlan;
     }
 
     protected ExerciseWorkoutPlan() {}
@@ -34,10 +33,6 @@ public class ExerciseWorkoutPlan {
 
     public Long getIdEW() {
         return idEW;
-    }
-
-    public void setIdEW(Long idEW) {
-        this.idEW = idEW;
     }
 
     public int getNumSeries() {

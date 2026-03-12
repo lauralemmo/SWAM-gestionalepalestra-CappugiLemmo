@@ -38,8 +38,8 @@ public class Athlete extends User{
     protected Athlete() {}
 
 
-    public void createWorkoutPlan(LocalDate date, PersonalTrainer personalTrainer){
-        this.workoutPlan = new WorkoutPlan(date, personalTrainer);
+    public void createWorkoutPlan(LocalDate date, PersonalTrainer personalTrainer, Athlete athlete){
+        this.workoutPlan = new WorkoutPlan(date, personalTrainer, athlete);
     }
     public void addSubscription(Subscription subscription){
         this.subscriptions.add(subscription);
