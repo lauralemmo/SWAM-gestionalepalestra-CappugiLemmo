@@ -50,12 +50,13 @@ public class Occurrence {
         this.hours = hours;
     }
 
-    @Override
+    /*@Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Occurrence that = (Occurrence) o;
         return Objects.equals(date, that.date) &&
                 Objects.equals(hours, that.hours);
-    }
+    }*/
+
 }

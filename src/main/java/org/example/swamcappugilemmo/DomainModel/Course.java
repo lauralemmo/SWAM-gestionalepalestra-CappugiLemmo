@@ -87,7 +87,4 @@ public class Course {
         this.personalTrainer = personalTrainer;
     }
 
-    public boolean isBookable() {
-        return this.personalTrainer != null && this.numMembers < this.numMax;
-    }
 }

@@ -12,13 +12,17 @@ import java.util.ArrayList;
 public class Athlete extends User{
     private String height;
     private String weight;
+
     @ElementCollection
     @CollectionTable(name = "subscription", joinColumns = @JoinColumn(name = "athlete_id"))
     private ArrayList<Subscription> subscription;
+
     @OneToOne(cascade = CascadeType.ALL , orphanRemoval = true)
     private WorkoutPlan workoutPlan;
+
     @OneToMany(mappedBy = "athlete", cascade = CascadeType.ALL, orphanRemoval = true)
     private ArrayList<Booking> bookings;
+
 
 
     public Athlete(String name, String surname, String username, String password, String email, String phone_number, String tax_code,
