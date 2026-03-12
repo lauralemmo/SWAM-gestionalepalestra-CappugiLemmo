@@ -90,10 +90,6 @@ public abstract class User {
         return tax_code;
     }
 
-    public void setTax_code(String tax_code) {
-        this.tax_code = tax_code;
-    }
-
     public LocalDate getBirth_date() {
         return birth_date;
     }

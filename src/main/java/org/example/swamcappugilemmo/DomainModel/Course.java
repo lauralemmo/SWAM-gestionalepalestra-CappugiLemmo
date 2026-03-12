@@ -43,10 +43,6 @@ public class Course {
         return idCourse;
     }
 
-    public void setId(Long id) {
-        this.idCourse = id;
-    }
-
     public String getName() {
         return name;
     }
