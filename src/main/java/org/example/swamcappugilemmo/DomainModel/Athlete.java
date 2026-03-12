@@ -15,9 +15,9 @@ public class Athlete extends User{
 
     @ElementCollection
     @CollectionTable(name = "subscription", joinColumns = @JoinColumn(name = "athlete_id"))
-    private ArrayList<Subscription> subscription;
+    private ArrayList<Subscription> subscriptions;
 
-    @OneToOne(cascade = CascadeType.ALL , orphanRemoval = true)
+    @OneToOne(mappedBy = "athlete", cascade = CascadeType.ALL , orphanRemoval = true)
     private WorkoutPlan workoutPlan;
 
     @OneToMany(mappedBy = "athlete", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -30,8 +30,8 @@ public class Athlete extends User{
         super(name, surname, username, password, email, phone_number, tax_code, birth_date);
         this.height = height;
         this.weight = weight;
-        this.subscription = new ArrayList<>();
-        this.subscription.add(subscription);
+        this.subscriptions = new ArrayList<>();
+        this.subscriptions.add(subscription);
         this.bookings = new ArrayList<>();
     }
 
@@ -40,6 +40,9 @@ public class Athlete extends User{
 
     public void createWorkoutPlan(LocalDate date, PersonalTrainer personalTrainer){
         this.workoutPlan = new WorkoutPlan(date, personalTrainer);
+    }
+    public void addSubscription(Subscription subscription){
+        this.subscriptions.add(subscription);
     }
 
 }
