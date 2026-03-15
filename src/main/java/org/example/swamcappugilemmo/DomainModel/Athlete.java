@@ -44,5 +44,8 @@ public class Athlete extends User{
     public void addSubscription(Subscription subscription){
         this.subscriptions.add(subscription);
     }
+    public ArrayList<Subscription> getSubscriptions(){
+        return subscriptions;
+    }
 
 }

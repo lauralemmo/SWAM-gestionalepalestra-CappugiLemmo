@@ -8,15 +8,13 @@ import org.example.swamcappugilemmo.DomainModel.Subscription;
 import org.example.swamcappugilemmo.DomainModel.SubscriptionType;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 public class AthleteController {
     @Inject
     private AthleteDAO athleteDAO;
 
-    @Transactional
-    public void crateNewSubscription(String tax_code, SubscriptionType subscriptionType, LocalDate startDate) {
-        athleteDAO.createNewSubscription(tax_code, subscriptionType, startDate);
-    }
+    /// ////////////// ATHLETE MANAGEMENT ///////////////
     @Transactional
     public void registerNewAthlete(String name, String surname, String username, String password, String email, String phone_number,
                                 String tax_code, LocalDate birth_date, String height, String weight, SubscriptionType subscriptionType, LocalDate startDate) {
@@ -24,4 +22,19 @@ public class AthleteController {
         Athlete newAthlete = new Athlete(name, surname, username, password, email, phone_number, tax_code, birth_date, height, weight, initialSubscription);
         athleteDAO.saveAthlete(newAthlete);
     }
+    @Transactional
+    public Athlete getAthleteByTaxCode(String tax_code) {
+        return athleteDAO.findAthleteByTaxCode(tax_code);
+    }
+
+   /* @Transactional
+    public void updateAthleteInfo(String tax_code, String height, String weight) {
+        Athlete athlete = athleteDAO.findAthleteByTaxCode(tax_code);
+        if (athlete != null) {
+            athlete.setHeight(height);
+            athlete.setWeight(weight);
+            athleteDAO.updateAthlete(athlete);
+        }
+    }*/
+
 }
