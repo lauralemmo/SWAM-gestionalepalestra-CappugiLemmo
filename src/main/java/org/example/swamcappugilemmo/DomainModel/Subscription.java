@@ -28,6 +28,8 @@ public class Subscription {
     protected Subscription() {}
 
     public boolean isActive() {
-        return !LocalDate.now().isBefore(this.start_date);
+        this.active = LocalDate.now().isAfter(this.start_date) && LocalDate.now().isBefore(this.end_date);
+        return active;
+
     }
 }
