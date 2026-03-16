@@ -24,10 +24,29 @@ public class ExerciseWorkoutPlanController {
         Exercise exercise = exerciseDAO.findById(exerciseId);
 
         if (plan == null || exercise == null) {
-            throw new IllegalArgumentException("Riferimenti non validi per la creazione dell'esercizio");
+            throw new IllegalArgumentException("Reference not found for workout plan id: " + workoutPlanId + " or exercise id: " + exerciseId);
         }
         ExerciseWorkoutPlan details = new ExerciseWorkoutPlan(series, reps, weight, exercise);
         plan.addExercise(details);
         exerciseWorkoutPlanDAO.saveExerciseWorkoutPlan(details);
+    }
+    @Transactional
+    public void updateExerciseInPlan(Long exerciseWorkoutPlanId, int series, int reps, double weight) {
+        ExerciseWorkoutPlan details = exerciseWorkoutPlanDAO.findById(exerciseWorkoutPlanId);
+        if (details == null) {
+            throw new IllegalArgumentException("Exercise details not found for id: " + exerciseWorkoutPlanId);
+        }
+        details.setNumSeries(series);
+        details.setNumRepetitions(reps);
+        details.setWeight(weight);
+    }
+
+    @Transactional
+    public void deleteExerciseInPlan(Long exerciseWorkoutPlan_id) {
+        ExerciseWorkoutPlan details = exerciseWorkoutPlanDAO.findById(exerciseWorkoutPlan_id);
+        if (details == null) {
+            throw new IllegalArgumentException("Exercise details not found for id: " + exerciseWorkoutPlan_id);
+        }
+        exerciseWorkoutPlanDAO.deleteExerciseWorkoutPlan(exerciseWorkoutPlan_id);
     }
 }

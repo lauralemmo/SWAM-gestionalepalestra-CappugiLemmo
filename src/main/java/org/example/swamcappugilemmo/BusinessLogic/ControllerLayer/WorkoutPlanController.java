@@ -36,5 +36,10 @@ public class WorkoutPlanController {
         workoutPlanDAO.saveWorkoutPlan(workoutPlan);
     }
 
+    @Transactional
+    public void deleteWorkoutPlan(Long workoutPlan_id) {
+        workoutPlanDAO.deleteWorkoutPlan(workoutPlan_id);
+    }
+
 
 }

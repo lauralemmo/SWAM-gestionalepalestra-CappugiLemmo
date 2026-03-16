@@ -16,6 +16,15 @@ public class WorkoutPlanDAO {
     }
 
     public WorkoutPlan findById(Long workoutPlanId) {
-        return null;
+        WorkoutPlan workoutPlan = em.find(WorkoutPlan.class, workoutPlanId);
+        if (workoutPlan == null) {
+            throw new IllegalArgumentException("WorkoutPlan with id " + workoutPlanId + " not found.");
+        }
+        return workoutPlan;
+    }
+
+    public void deleteWorkoutPlan(Long workoutPlanId) {
+        WorkoutPlan workoutPlan = findById(workoutPlanId);
+        em.remove(workoutPlan);
     }
 }
