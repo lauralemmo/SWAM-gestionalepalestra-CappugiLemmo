@@ -1,5 +1,6 @@
 package org.example.swamcappugilemmo.BusinessLogic.ControllerLayer;
 
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import org.example.swamcappugilemmo.DAO.AthleteDAO;
@@ -9,6 +10,7 @@ import org.example.swamcappugilemmo.DomainModel.SubscriptionType;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
+@ApplicationScoped
 public class SubscriptionController {
     @Inject
     private AthleteDAO athleteDAO; //non ha il suo dao, ma usa quello dell'atleta per gestire le sottoscrizioni

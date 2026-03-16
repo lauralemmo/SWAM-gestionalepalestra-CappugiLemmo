@@ -37,15 +37,17 @@ public class Athlete extends User{
 
     protected Athlete() {}
 
-
-    public void createWorkoutPlan(LocalDate date, PersonalTrainer personalTrainer, Athlete athlete){
-        this.workoutPlan = new WorkoutPlan(date, personalTrainer, athlete);
-    }
     public void addSubscription(Subscription subscription){
         this.subscriptions.add(subscription);
     }
     public ArrayList<Subscription> getSubscriptions(){
         return subscriptions;
+    }
+    public void setWorkoutPlan(WorkoutPlan workoutPlan){
+        this.workoutPlan = workoutPlan;
+    }
+    public WorkoutPlan getWorkoutPlan(){
+        return workoutPlan;
     }
 
 }

@@ -71,4 +71,8 @@ public class WorkoutPlan {
         return personalTrainer;
     }
 
+    public Athlete getAthlete() {
+        return athlete;
+    }
+
 }
