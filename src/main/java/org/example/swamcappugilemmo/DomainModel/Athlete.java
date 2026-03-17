@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-
+import java.util.List;
 
 
 @Entity
@@ -14,14 +14,14 @@ public class Athlete extends User{
     private String weight;
 
     @ElementCollection
-    @CollectionTable(name = "subscription", joinColumns = @JoinColumn(name = "athlete_id"))
-    private ArrayList<Subscription> subscriptions;
+    @CollectionTable(name = "subscription", joinColumns = @JoinColumn(name = "athlete_id", nullable = false))
+    private List<Subscription> subscriptions;
 
     @OneToOne(mappedBy = "athlete", cascade = CascadeType.ALL , orphanRemoval = true)
     private WorkoutPlan workoutPlan;
 
     @OneToMany(mappedBy = "athlete", cascade = CascadeType.ALL, orphanRemoval = true)
-    private ArrayList<Booking> bookings;
+    private List<Booking> bookings;
 
 
 
@@ -32,7 +32,6 @@ public class Athlete extends User{
         this.weight = weight;
         this.subscriptions = new ArrayList<>();
         this.subscriptions.add(subscription);
-        this.bookings = new ArrayList<>();
     }
 
     protected Athlete() {}
@@ -40,7 +39,7 @@ public class Athlete extends User{
     public void addSubscription(Subscription subscription){
         this.subscriptions.add(subscription);
     }
-    public ArrayList<Subscription> getSubscriptions(){
+    public List<Subscription> getSubscriptions(){
         return subscriptions;
     }
     public void setWorkoutPlan(WorkoutPlan workoutPlan){

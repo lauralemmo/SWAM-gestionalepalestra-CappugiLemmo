@@ -9,6 +9,7 @@ import org.example.swamcappugilemmo.DomainModel.SubscriptionType;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 
 @ApplicationScoped
 public class SubscriptionController {
@@ -30,7 +31,7 @@ public class SubscriptionController {
     }
     // vedi lo storico delle sottoscrizioni di un atleta
     @Transactional
-    public ArrayList<Subscription> getSubscriptions(String tax_code) {
+    public List<Subscription> getSubscriptions(String tax_code) {
         return athleteDAO.getSubscriptions(tax_code);
     }
 }

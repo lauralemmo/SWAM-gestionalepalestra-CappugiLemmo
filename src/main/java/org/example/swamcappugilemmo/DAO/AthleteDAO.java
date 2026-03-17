@@ -9,6 +9,7 @@ import org.example.swamcappugilemmo.DomainModel.SubscriptionType;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 
 @ApplicationScoped
 public class AthleteDAO {
@@ -51,7 +52,7 @@ public class AthleteDAO {
             throw new IllegalArgumentException("Athlete with tax code " + tax_code + " not found.");
         }
     }
-    public ArrayList<Subscription> getSubscriptions(String tax_code){
+    public List<Subscription> getSubscriptions(String tax_code){
         Athlete athlete = em.find(Athlete.class,tax_code);
         if (athlete != null) {
             return athlete.getSubscriptions();
