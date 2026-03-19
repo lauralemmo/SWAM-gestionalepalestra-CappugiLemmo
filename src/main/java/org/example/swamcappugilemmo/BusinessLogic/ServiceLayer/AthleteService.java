@@ -3,6 +3,7 @@ package org.example.swamcappugilemmo.BusinessLogic.ServiceLayer;
 import org.example.swamcappugilemmo.BusinessLogic.ControllerLayer.AthleteController;
 import org.example.swamcappugilemmo.BusinessLogic.DTO.AthleteRegistrationRequest;
 import org.example.swamcappugilemmo.BusinessLogic.DTO.AthleteResponse;
+import org.example.swamcappugilemmo.BusinessLogic.Mapper.AthleteMapper;
 import org.example.swamcappugilemmo.DomainModel.Athlete;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
@@ -17,13 +18,16 @@ public class AthleteService {
     @Inject
     private AthleteController athleteController;
 
+    @Inject
+    private AthleteMapper athleteMapper;
+
     @GET
     @Path("/{taxCode}")
     public Response getAthlete(@PathParam("taxCode") String taxCode) {
         try {
             // Delega al controller il recupero dell'atleta
             Athlete athlete = athleteController.getAthleteByTaxCode(taxCode);
-            AthleteResponse response = new AthleteResponse(athlete);
+            AthleteResponse response = athleteMapper.toDto(athlete);
             return Response.ok(response).build();
         } catch (IllegalArgumentException e) {
             // Se l'atleta non esiste, restituisce 404 Not Found
@@ -37,20 +41,10 @@ public class AthleteService {
     public Response registerAthlete(AthleteRegistrationRequest request) {
         try {
             // Estrai i dati dal tuo DTO e passali al controller
-            athleteController.registerNewAthlete(
-                    request.getName(),
-                    request.getSurname(),
-                    request.getUsername(),
-                    request.getPassword(),
-                    request.getEmail(),
-                    request.getPhone_number(),
-                    request.getTax_code(),
-                    request.getBirth_date(),
-                    request.getHeight(),
-                    request.getWeight(),
-                    request.getSubscriptionType(),
-                    request.getStartDate()
-            );
+            Athlete newAthlete = athleteMapper.toEntity(request);
+
+            athleteController.registerNewAthlete(newAthlete, request.getSubscriptionType(), request.getStartDate());
+
             return Response.status(Response.Status.CREATED).build();
         } catch (Exception e) {
             return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();

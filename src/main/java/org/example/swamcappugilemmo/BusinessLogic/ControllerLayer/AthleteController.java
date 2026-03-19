@@ -34,6 +34,14 @@ public class AthleteController {
         newAthlete.addSubscription(initialSubscription);
         athleteDAO.saveAthlete(newAthlete);
     }
+
+    @Transactional
+    public void registerNewAthlete(Athlete newAthlete, SubscriptionType subscriptionType, LocalDate startDate) {
+        Subscription initialSubscription = new Subscription(subscriptionType, startDate);
+        newAthlete.addSubscription(initialSubscription);
+        athleteDAO.saveAthlete(newAthlete);
+    }
+
     @Transactional
     public Athlete getAthleteByTaxCode(String tax_code) {
         return athleteDAO.findAthleteByTaxCode(tax_code);

@@ -9,11 +9,35 @@ public class SubscriptionDTO {
     private String startDate;
     private String endDate;
 
-    // Costruttore che accetta l'oggetto del Domain Model
-    public SubscriptionDTO(Subscription s) {
-        this.type = s.getType().name(); // o un metodo per avere il nome dell'enum
-        this.price = s.getPrice(); // recupera il prezzo dal tipo o dal campo
-        this.startDate = s.isActive() ? "Attivo" : "Scaduto"; // esempio di logica
+    public String getType() {
+        return type;
     }
-    public String getType() { return type; }
-    public String getPrice() { return price; }}
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
+    }
+
+    public String getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
+
+    public String getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
+    }
+}
