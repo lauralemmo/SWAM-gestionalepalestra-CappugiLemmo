@@ -13,25 +13,23 @@ public class Athlete extends User{
     private String height;
     private String weight;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "subscription", joinColumns = @JoinColumn(name = "athlete_id", nullable = false))
-    private List<Subscription> subscriptions;
+    private List<Subscription> subscriptions = new ArrayList<>();
 
     @OneToOne(mappedBy = "athlete", cascade = CascadeType.ALL , orphanRemoval = true)
     private WorkoutPlan workoutPlan;
 
     @OneToMany(mappedBy = "athlete", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Booking> bookings;
+    private List<Booking> bookings =  new ArrayList<>();
 
 
 
     public Athlete(String name, String surname, String username, String password, String email, String phone_number, String tax_code,
-                   LocalDate birth_date, String height, String weight, Subscription subscription) {
+                   LocalDate birth_date, String height, String weight) {
         super(name, surname, username, password, email, phone_number, tax_code, birth_date);
         this.height = height;
         this.weight = weight;
-        this.subscriptions = new ArrayList<>();
-        this.subscriptions.add(subscription);
     }
 
     protected Athlete() {}
@@ -49,4 +47,11 @@ public class Athlete extends User{
         return workoutPlan;
     }
 
+    public String getHeight() {
+        return  this.height;
+    }
+
+    public String getWeight() {
+        return this.weight;
+    }
 }

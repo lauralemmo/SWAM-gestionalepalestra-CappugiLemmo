@@ -1,17 +1,14 @@
 package org.example.swamcappugilemmo.DomainModel;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.*;
 
 import java.time.LocalDate;
 
 
 
-@MappedSuperclass   //impedisce query su User
-//@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)   //in alternativa
-//@Entity
+//@MappedSuperclass   //impedisce query su User
+@Entity
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)   //in alternativa
 public abstract class User {
 
     @Id

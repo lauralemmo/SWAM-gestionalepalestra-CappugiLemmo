@@ -30,8 +30,8 @@ public class AthleteController {
                 phone_number,
                 birth_date,
                 height,
-                weight,
-                initialSubscription);
+                weight);
+        newAthlete.addSubscription(initialSubscription);
         athleteDAO.saveAthlete(newAthlete);
     }
     @Transactional

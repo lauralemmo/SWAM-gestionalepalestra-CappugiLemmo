@@ -32,4 +32,10 @@ public class Subscription {
         return active;
 
     }
+    public SubscriptionType getType() {
+        return type;
+    }
+    public String getPrice() {
+        return price;
+    }
 }
