@@ -1,12 +1,9 @@
 package org.example.swamcappugilemmo.BusinessLogic.DTO;
 
-import org.example.swamcappugilemmo.DomainModel.Athlete;
-
 import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
 
-public class AthleteResponse {
+public class AthleteResponseDTO {
     private String tax_code;
     private String name;
     private String surname;

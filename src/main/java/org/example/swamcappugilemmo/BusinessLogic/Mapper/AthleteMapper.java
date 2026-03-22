@@ -1,7 +1,7 @@
 package org.example.swamcappugilemmo.BusinessLogic.Mapper;
 import jakarta.enterprise.context.ApplicationScoped;
-import org.example.swamcappugilemmo.BusinessLogic.DTO.AthleteRegistrationRequest;
-import org.example.swamcappugilemmo.BusinessLogic.DTO.AthleteResponse;
+import org.example.swamcappugilemmo.BusinessLogic.DTO.AthleteRegistrationRequestDTO;
+import org.example.swamcappugilemmo.BusinessLogic.DTO.AthleteResponseDTO;
 import org.example.swamcappugilemmo.BusinessLogic.DTO.SubscriptionDTO;
 import org.example.swamcappugilemmo.DomainModel.Athlete;
 import org.example.swamcappugilemmo.DomainModel.Subscription;
@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 public class AthleteMapper {
 
     // Da DTO a Entità (per la registrazione)
-    public Athlete toEntity(AthleteRegistrationRequest request) {
+    public Athlete toEntity(AthleteRegistrationRequestDTO request) {
         return new Athlete(
                 request.getTax_code(),
                 request.getName(),
@@ -28,8 +28,8 @@ public class AthleteMapper {
     }
 
     // Da Entità a DTO (per la risposta)
-    public AthleteResponse toDto(Athlete athlete) {
-        AthleteResponse response = new AthleteResponse();
+    public AthleteResponseDTO toDto(Athlete athlete) {
+        AthleteResponseDTO response = new AthleteResponseDTO();
         response.setTax_code(athlete.getTax_code());
         response.setName(athlete.getName());
         response.setSurname(athlete.getSurname());

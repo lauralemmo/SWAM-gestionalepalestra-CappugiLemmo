@@ -17,7 +17,7 @@ public class AthleteController {
     private AthleteDAO athleteDAO;
 
     /// ////////////// ATHLETE MANAGEMENT ///////////////
-    @Transactional
+    /*@Transactional
     public void registerNewAthlete(String name, String surname, String username, String password, String email, String phone_number,
                                 String tax_code, LocalDate birth_date, String height, String weight, SubscriptionType subscriptionType, LocalDate startDate) {
         Subscription initialSubscription = new Subscription(subscriptionType, startDate);
@@ -33,7 +33,7 @@ public class AthleteController {
                 weight);
         newAthlete.addSubscription(initialSubscription);
         athleteDAO.saveAthlete(newAthlete);
-    }
+    }*/ //vecchio metodo, ora uso quello con i mapper
 
     @Transactional
     public void registerNewAthlete(Athlete newAthlete, SubscriptionType subscriptionType, LocalDate startDate) {

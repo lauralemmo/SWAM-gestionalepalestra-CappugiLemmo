@@ -1,8 +1,8 @@
 package org.example.swamcappugilemmo.BusinessLogic.ServiceLayer;
 
 import org.example.swamcappugilemmo.BusinessLogic.ControllerLayer.AthleteController;
-import org.example.swamcappugilemmo.BusinessLogic.DTO.AthleteRegistrationRequest;
-import org.example.swamcappugilemmo.BusinessLogic.DTO.AthleteResponse;
+import org.example.swamcappugilemmo.BusinessLogic.DTO.AthleteRegistrationRequestDTO;
+import org.example.swamcappugilemmo.BusinessLogic.DTO.AthleteResponseDTO;
 import org.example.swamcappugilemmo.BusinessLogic.Mapper.AthleteMapper;
 import org.example.swamcappugilemmo.DomainModel.Athlete;
 import jakarta.inject.Inject;
@@ -27,7 +27,7 @@ public class AthleteService {
         try {
             // Delega al controller il recupero dell'atleta
             Athlete athlete = athleteController.getAthleteByTaxCode(taxCode);
-            AthleteResponse response = athleteMapper.toDto(athlete);
+            AthleteResponseDTO response = athleteMapper.toDto(athlete);
             return Response.ok(response).build();
         } catch (IllegalArgumentException e) {
             // Se l'atleta non esiste, restituisce 404 Not Found
@@ -38,7 +38,7 @@ public class AthleteService {
     @POST
     @Path("/register")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response registerAthlete(AthleteRegistrationRequest request) {
+    public Response registerAthlete(AthleteRegistrationRequestDTO request) {
         try {
             // Estrai i dati dal tuo DTO e passali al controller
             Athlete newAthlete = athleteMapper.toEntity(request);

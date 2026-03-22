@@ -4,7 +4,7 @@ import org.example.swamcappugilemmo.DomainModel.SubscriptionType;
 
 import java.time.LocalDate;
 
-public class AthleteRegistrationRequest {
+public class AthleteRegistrationRequestDTO {
     private String name;
     private String surname;
     private String username;
