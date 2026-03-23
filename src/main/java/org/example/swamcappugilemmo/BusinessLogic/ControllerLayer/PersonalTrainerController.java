@@ -1,5 +1,6 @@
 package org.example.swamcappugilemmo.BusinessLogic.ControllerLayer;
 
+import jakarta.enterprise.context.Dependent;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import org.example.swamcappugilemmo.BusinessLogic.DTO.PersonalTrainerDTO;
@@ -11,7 +12,7 @@ import org.example.swamcappugilemmo.DomainModel.PersonalTrainer;
 import java.time.LocalDate;
 import java.util.List;
 
-
+@Dependent
 public class PersonalTrainerController {
     @Inject
     PersonalTrainerDAO personalTrainerDAO;

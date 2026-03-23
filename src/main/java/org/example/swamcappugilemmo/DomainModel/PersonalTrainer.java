@@ -8,6 +8,7 @@ import jakarta.persistence.Table;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "personalTrainer")
@@ -20,11 +21,11 @@ public class PersonalTrainer extends User {
 
     @OneToMany(mappedBy = "personalTrainer")
     //Il "personalTrainer" è il nome dell'attributo in WorkoutPlan che fa riferimento a PersonalTrainer
-    private ArrayList<WorkoutPlan> workoutPlans;
+    private List<WorkoutPlan> workoutPlans = new ArrayList<>();
 
     @OneToMany(mappedBy = "personalTrainer")
     //Il "personalTrainer" è il nome dell'attributo in Course che fa riferimento a PersonalTrainer
-    private ArrayList<Course> courses;
+    private List<Course> courses = new ArrayList<>();
 
 
 
@@ -73,7 +74,7 @@ public class PersonalTrainer extends User {
         this.endDate = endDate;
     }
 
-    public ArrayList<WorkoutPlan> getWorkoutPlans() {
+    public List<WorkoutPlan> getWorkoutPlans() {
         return workoutPlans;
     }
 
@@ -81,7 +82,7 @@ public class PersonalTrainer extends User {
         this.workoutPlans = workoutPlans;
     }
 
-    public ArrayList<Course> getCourses() {
+    public List<Course> getCourses() {
         return courses;
     }
 
