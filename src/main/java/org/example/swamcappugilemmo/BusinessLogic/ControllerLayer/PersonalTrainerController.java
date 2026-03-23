@@ -2,6 +2,9 @@ package org.example.swamcappugilemmo.BusinessLogic.ControllerLayer;
 
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
+import org.example.swamcappugilemmo.BusinessLogic.DTO.PersonalTrainerDTO;
+import org.example.swamcappugilemmo.BusinessLogic.DTO.PersonalTrainerResponseDTO;
+import org.example.swamcappugilemmo.BusinessLogic.Mapper.PersonalTrainerMapper;
 import org.example.swamcappugilemmo.DAO.PersonalTrainerDAO;
 import org.example.swamcappugilemmo.DomainModel.PersonalTrainer;
 
@@ -12,6 +15,8 @@ import java.util.List;
 public class PersonalTrainerController {
     @Inject
     PersonalTrainerDAO personalTrainerDAO;
+    @Inject
+    PersonalTrainerMapper ptMapper;
 
     public PersonalTrainerController(){
         this.personalTrainerDAO = new PersonalTrainerDAO();
@@ -19,16 +24,29 @@ public class PersonalTrainerController {
 
 
 
-    @Transactional
+    /*@Transactional
     public void addPersonalTrainer(String name, String surname, String username, String password, String email, String phone_number, String tax_code,
                                    LocalDate birth_date, int salary, LocalDate startDate, LocalDate endDate){
         PersonalTrainer pt = new PersonalTrainer(name, surname, username, password, email, phone_number, tax_code, birth_date, salary, startDate, endDate);
         personalTrainerDAO.createPersonalTrainer(pt);
-    }
+    }*/
 
     @Transactional
+    public void addPersonalTrainer(PersonalTrainerDTO request){
+        PersonalTrainer newPT = ptMapper.toEntity(request);
+        personalTrainerDAO.createPersonalTrainer(newPT);
+    }
+
+
+    /*@Transactional
     public PersonalTrainer getPersonalTrainerByTaxCode(String taxCode){
         return personalTrainerDAO.getPersonalTrainerByTaxCode(taxCode);
+    }*/
+
+    @Transactional
+    public PersonalTrainerResponseDTO getPersonalTrainerByTaxCode(String taxCode){
+        PersonalTrainer pt = personalTrainerDAO.getPersonalTrainerByTaxCode(taxCode);
+        return ptMapper.toDto(pt);
     }
 
     @Transactional

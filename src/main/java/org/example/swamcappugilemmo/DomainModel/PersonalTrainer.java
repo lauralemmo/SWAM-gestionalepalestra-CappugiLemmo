@@ -34,8 +34,6 @@ public class PersonalTrainer extends User {
         this.salary = salary;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.workoutPlans = new ArrayList<>();
-        this.courses = new ArrayList<>();
     }
 
     protected PersonalTrainer() {}
