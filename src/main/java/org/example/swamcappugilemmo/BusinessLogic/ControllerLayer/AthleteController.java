@@ -2,6 +2,9 @@ package org.example.swamcappugilemmo.BusinessLogic.ControllerLayer;
 
 import jakarta.enterprise.context.Dependent;
 import jakarta.inject.Inject;
+import org.example.swamcappugilemmo.BusinessLogic.DTO.AthleteRegistrationRequestDTO;
+import org.example.swamcappugilemmo.BusinessLogic.DTO.AthleteResponseDTO;
+import org.example.swamcappugilemmo.BusinessLogic.Mapper.AthleteMapper;
 import org.example.swamcappugilemmo.DAO.AthleteDAO;
 import jakarta.transaction.Transactional;
 import org.example.swamcappugilemmo.DomainModel.Athlete;
@@ -15,6 +18,9 @@ import java.util.ArrayList;
 public class AthleteController {
     @Inject
     private AthleteDAO athleteDAO;
+
+    @Inject
+    private AthleteMapper athleteMapper;
 
     /// ////////////// ATHLETE MANAGEMENT ///////////////
     /*@Transactional
@@ -33,18 +39,31 @@ public class AthleteController {
                 weight);
         newAthlete.addSubscription(initialSubscription);
         athleteDAO.saveAthlete(newAthlete);
-    }*/ //vecchio metodo, ora uso quello con i mapper
+    } //vecchio metodo, ora uso quello con i mapper
 
     @Transactional
     public void registerNewAthlete(Athlete newAthlete, SubscriptionType subscriptionType, LocalDate startDate) {
         Subscription initialSubscription = new Subscription(subscriptionType, startDate);
         newAthlete.addSubscription(initialSubscription);
         athleteDAO.saveAthlete(newAthlete);
+    }*/
+
+    @Transactional public void registerNewAthlete(AthleteRegistrationRequestDTO request) {
+        Athlete newAthlete = athleteMapper.toEntity(request);
+        Subscription initialSubscription = new Subscription(request.getSubscriptionType(), request.getStartDate());
+        newAthlete.addSubscription(initialSubscription);
+        athleteDAO.saveAthlete(newAthlete);
+
     }
 
     @Transactional
-    public Athlete getAthleteByTaxCode(String tax_code) {
-        return athleteDAO.findAthleteByTaxCode(tax_code);
+    public AthleteResponseDTO getAthleteByTaxCode(String tax_code) {
+        Athlete athlete = athleteDAO.findAthleteByTaxCode(tax_code);
+        if (athlete != null) {
+            return athleteMapper.toDto(athlete);
+        } else {
+            return null; // O gestisci l'errore come preferisci
+        }
     }
 
    /* @Transactional

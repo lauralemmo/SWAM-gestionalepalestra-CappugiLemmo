@@ -18,16 +18,12 @@ public class AthleteService {
     @Inject
     private AthleteController athleteController;
 
-    @Inject
-    private AthleteMapper athleteMapper;
-
     @GET
     @Path("/{taxCode}")
     public Response getAthlete(@PathParam("taxCode") String taxCode) {
         try {
             // Delega al controller il recupero dell'atleta
-            Athlete athlete = athleteController.getAthleteByTaxCode(taxCode);
-            AthleteResponseDTO response = athleteMapper.toDto(athlete);
+            AthleteResponseDTO response = athleteController.getAthleteByTaxCode(taxCode);
             return Response.ok(response).build();
         } catch (IllegalArgumentException e) {
             // Se l'atleta non esiste, restituisce 404 Not Found
@@ -41,9 +37,7 @@ public class AthleteService {
     public Response registerAthlete(AthleteRegistrationRequestDTO request) {
         try {
             // Estrai i dati dal tuo DTO e passali al controller
-            Athlete newAthlete = athleteMapper.toEntity(request);
-
-            athleteController.registerNewAthlete(newAthlete, request.getSubscriptionType(), request.getStartDate());
+            athleteController.registerNewAthlete(request);
 
             return Response.status(Response.Status.CREATED).build();
         } catch (Exception e) {

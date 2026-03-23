@@ -2,12 +2,15 @@ package org.example.swamcappugilemmo.BusinessLogic.DTO;
 
 import org.example.swamcappugilemmo.DomainModel.Subscription;
 
+import java.time.LocalDate;
+
 // In org.example.swamcappugilemmo.BusinessLogic.ServiceLayer
 public class SubscriptionDTO {
     private String type;
     private String price;
-    private String startDate;
-    private String endDate;
+    private LocalDate startDate;
+    private LocalDate endDate;
+    private boolean active;
 
     public String getType() {
         return type;
@@ -25,19 +28,26 @@ public class SubscriptionDTO {
         this.price = price;
     }
 
-    public String getStartDate() {
+    public LocalDate getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(String startDate) {
+    public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
     }
 
-    public String getEndDate() {
+    public LocalDate getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(String endDate) {
+    public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }

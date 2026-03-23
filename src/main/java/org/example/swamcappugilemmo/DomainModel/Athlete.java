@@ -25,9 +25,9 @@ public class Athlete extends User{
 
 
 
-    public Athlete(String name, String surname, String username, String password, String email, String phone_number, String tax_code,
+    public Athlete(String tax_code, String name, String surname, String username, String password, String email, String phone_number,
                    LocalDate birth_date, String height, String weight) {
-        super(name, surname, username, password, email, phone_number, tax_code, birth_date);
+        super(tax_code, name, surname, username, password, email, phone_number, birth_date);
         this.height = height;
         this.weight = weight;
     }

@@ -1,5 +1,6 @@
 package org.example.swamcappugilemmo.BusinessLogic.Mapper;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import org.example.swamcappugilemmo.BusinessLogic.DTO.AthleteRegistrationRequestDTO;
 import org.example.swamcappugilemmo.BusinessLogic.DTO.AthleteResponseDTO;
 import org.example.swamcappugilemmo.BusinessLogic.DTO.SubscriptionDTO;
@@ -10,6 +11,8 @@ import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class AthleteMapper {
+    @Inject
+    private SubscriptionMapper subscriptionMapper;
 
     // Da DTO a Entità (per la registrazione)
     public Athlete toEntity(AthleteRegistrationRequestDTO request) {
@@ -42,18 +45,11 @@ public class AthleteMapper {
 
         // Mappa anche la lista delle sottoscrizioni
         response.setSubscriptions(athlete.getSubscriptions().stream()
-                .map(this::toSubscriptionDto)
+                .map(subscriptionMapper::toDto)
                 .collect(Collectors.toList()));
 
         return response;
     }
 
-    // Mapper di supporto per la Subscription
-    public SubscriptionDTO toSubscriptionDto(Subscription s) {
-        SubscriptionDTO dto = new SubscriptionDTO();
-        dto.setType(s.getType().name());
-        dto.setPrice(s.getPrice());
-        dto.setStartDate(s.isActive() ? "Attivo" : "Scaduto"); // Mantiene la tua logica originale
-        return dto;
-    }
+
 }
