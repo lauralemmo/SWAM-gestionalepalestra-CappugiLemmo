@@ -48,7 +48,8 @@ public class AthleteController {
         athleteDAO.saveAthlete(newAthlete);
     }*/
 
-    @Transactional public void registerNewAthlete(AthleteRegistrationRequestDTO request) {
+    @Transactional
+    public void registerNewAthlete(AthleteRegistrationRequestDTO request) {
         Athlete newAthlete = athleteMapper.toEntity(request);
         Subscription initialSubscription = new Subscription(request.getSubscriptionType(), request.getStartDate());
         newAthlete.addSubscription(initialSubscription);
