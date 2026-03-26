@@ -14,6 +14,8 @@ public class SubscriptionMapper {
         dto.setType(s.getType().name());
         dto.setPrice(s.getPrice());
         dto.setActive(s.isActive());
+        dto.setStartDate(s.getStart_date());
+        dto.setEndDate(s.getEnd_date());
         return dto;
     }
 }

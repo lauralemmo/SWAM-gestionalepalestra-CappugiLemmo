@@ -38,4 +38,13 @@ public class Subscription {
     public String getPrice() {
         return price;
     }
+
+    public LocalDate getStart_date() {
+        return start_date;
+    }
+
+    public LocalDate getEnd_date() {
+        return end_date;
+    }
+
 }

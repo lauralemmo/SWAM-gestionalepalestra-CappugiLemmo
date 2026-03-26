@@ -38,6 +38,15 @@ public class PersonalTrainerController {
         personalTrainerDAO.createPersonalTrainer(newPT);
     }
 
+    @Transactional
+    public void addNewSubscriptionToPersonalTrainer(String taxCode, LocalDate startDate, LocalDate endDate){
+        PersonalTrainer pt = personalTrainerDAO.getPersonalTrainerByTaxCode(taxCode);
+        pt.setActive(true);
+        pt.setStartDate(startDate);
+        pt.setEndDate(endDate);
+        personalTrainerDAO.updatePersonalTrainer(pt);
+    }
+
 
     /*@Transactional
     public PersonalTrainer getPersonalTrainerByTaxCode(String taxCode){

@@ -66,6 +66,14 @@ public class AthleteController {
         }
     }
 
+    @Transactional
+    public void updateAthleteUsername(String tax_code, String request) {
+        Athlete athlete = athleteDAO.findAthleteByTaxCode(tax_code);
+        if (athlete != null) {
+            athlete.setUsername(request);
+        }
+    }
+
    /* @Transactional
     public void updateAthleteInfo(String tax_code, String height, String weight) {
         Athlete athlete = athleteDAO.findAthleteByTaxCode(tax_code);
