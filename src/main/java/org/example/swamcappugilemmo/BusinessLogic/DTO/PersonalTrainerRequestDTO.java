@@ -1,14 +1,8 @@
 package org.example.swamcappugilemmo.BusinessLogic.DTO;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.OneToMany;
-import org.example.swamcappugilemmo.DomainModel.Course;
-import org.example.swamcappugilemmo.DomainModel.WorkoutPlan;
-
 import java.time.LocalDate;
-import java.util.ArrayList;
 
-public class PersonalTrainerDTO {
+public class PersonalTrainerRequestDTO {
     private String tax_code;
     private String name;
     private String surname;

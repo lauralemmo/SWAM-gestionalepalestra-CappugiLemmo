@@ -1,18 +1,14 @@
 package org.example.swamcappugilemmo.BusinessLogic.Mapper;
 
 import jakarta.enterprise.context.ApplicationScoped;
-import org.example.swamcappugilemmo.BusinessLogic.DTO.AthleteResponseDTO;
-import org.example.swamcappugilemmo.BusinessLogic.DTO.PersonalTrainerDTO;
+import org.example.swamcappugilemmo.BusinessLogic.DTO.PersonalTrainerRequestDTO;
 import org.example.swamcappugilemmo.BusinessLogic.DTO.PersonalTrainerResponseDTO;
-import org.example.swamcappugilemmo.DomainModel.Athlete;
 import org.example.swamcappugilemmo.DomainModel.PersonalTrainer;
-
-import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class PersonalTrainerMapper {
 
-    public PersonalTrainer toEntity(PersonalTrainerDTO dto) {
+    public PersonalTrainer toEntity(PersonalTrainerRequestDTO dto) {
         return new PersonalTrainer(
                 dto.getTax_code(),
                 dto.getName(),

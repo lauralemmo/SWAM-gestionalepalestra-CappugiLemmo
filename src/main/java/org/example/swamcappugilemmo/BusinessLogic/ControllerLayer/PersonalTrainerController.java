@@ -3,7 +3,7 @@ package org.example.swamcappugilemmo.BusinessLogic.ControllerLayer;
 import jakarta.enterprise.context.Dependent;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
-import org.example.swamcappugilemmo.BusinessLogic.DTO.PersonalTrainerDTO;
+import org.example.swamcappugilemmo.BusinessLogic.DTO.PersonalTrainerRequestDTO;
 import org.example.swamcappugilemmo.BusinessLogic.DTO.PersonalTrainerResponseDTO;
 import org.example.swamcappugilemmo.BusinessLogic.Mapper.PersonalTrainerMapper;
 import org.example.swamcappugilemmo.DAO.PersonalTrainerDAO;
@@ -33,7 +33,7 @@ public class PersonalTrainerController {
     }*/
 
     @Transactional
-    public void addPersonalTrainer(PersonalTrainerDTO request){
+    public void addPersonalTrainer(PersonalTrainerRequestDTO request){
         PersonalTrainer newPT = ptMapper.toEntity(request);
         personalTrainerDAO.createPersonalTrainer(newPT);
     }

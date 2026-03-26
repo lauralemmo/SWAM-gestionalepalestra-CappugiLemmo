@@ -6,7 +6,7 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.example.swamcappugilemmo.BusinessLogic.ControllerLayer.PersonalTrainerController;
-import org.example.swamcappugilemmo.BusinessLogic.DTO.PersonalTrainerDTO;
+import org.example.swamcappugilemmo.BusinessLogic.DTO.PersonalTrainerRequestDTO;
 import org.example.swamcappugilemmo.BusinessLogic.DTO.PersonalTrainerResponseDTO;
 
 @Path("/personaltrainers")
@@ -31,7 +31,7 @@ public class PersonalTrainerService {
     @POST
     @Path("/register")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response registerPersonalTrainer(PersonalTrainerDTO personalTrainerDTO) {
+    public Response registerPersonalTrainer(PersonalTrainerRequestDTO personalTrainerDTO) {
         try {
             personalTrainerController.addPersonalTrainer(personalTrainerDTO);
             return Response.status(Response.Status.CREATED).entity(personalTrainerDTO).build();
