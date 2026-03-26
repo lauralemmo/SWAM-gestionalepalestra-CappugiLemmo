@@ -1,14 +1,13 @@
 package org.example.swamcappugilemmo.BusinessLogic.DTO;
 
 public class CourseDTO {
-    private Long idCourse;
+
     private String name;
     private int numMembers;
     private int numMax;
+    private String taxCode;
 
-    public Long getIdCourse() {return idCourse;}
 
-    public void setIdCourse(Long idCourse) {this.idCourse = idCourse;}
 
     public String getName() {return name;}
 
@@ -21,4 +20,8 @@ public class CourseDTO {
     public int getNumMax() {return numMax;}
 
     public void setNumMax(int numMax) {this.numMax = numMax;}
+
+    public String getTaxCode() {return taxCode;}
+
+    public void setTaxCode(String taxCode) {this.taxCode = taxCode;}
 }
