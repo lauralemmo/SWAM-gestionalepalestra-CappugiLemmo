@@ -54,4 +54,14 @@ public class Athlete extends User{
     public String getWeight() {
         return this.weight;
     }
+
+    public List<Booking> getBookings() {
+        return bookings;
+    }
+
+    public void setBookings(List<Booking> bookings) {this.bookings.addAll(bookings);}
+
+    public void addBookings(Booking booking) {
+        this.bookings.add(booking);
+    }
 }

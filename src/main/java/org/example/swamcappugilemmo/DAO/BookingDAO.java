@@ -13,4 +13,12 @@ public class BookingDAO {
     public void saveBooking(Booking booking) {
         em.persist(booking);
     }
+
+    public Booking findBookingById(Long bookingId) {
+        Booking booking = em.find(Booking.class,bookingId);
+        if (booking == null) {
+            throw new IllegalArgumentException("Booking with id " + bookingId + " not found.");
+        }
+        return booking;
+    }
 }

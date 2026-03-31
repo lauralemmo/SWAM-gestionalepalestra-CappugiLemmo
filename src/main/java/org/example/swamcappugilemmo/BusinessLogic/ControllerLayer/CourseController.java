@@ -88,7 +88,9 @@ public class CourseController {
     public List<CourseDTO> getCoursesByPersonalTrainer(PersonalTrainer pt){
         List<Course> cc = courseDAO.getCoursesByPersonalTrainer(pt);
         if (cc != null) {
-            return courseMapper.toDto(cc);
+            return null;
+            // TODO tolto perche dava errore, va rimesso!
+            //return courseMapper.toDto(cc);
         } else{
             return null;
         }

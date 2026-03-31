@@ -42,4 +42,24 @@ public class BookingService {
 
 //=================================================GET=================================================
 
+    @GET
+    @Path("/{bookingId}")
+    public Response getBooking(@PathParam("bookingId") Long bookingId) {
+        try {
+            // Delega al controller il recupero della prenotazione
+            BookingDTO response = bookingController.getBookingDTOfromId(bookingId);
+            return Response.ok(response).build();
+        } catch (IllegalArgumentException e) {
+            // Se la prenotazione non esiste, restituisce 404 Not Found
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity(e.getMessage())
+                    .build();
+        } catch (Exception e) {
+            // Gestisce errori generici del server
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity("Errore nel recupero della prenotazione: " + e.getMessage())
+                    .build();
+        }
+    }
+
 }

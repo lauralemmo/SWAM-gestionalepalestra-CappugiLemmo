@@ -34,19 +34,27 @@ public class BookingController {
 
         Course course = courseDAO.getCourseByName(request.getCourse());
 
+        if (athlete == null || course == null) {
+            throw new IllegalArgumentException("Atleta o Corso non trovato");
+        }
+
         if (course.getNumMembers() < course.getNumMax()) {
             course.setNumMembers(course.getNumMembers() + 1);
         }
         else throw new IllegalStateException("Corso pieno, non è possibile prenotare");
 
-        if (athlete == null || course == null) {
-            throw new IllegalArgumentException("Atleta o Corso non trovato");
-        }
 
         // Utilizzo del Mapper per creare l'entità Booking
         Booking booking = bookingMapper.toEntity(request.getDate(), course, athlete);
 
+        athlete.addBookings(booking);
+
         // Salvataggio tramite DAO
         bookingDAO.saveBooking(booking);
+    }
+
+    public BookingDTO getBookingDTOfromId(Long bookingId) {
+        Booking booking = bookingDAO.findBookingById(bookingId);
+        return bookingMapper.toDto(booking);
     }
 }

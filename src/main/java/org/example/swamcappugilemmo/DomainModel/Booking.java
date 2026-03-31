@@ -30,5 +30,36 @@ public class Booking {
     }
 
     protected Booking() {}
+    public Long getIdBooking() {
+        return idBooking;
+    }
+
+    public void setIdBooking(Long idBooking) {
+        this.idBooking = idBooking;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
+    public Course getCourse() {
+        return course;
+    }
+
+    public void setCourse(Course course) {
+        this.course = course;
+    }
+
+    public Athlete getAthlete() {
+        return athlete;
+    }
+
+    public void setAthlete(Athlete athlete) {
+        this.athlete = athlete;
+    }
 
 }

@@ -18,4 +18,11 @@ public class BookingMapper {
     public Booking toEntity(LocalDate localDate, Course course, Athlete athlete) {
     return new Booking(localDate, course, athlete) ;
     }
+    public BookingDTO toDto(Booking booking) {
+        BookingDTO dto = new BookingDTO();
+        dto.setDate(booking.getDate());
+        dto.setCourse(booking.getCourse().getName());
+        dto.setTaxCode(athleteMapper.toDto(booking.getAthlete()).getTax_code());
+        return dto;
+    }
 }
