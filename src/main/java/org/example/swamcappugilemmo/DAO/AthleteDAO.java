@@ -4,6 +4,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.example.swamcappugilemmo.DomainModel.Athlete;
+import org.example.swamcappugilemmo.DomainModel.Course;
 import org.example.swamcappugilemmo.DomainModel.Subscription;
 import org.example.swamcappugilemmo.DomainModel.SubscriptionType;
 
@@ -60,6 +61,23 @@ public class AthleteDAO {
         else {
             throw new IllegalArgumentException("Athlete with tax code " + tax_code + " not found.");
         }
+    }
+
+    public void updateAthlete(Athlete athlete){
+        Athlete newA = em.merge(athlete);
+        if(newA == null){
+            throw new RuntimeException("Update failed");
+        }
+        System.out.println("Atleta aggiornato");
+    }
+
+    public void deleteAthlete(String username){
+        Athlete a = em.find(Athlete.class, username);
+        if(a == null){
+            throw new RuntimeException("Atleta non trovato");
+        }
+        em.remove(a);
+        System.out.println("Atleta eliminato");
     }
 
 }

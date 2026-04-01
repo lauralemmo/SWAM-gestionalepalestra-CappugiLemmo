@@ -85,4 +85,18 @@ public class AthleteController {
         }
     }*/
 
+    @Transactional
+    public void updateAthlete(String tax_code, String name, String surname, String username, String password, String email,
+                              String phone_number, LocalDate birth_date, String height, String weight,
+                              SubscriptionType subscriptionType, LocalDate startDate){
+        Athlete athlete = new Athlete(tax_code, name, surname, username, password, email, phone_number, birth_date, height, weight);
+        athleteDAO.updateAthlete(athlete);
+    }
+
+    @Transactional
+    public void deleteAthlete(String username){
+        athleteDAO.deleteAthlete(username);
+    }
+
+
 }
