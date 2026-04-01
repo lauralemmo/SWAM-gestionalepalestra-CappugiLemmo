@@ -33,6 +33,9 @@ public class Occurrence {
 
 
 
+    public Long getId() {
+        return idOccurrence;
+    }
 
     public LocalDate getDate() {
         return date;

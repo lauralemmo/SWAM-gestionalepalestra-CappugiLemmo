@@ -3,6 +3,7 @@ package org.example.swamcappugilemmo.DomainModel;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "course")
@@ -18,7 +19,7 @@ public class Course {
     //@ElementCollection
     //@CollectionTable(name = "course_occurrences", joinColumns = @JoinColumn(name = "course_id"))
     @OneToMany(mappedBy = "course")
-    private ArrayList<Occurrence> occurrences;
+    private List<Occurrence> occurrences = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "personal_trainer_tax_code")
@@ -30,7 +31,6 @@ public class Course {
         this.name = name;
         this.numMembers = numMembers;
         this.numMax = numMax;
-        this.occurrences = new ArrayList<>();
         this.personalTrainer = personalTrainer;
     }
 
@@ -67,7 +67,7 @@ public class Course {
         this.numMax = numMax;
     }
 
-    public ArrayList<Occurrence> getOccurrences() {
+    public List<Occurrence> getOccurrences() {
         return occurrences;
     }
 

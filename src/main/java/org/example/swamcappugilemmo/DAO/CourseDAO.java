@@ -20,10 +20,10 @@ public class CourseDAO {
         System.out.println("Nuovo corso aggiunto");
     }
 
-    public Course getCourseByName(String name){
-        Course course = em.find(Course.class, name);
+    public Course getCourseById(Long id){
+        Course course = em.find(Course.class, id);
         if (course == null) {
-            throw new IllegalArgumentException("Course with name " + name + " not found.");
+            throw new IllegalArgumentException("Course with name " + id + " not found.");
         }
         return course;
     }

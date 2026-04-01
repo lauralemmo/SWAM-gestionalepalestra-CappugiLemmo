@@ -1,14 +1,23 @@
 package org.example.swamcappugilemmo.BusinessLogic.DTO;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 //DTO per creare una prenotazione, non contiene l' utente, lo conterrà solo quando un utente la selezione
 public class BookingDTO {
 
-    private LocalDate date;
-    private String course_name;
     private String tax_code;
-    private String course;
+    private Long idCourse;
+    private LocalDate date;
+    private LocalTime hours;
+
+    public LocalTime getHours() {
+        return hours;
+    }
+
+    public void setHours(LocalTime hours) {
+        this.hours = hours;
+    }
 
     public LocalDate getDate() {
         return date;
@@ -24,10 +33,10 @@ public class BookingDTO {
         this.tax_code = tax_code;
     }
 
-    public String getCourse() {
-        return course;
+    public Long getIdCourse() {
+        return idCourse;
     }
-    public void setCourse(String course) {
-        this.course = course;   }
+    public void setIdCourse(Long course) {
+        this.idCourse = course;   }
 
 }

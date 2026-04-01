@@ -26,5 +26,29 @@ public class OccurrenceDAO {
                 .getResultList();
     }
 
+    public Occurrence getOccurrenceById(Long id){
+        Occurrence occurrence = em.find(Occurrence.class, id);
+        if (occurrence == null) {
+            throw new IllegalArgumentException("Occurrence with name " + id + " not found.");
+        }
+        return occurrence;
+    }
+
+     public void updateOccurrence(Occurrence occurrence){
+         Occurrence newO = em.merge(occurrence);
+         if(newO == null){
+             throw new RuntimeException("Update failed");
+         }
+         System.out.println("Lezione aggiornata");
+     }
+
+     public void deleteOccurrence(Long id){
+         Occurrence o = em.find(Occurrence.class, id);
+         if (o == null) {
+             throw new IllegalArgumentException("Occurrence with name " + id + " not found.");
+         }
+         em.remove(o);
+         System.out.println("Lezione eliminata");
+     }
 
 }

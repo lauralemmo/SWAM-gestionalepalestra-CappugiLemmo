@@ -90,4 +90,9 @@ public class PersonalTrainer extends User {
         this.courses = courses;
     }
 
+    public void addCourse(Course course){
+        this.courses.add(course);
+        //course.setPersonalTrainer(this);
+    }
+
 }

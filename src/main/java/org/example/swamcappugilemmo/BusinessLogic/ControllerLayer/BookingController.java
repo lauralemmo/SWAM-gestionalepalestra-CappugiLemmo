@@ -12,6 +12,8 @@ import org.example.swamcappugilemmo.DomainModel.Athlete;
 import org.example.swamcappugilemmo.DomainModel.Course;
 import org.example.swamcappugilemmo.DomainModel.Booking;
 
+import static java.util.Arrays.stream;
+
 @Dependent
 public class BookingController {
 
@@ -32,7 +34,7 @@ public class BookingController {
         // Recupero delle entità necessarie tramite i DAO
         Athlete athlete = athleteDAO.findAthleteByTaxCode(request.getTaxCode());
 
-        Course course = courseDAO.getCourseByName(request.getCourse());
+        Course course = courseDAO.getCourseById(request.getIdCourse());
 
         if (athlete == null || course == null) {
             throw new IllegalArgumentException("Atleta o Corso non trovato");
@@ -43,16 +45,21 @@ public class BookingController {
         }
         else throw new IllegalStateException("Corso pieno, non è possibile prenotare");
 
+        if (course.getOccurrences().stream().noneMatch(occurrence -> occurrence.getDate().equals(request.getDate()) && occurrence.getHours().equals(request.getHours()))) {
+            throw new IllegalArgumentException("Il corso non è disponibile in quella data e ora");
+        }
 
         // Utilizzo del Mapper per creare l'entità Booking
-        Booking booking = bookingMapper.toEntity(request.getDate(), course, athlete);
+        Booking booking = bookingMapper.toEntity(request.getDate(), request.getHours(), course, athlete);
 
+        // Aggiunta della prenotazione all'atleta
         athlete.addBookings(booking);
 
         // Salvataggio tramite DAO
         bookingDAO.saveBooking(booking);
     }
 
+    @Transactional
     public BookingDTO getBookingDTOfromId(Long bookingId) {
         Booking booking = bookingDAO.findBookingById(bookingId);
         return bookingMapper.toDto(booking);

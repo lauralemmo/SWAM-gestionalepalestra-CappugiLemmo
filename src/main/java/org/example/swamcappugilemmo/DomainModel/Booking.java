@@ -3,6 +3,7 @@ package org.example.swamcappugilemmo.DomainModel;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Entity
 @Table(name = "booking")
@@ -12,6 +13,8 @@ public class Booking {
     private Long idBooking;
 
     private LocalDate date;
+
+    private LocalTime hours;
 
     @ManyToOne
     @JoinColumn(name = "course_id")
@@ -23,8 +26,9 @@ public class Booking {
 
 
 
-    public Booking(LocalDate date, Course course, Athlete athlete) {
+    public Booking(LocalDate date,LocalTime hours , Course course, Athlete athlete) {
         this.date = date;
+        this.hours = hours;
         this.course = course;
         this.athlete = athlete;
     }
@@ -47,7 +51,7 @@ public class Booking {
     }
 
     public Course getCourse() {
-        return course;
+        return this.course;
     }
 
     public void setCourse(Course course) {
@@ -62,4 +66,11 @@ public class Booking {
         this.athlete = athlete;
     }
 
+    public LocalTime getHours() {
+        return hours;
+    }
+
+    public void setHours(LocalTime hours) {
+        this.hours = hours;
+    }
 }

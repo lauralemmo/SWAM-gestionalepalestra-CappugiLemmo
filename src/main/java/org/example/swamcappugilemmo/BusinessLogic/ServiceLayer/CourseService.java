@@ -36,9 +36,9 @@ public class CourseService {
 
     @GET
     @Path("/name")
-    public Response getCourseName(@QueryParam("name") String name){
+    public Response getCourseName(@QueryParam("name") Long idCourse){
         try{
-            CourseDTO response = courseController.getCourseByName(name);
+            CourseDTO response = courseController.getCourseById(idCourse);
             return Response.ok(response).build();
         } catch(IllegalArgumentException e){
             return Response.status(Response.Status.NOT_FOUND).entity(e.getMessage()).build();

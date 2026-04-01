@@ -41,7 +41,7 @@ public class CourseController {
         PersonalTrainer pt = personalTrainerDAO.getPersonalTrainerByTaxCode(request.getTaxCode());
         Course newC = courseMapper.toEntity(request,pt);
         courseDAO.createCourse(newC);
-
+        //pt.addCourse(newC);
     }
 
 
@@ -51,8 +51,8 @@ public class CourseController {
     }*/
 
     @Transactional
-    public CourseDTO getCourseByName(String name) {
-        Course c = courseDAO.getCourseByName(name);
+    public CourseDTO getCourseById(Long id) {
+        Course c = courseDAO.getCourseById(id);
         if (c != null) {
             return courseMapper.toDto(c);
         } else {
