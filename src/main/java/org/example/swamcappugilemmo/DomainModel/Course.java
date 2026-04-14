@@ -25,6 +25,9 @@ public class Course {
     @JoinColumn(name = "personal_trainer_tax_code")
     private PersonalTrainer personalTrainer;
 
+    @OneToMany(mappedBy = "course")
+    private List<Booking> bookings = new ArrayList<>();
+
 
 
     public Course(String name, int numMembers, int numMax, PersonalTrainer personalTrainer) {

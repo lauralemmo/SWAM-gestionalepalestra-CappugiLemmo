@@ -14,9 +14,11 @@ public class ExerciseWorkoutPlan {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "exercise_id")
-    //nome della colonna nella tabella ExerciseWorkoutPlan che fa riferimento a Exercise
     private Exercise exercise;
 
+    @ManyToOne
+    @JoinColumn(name = "workoutPlan_id")
+    private WorkoutPlan workoutPlan;
 
 
     public ExerciseWorkoutPlan(int numSeries, int numRepetitions, double weight, Exercise exercise) {

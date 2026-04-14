@@ -13,7 +13,6 @@ public class Booking {
     private Long idBooking;
 
     private LocalDate date;
-
     private LocalTime hours;
 
     @ManyToOne

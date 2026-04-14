@@ -13,9 +13,8 @@ public class WorkoutPlan {
 
     private LocalDate date;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true) //orphanRemoval per rimuovere gli esercizi associati quando si elimina il piano
-    @JoinColumn(name = "athlete_id")
-    private ArrayList<ExerciseWorkoutPlan> exercises;
+    @OneToMany(mappedBy = "workoutPlan", cascade = CascadeType.ALL, orphanRemoval = true) //orphanRemoval per rimuovere gli esercizi associati quando si elimina il piano
+    private ArrayList<ExerciseWorkoutPlan> specificExercises;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "personal_trainer_tax_code")
@@ -29,7 +28,7 @@ public class WorkoutPlan {
 
     public WorkoutPlan(LocalDate date, PersonalTrainer personalTrainer, Athlete athlete) {
         this.date = date;
-        this.exercises = new ArrayList<>();
+        this.specificExercises = new ArrayList<>();
         this.personalTrainer = personalTrainer;
         this.athlete = athlete;
     }
@@ -40,7 +39,7 @@ public class WorkoutPlan {
 
 
     public void addExercise(ExerciseWorkoutPlan exercise) {
-        this.exercises.add(exercise);
+        this.specificExercises.add(exercise);
     }
 
     public Long getIdWorkoutPlan() {
@@ -56,11 +55,11 @@ public class WorkoutPlan {
     }
 
     public ArrayList<ExerciseWorkoutPlan> getExercises() {
-        return exercises;
+        return specificExercises;
     }
 
     public void setExercises(ArrayList<ExerciseWorkoutPlan> exercises) {
-        this.exercises = exercises;
+        this.specificExercises = exercises;
     }
 
     public void setPersonalTrainer(PersonalTrainer personalTrainer) {
