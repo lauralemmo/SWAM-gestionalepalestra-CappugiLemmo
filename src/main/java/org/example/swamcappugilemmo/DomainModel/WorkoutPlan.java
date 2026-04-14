@@ -3,6 +3,7 @@ package org.example.swamcappugilemmo.DomainModel;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "workoutPlan")
@@ -14,7 +15,7 @@ public class WorkoutPlan {
     private LocalDate date;
 
     @OneToMany(mappedBy = "workoutPlan", cascade = CascadeType.ALL, orphanRemoval = true) //orphanRemoval per rimuovere gli esercizi associati quando si elimina il piano
-    private ArrayList<ExerciseWorkoutPlan> specificExercises;
+    private List<ExerciseWorkoutPlan> specificExercises;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "personal_trainer_tax_code")
@@ -54,7 +55,7 @@ public class WorkoutPlan {
         this.date = date;
     }
 
-    public ArrayList<ExerciseWorkoutPlan> getExercises() {
+    public List<ExerciseWorkoutPlan> getExercises() {
         return specificExercises;
     }
 
