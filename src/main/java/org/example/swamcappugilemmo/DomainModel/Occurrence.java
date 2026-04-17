@@ -2,12 +2,17 @@ package org.example.swamcappugilemmo.DomainModel;
 
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Objects;
 
 @Entity
 @Table(name = "occurrence")
+@Getter
+@Setter
 public class Occurrence {
     //Se è Annotato come @Embeddable non può avere un Id
     @Id
@@ -20,38 +25,6 @@ public class Occurrence {
     @ManyToOne
     @JoinColumn(name = "course_id")
     private Course course;
-
-
-
-    public Occurrence(LocalDate date, LocalTime hours, Course course) {
-        this.date = date;
-        this.hours = hours;
-        this.course =  course;
-    }
-
-    protected Occurrence() {}
-
-
-
-    public Long getId() {
-        return idOccurrence;
-    }
-
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
-
-    public LocalTime getHours() {
-        return hours;
-    }
-
-    public void setHours(LocalTime hours) {
-        this.hours = hours;
-    }
 
     /*@Override
     public boolean equals(Object o) {

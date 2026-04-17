@@ -1,11 +1,16 @@
 package org.example.swamcappugilemmo.DomainModel;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Getter
+@Setter
 @Table(name = "workoutPlan")
 public class WorkoutPlan {
     @Id
@@ -25,34 +30,8 @@ public class WorkoutPlan {
     @JoinColumn(name = "athlete_id")
     private Athlete athlete;
 
-
-
-    public WorkoutPlan(LocalDate date, PersonalTrainer personalTrainer, Athlete athlete) {
-        this.date = date;
-        this.specificExercises = new ArrayList<>();
-        this.personalTrainer = personalTrainer;
-        this.athlete = athlete;
-    }
-
-    protected WorkoutPlan() {}
-
-
-
-
     public void addExercise(ExerciseWorkoutPlan exercise) {
         this.specificExercises.add(exercise);
-    }
-
-    public Long getIdWorkoutPlan() {
-        return idWorkoutPlan;
-    }
-
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public void setDate(LocalDate date) {
-        this.date = date;
     }
 
     public List<ExerciseWorkoutPlan> getExercises() {
@@ -61,18 +40,6 @@ public class WorkoutPlan {
 
     public void setExercises(ArrayList<ExerciseWorkoutPlan> exercises) {
         this.specificExercises = exercises;
-    }
-
-    public void setPersonalTrainer(PersonalTrainer personalTrainer) {
-        this.personalTrainer = personalTrainer;
-    }
-
-    public PersonalTrainer getPersonalTrainer() {
-        return personalTrainer;
-    }
-
-    public Athlete getAthlete() {
-        return athlete;
     }
 
 }

@@ -4,12 +4,16 @@ package org.example.swamcappugilemmo.DomainModel;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "personalTrainer")
 public class PersonalTrainer extends User {
@@ -28,62 +32,8 @@ public class PersonalTrainer extends User {
     private List<Course> courses = new ArrayList<>();
 
 
-
-    public PersonalTrainer(String name, String surname, String username, String password, String email, String phone_number, String tax_code,
-                           LocalDate birth_date, int salary, LocalDate startDate, LocalDate endDate) {
-        super(name, surname, username, password, email, phone_number, tax_code, birth_date);
-        this.salary = salary;
-        this.startDate = startDate;
-        this.endDate = endDate;
-    }
-
-    protected PersonalTrainer() {}
-
-
-
-
-    public int getSalary() {
-        return salary;
-    }
-
-    public void setSalary(int salary) {
-        this.salary = salary;
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
-    }
-
-    public LocalDate getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(LocalDate startDate) {
-        this.startDate = startDate;
-    }
-
-    public LocalDate getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(LocalDate endDate) {
-        this.endDate = endDate;
-    }
-
-    public List<WorkoutPlan> getWorkoutPlans() {
-        return workoutPlans;
-    }
-
     public void setWorkoutPlans(ArrayList<WorkoutPlan> workoutPlans) {
         this.workoutPlans = workoutPlans;
-    }
-
-    public List<Course> getCourses() {
-        return courses;
     }
 
     public void setCourses(ArrayList<Course> courses) {

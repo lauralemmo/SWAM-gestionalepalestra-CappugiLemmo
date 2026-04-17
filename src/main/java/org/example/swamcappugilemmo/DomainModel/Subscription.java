@@ -4,9 +4,13 @@ import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Transient;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
 
+@Getter
+@Setter
 @Embeddable
 public class Subscription {
     private LocalDate start_date;
@@ -17,34 +21,10 @@ public class Subscription {
     @Transient
     private boolean active;
 
-    public Subscription(SubscriptionType type, LocalDate start_date) {
-        this.start_date = start_date;
-        this.end_date = this.start_date.plusMonths(type.getMonths());
-        this.price = type.getDefaultPrice();
-        this.type = type;
-        this.active = true;
-    }
-
-    protected Subscription() {}
-
     public boolean isActive() {
         this.active = LocalDate.now().isAfter(this.start_date) && LocalDate.now().isBefore(this.end_date);
         return active;
 
-    }
-    public SubscriptionType getType() {
-        return type;
-    }
-    public String getPrice() {
-        return price;
-    }
-
-    public LocalDate getStart_date() {
-        return start_date;
-    }
-
-    public LocalDate getEnd_date() {
-        return end_date;
     }
 
 }

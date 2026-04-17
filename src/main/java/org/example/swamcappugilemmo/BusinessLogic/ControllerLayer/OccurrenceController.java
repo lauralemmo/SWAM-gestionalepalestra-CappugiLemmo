@@ -21,9 +21,22 @@ public class OccurrenceController {
 
     @Transactional
     public void addOccurrence(Long courseId, LocalDate date, LocalTime hours) {
-        Course corso = courseDAO.getCourseById(courseId);
-        Occurrence newOccurrence = new Occurrence(date, hours, corso);
-        occurrenceDAO.createOccurrence(newOccurrence);
+        try {
+            Course course = courseDAO.getCourseById(courseId); // Lancia IllegalArgumentException se non trovato
+            Occurrence newOccurrence = new Occurrence(date, hours, course);
+            occurrenceDAO.createOccurrence(newOccurrence);
+        }
+
+        catch (IllegalArgumentException e) {
+            // Qui capisci se l'ID del corso era sbagliato
+            System.err.println("Errore: Corso con ID " + courseId + " non trovato. " + e.getMessage());
+            throw e; // Rilancia per informare il Service
+        }
+
+        catch (Exception e) {
+            System.err.println("Errore generico durante l'aggiunta dell'occorrenza: " + e.getMessage());
+            throw new RuntimeException("Impossibile aggiungere l'occorrenza", e);
+        }
     }
 
    @Transactional
