@@ -4,10 +4,7 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import org.example.swamcappugilemmo.BusinessLogic.ControllerLayer.AthleteController;
 import org.example.swamcappugilemmo.BusinessLogic.ControllerLayer.CourseController;
-import org.example.swamcappugilemmo.BusinessLogic.DTO.AthleteRegistrationRequestDTO;
-import org.example.swamcappugilemmo.BusinessLogic.DTO.AthleteResponseDTO;
 import org.example.swamcappugilemmo.BusinessLogic.DTO.CourseDTO;
 
 

@@ -25,14 +25,14 @@ public class Athlete extends User{
 
 
 
-    public Athlete(String tax_code, String name, String surname, String username, String password, String email, String phone_number,
+    /*public Athlete(String tax_code, String name, String surname, String username, String password, String email, String phone_number,
                    LocalDate birth_date, String height, String weight) {
         super(tax_code, name, surname, username, password, email, phone_number, birth_date);
         this.height = height;
         this.weight = weight;
     }
 
-    protected Athlete() {}
+    protected Athlete() {}*/
 
     public void addSubscription(Subscription subscription){
         this.subscriptions.add(subscription);
@@ -63,5 +63,13 @@ public class Athlete extends User{
 
     public void addBookings(Booking booking) {
         this.bookings.add(booking);
+    }
+
+    public void setHeight(String height) {
+        this.height = height;
+    }
+
+    public void setWeight(String weight) {
+        this.weight = weight;
     }
 }

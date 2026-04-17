@@ -22,6 +22,10 @@ public class AthleteDAO {
         em.persist(newAthlete);
     }
 
+    public List<Athlete> findAll() {
+        return em.createQuery("SELECT a FROM Athlete a", Athlete.class).getResultList();
+    }
+
     public Athlete findAthleteByTaxCode(String taxCode) {
         Athlete athlete = em.find(Athlete.class, taxCode);
         if (athlete == null) {

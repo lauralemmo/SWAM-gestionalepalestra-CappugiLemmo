@@ -2,7 +2,7 @@ package org.example.swamcappugilemmo.BusinessLogic.ControllerLayer;
 
 import jakarta.enterprise.context.Dependent;
 import jakarta.inject.Inject;
-import org.example.swamcappugilemmo.BusinessLogic.DTO.AthleteRegistrationRequestDTO;
+import org.example.swamcappugilemmo.BusinessLogic.DTO.AthleteRequestDTO;
 import org.example.swamcappugilemmo.BusinessLogic.DTO.AthleteResponseDTO;
 import org.example.swamcappugilemmo.BusinessLogic.Mapper.AthleteMapper;
 import org.example.swamcappugilemmo.DAO.AthleteDAO;
@@ -12,7 +12,8 @@ import org.example.swamcappugilemmo.DomainModel.Subscription;
 import org.example.swamcappugilemmo.DomainModel.SubscriptionType;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Dependent
 public class AthleteController {
@@ -49,12 +50,20 @@ public class AthleteController {
     }*/
 
     @Transactional
-    public void registerNewAthlete(AthleteRegistrationRequestDTO request) {
+    public AthleteResponseDTO registerNewAthlete(AthleteRequestDTO request) {
         Athlete newAthlete = athleteMapper.toEntity(request);
         Subscription initialSubscription = new Subscription(request.getSubscriptionType(), request.getStartDate());
         newAthlete.addSubscription(initialSubscription);
         athleteDAO.saveAthlete(newAthlete);
+        return athleteMapper.toDto(newAthlete);
+    }
 
+    @Transactional
+    public List<AthleteResponseDTO> getAllAthletes() {
+        return athleteDAO.findAll()
+                .stream()
+                .map(athleteMapper::toDto)
+                .collect(Collectors.toList());
     }
 
     @Transactional
@@ -85,13 +94,13 @@ public class AthleteController {
         }
     }*/
 
-    @Transactional
+   /* @Transactional
     public void updateAthlete(String tax_code, String name, String surname, String username, String password, String email,
                               String phone_number, LocalDate birth_date, String height, String weight,
                               SubscriptionType subscriptionType, LocalDate startDate){
         Athlete athlete = new Athlete(tax_code, name, surname, username, password, email, phone_number, birth_date, height, weight);
         athleteDAO.updateAthlete(athlete);
-    }
+    }*/
 
     @Transactional
     public void deleteAthlete(String username){

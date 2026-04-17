@@ -1,15 +1,15 @@
 package org.example.swamcappugilemmo.BusinessLogic.ServiceLayer;
 
 import org.example.swamcappugilemmo.BusinessLogic.ControllerLayer.AthleteController;
-import org.example.swamcappugilemmo.BusinessLogic.DTO.AthleteRegistrationRequestDTO;
+import org.example.swamcappugilemmo.BusinessLogic.DTO.AthleteRequestDTO;
 import org.example.swamcappugilemmo.BusinessLogic.DTO.AthleteResponseDTO;
 import org.example.swamcappugilemmo.BusinessLogic.DTO.SubscriptionDTO;
-import org.example.swamcappugilemmo.BusinessLogic.Mapper.AthleteMapper;
-import org.example.swamcappugilemmo.DomainModel.Athlete;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+
+import java.util.List;
 
 @Path("/athletes")
 @Produces(MediaType.APPLICATION_JSON)
@@ -23,18 +23,42 @@ public class AthleteService {
     @POST
     @Path("/register")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response registerAthlete(AthleteRegistrationRequestDTO request) {
-        try {
+    public Response registerAthlete(AthleteRequestDTO request) {
+        /*try {
             // Estrai i dati dal tuo DTO e passali al controller
             athleteController.registerNewAthlete(request);
 
             return Response.status(Response.Status.CREATED).build();
         } catch (Exception e) {
             return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
+        }*/
+        try{
+            AthleteResponseDTO response = athleteController.registerNewAthlete(request);
+            return Response.status(Response.Status.CREATED)
+                    .entity(response)
+                    .build();
+        } catch(Exception e){
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity(e.getMessage())
+                    .build();
         }
     }
 
     //=================================================GET=================================================
+    @GET
+    public Response getAllAthletes() {
+        try{
+            List<AthleteResponseDTO> athletes = athleteController.getAllAthletes();
+            return Response.ok(athletes).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Errore interno del server")
+                    .build();
+        }
+    }
+
+
+
     @GET
     @Path("/{taxCode}")
     public Response getAthlete(@PathParam("taxCode") String taxCode) {

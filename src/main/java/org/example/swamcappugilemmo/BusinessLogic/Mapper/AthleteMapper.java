@@ -1,11 +1,9 @@
 package org.example.swamcappugilemmo.BusinessLogic.Mapper;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import org.example.swamcappugilemmo.BusinessLogic.DTO.AthleteRegistrationRequestDTO;
+import org.example.swamcappugilemmo.BusinessLogic.DTO.AthleteRequestDTO;
 import org.example.swamcappugilemmo.BusinessLogic.DTO.AthleteResponseDTO;
-import org.example.swamcappugilemmo.BusinessLogic.DTO.SubscriptionDTO;
 import org.example.swamcappugilemmo.DomainModel.Athlete;
-import org.example.swamcappugilemmo.DomainModel.Subscription;
 
 import java.util.stream.Collectors;
 
@@ -15,8 +13,8 @@ public class AthleteMapper {
     private SubscriptionMapper subscriptionMapper;
 
     // Da DTO a Entità (per la registrazione)
-    public Athlete toEntity(AthleteRegistrationRequestDTO request) {
-        return new Athlete(
+    public Athlete toEntity(AthleteRequestDTO request) {
+        /*return new Athlete(
                 request.getTax_code(),
                 request.getName(),
                 request.getSurname(),
@@ -27,7 +25,18 @@ public class AthleteMapper {
                 request.getBirth_date(),
                 request.getHeight(),
                 request.getWeight()
-        );
+        );*/
+        Athlete athlete = new Athlete();
+        athlete.setName(request.getName());
+        athlete.setSurname(request.getSurname());
+        athlete.setUsername(request.getUsername());
+        athlete.setPassword(request.getPassword());
+        athlete.setEmail(request.getEmail());
+        athlete.setPhone_number(request.getPhone_number());
+        athlete.setBirth_date(request.getBirth_date());
+        athlete.setHeight(request.getHeight());
+        athlete.setWeight(request.getWeight());
+        return athlete;
     }
 
     // Da Entità a DTO (per la risposta)

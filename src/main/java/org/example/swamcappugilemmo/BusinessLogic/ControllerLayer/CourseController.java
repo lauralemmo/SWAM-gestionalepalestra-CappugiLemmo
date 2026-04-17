@@ -3,16 +3,12 @@ package org.example.swamcappugilemmo.BusinessLogic.ControllerLayer;
 import jakarta.enterprise.context.Dependent;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
-import org.example.swamcappugilemmo.BusinessLogic.DTO.AthleteRegistrationRequestDTO;
-import org.example.swamcappugilemmo.BusinessLogic.DTO.AthleteResponseDTO;
 import org.example.swamcappugilemmo.BusinessLogic.DTO.CourseDTO;
-import org.example.swamcappugilemmo.BusinessLogic.Mapper.AthleteMapper;
 import org.example.swamcappugilemmo.BusinessLogic.Mapper.CourseMapper;
 import org.example.swamcappugilemmo.DAO.CourseDAO;
 import org.example.swamcappugilemmo.DAO.PersonalTrainerDAO;
 import org.example.swamcappugilemmo.DomainModel.*;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Dependent

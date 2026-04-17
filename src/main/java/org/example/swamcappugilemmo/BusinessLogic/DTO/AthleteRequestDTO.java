@@ -4,14 +4,14 @@ import org.example.swamcappugilemmo.DomainModel.SubscriptionType;
 
 import java.time.LocalDate;
 
-public class AthleteRegistrationRequestDTO {
+public class AthleteRequestDTO {
+    private String tax_code;
     private String name;
     private String surname;
     private String username;
     private String password;
     private String email;
     private String phone_number;
-    private String tax_code;
     private LocalDate birth_date;
     private String height;
     private String weight;
