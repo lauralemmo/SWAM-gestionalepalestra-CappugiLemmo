@@ -1,10 +1,14 @@
 package org.example.swamcappugilemmo.DomainModel;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "course")
 public class Course {
@@ -28,62 +32,5 @@ public class Course {
     @OneToMany(mappedBy = "course")
     private List<Booking> bookings = new ArrayList<>();
 
-
-
-    public Course(String name, int numMembers, int numMax, PersonalTrainer personalTrainer) {
-        this.name = name;
-        this.numMembers = numMembers;
-        this.numMax = numMax;
-        this.personalTrainer = personalTrainer;
-    }
-
-    protected Course() {}
-
-
-
-
-    public Long getId() {
-        return idCourse;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getNumMembers() {
-        return numMembers;
-    }
-
-    public void setNumMembers(int numMembers) {
-        this.numMembers = numMembers;
-    }
-
-    public int getNumMax() {
-        return numMax;
-    }
-
-    public void setNumMax(int numMax) {
-        this.numMax = numMax;
-    }
-
-    public List<Occurrence> getOccurrences() {
-        return occurrences;
-    }
-
-    public void setOccurrences(ArrayList<Occurrence> occurrences) {
-        this.occurrences = occurrences;
-    }
-
-    public PersonalTrainer getPersonalTrainer() {
-        return personalTrainer;
-    }
-
-    public void setPersonalTrainer(PersonalTrainer personalTrainer) {
-        this.personalTrainer = personalTrainer;
-    }
 
 }

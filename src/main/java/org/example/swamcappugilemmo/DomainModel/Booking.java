@@ -1,10 +1,14 @@
 package org.example.swamcappugilemmo.DomainModel;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "booking")
 public class Booking {
@@ -24,52 +28,4 @@ public class Booking {
     private Athlete athlete;
 
 
-
-    public Booking(LocalDate date,LocalTime hours , Course course, Athlete athlete) {
-        this.date = date;
-        this.hours = hours;
-        this.course = course;
-        this.athlete = athlete;
-    }
-
-    protected Booking() {}
-    public Long getIdBooking() {
-        return idBooking;
-    }
-
-    public void setIdBooking(Long idBooking) {
-        this.idBooking = idBooking;
-    }
-
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
-
-    public Course getCourse() {
-        return this.course;
-    }
-
-    public void setCourse(Course course) {
-        this.course = course;
-    }
-
-    public Athlete getAthlete() {
-        return athlete;
-    }
-
-    public void setAthlete(Athlete athlete) {
-        this.athlete = athlete;
-    }
-
-    public LocalTime getHours() {
-        return hours;
-    }
-
-    public void setHours(LocalTime hours) {
-        this.hours = hours;
-    }
 }

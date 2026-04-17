@@ -1,12 +1,15 @@
 package org.example.swamcappugilemmo.DomainModel;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-
+@Getter
+@Setter
 @Entity
 @Table(name = "athlete")
 public class Athlete extends User{
@@ -25,51 +28,14 @@ public class Athlete extends User{
 
 
 
-    /*public Athlete(String tax_code, String name, String surname, String username, String password, String email, String phone_number,
-                   LocalDate birth_date, String height, String weight) {
-        super(tax_code, name, surname, username, password, email, phone_number, birth_date);
-        this.height = height;
-        this.weight = weight;
-    }
-
-    protected Athlete() {}*/
 
     public void addSubscription(Subscription subscription){
         this.subscriptions.add(subscription);
     }
-    public List<Subscription> getSubscriptions(){
-        return subscriptions;
-    }
-    public void setWorkoutPlan(WorkoutPlan workoutPlan){
-        this.workoutPlan = workoutPlan;
-    }
-    public WorkoutPlan getWorkoutPlan(){
-        return workoutPlan;
-    }
-
-    public String getHeight() {
-        return  this.height;
-    }
-
-    public String getWeight() {
-        return this.weight;
-    }
-
-    public List<Booking> getBookings() {
-        return bookings;
-    }
-
-    public void setBookings(List<Booking> bookings) {this.bookings.addAll(bookings);}
 
     public void addBookings(Booking booking) {
         this.bookings.add(booking);
     }
 
-    public void setHeight(String height) {
-        this.height = height;
-    }
 
-    public void setWeight(String weight) {
-        this.weight = weight;
-    }
 }

@@ -2,9 +2,13 @@ package org.example.swamcappugilemmo.DomainModel;
 
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "exercise")
 public class Exercise {
@@ -20,34 +24,4 @@ public class Exercise {
     private List<ExerciseWorkoutPlan> specificExercises;
 
 
-
-    public Exercise(String name, String description) {
-        this.name = name;
-        this.description = description;
-    }
-
-    protected Exercise() {}
-
-
-
-    
-    public Long getIdExercise() {
-        return idExercise;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
 }
