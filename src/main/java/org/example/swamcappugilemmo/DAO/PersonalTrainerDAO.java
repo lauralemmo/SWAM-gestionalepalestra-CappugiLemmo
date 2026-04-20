@@ -20,6 +20,14 @@ public class PersonalTrainerDAO {
         System.out.println("Nuovo personal trainer aggiunto");
     }
 
+    public PersonalTrainer getPersonalTrainerById(long id){
+        PersonalTrainer pt = em.find(PersonalTrainer.class, id);
+        if (pt == null) {
+            throw new IllegalArgumentException("Personal trainer with id " + id + " not found.");
+        }
+        return pt;
+    }
+
     public PersonalTrainer getPersonalTrainerByTaxCode(String taxCode){
         PersonalTrainer pt = em.find(PersonalTrainer.class, taxCode);
         if (pt == null) {

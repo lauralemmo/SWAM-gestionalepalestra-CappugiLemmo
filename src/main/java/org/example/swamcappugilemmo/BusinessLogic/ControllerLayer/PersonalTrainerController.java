@@ -65,9 +65,24 @@ public class PersonalTrainerController {
     }
 
     @Transactional
-    public void updatePersonalTrainer(String name, String surname, String username, String password, String email, String phone_number, String tax_code,
+    public void updatePersonalTrainer(Long id, String name, String surname, String username, String password, String email, String phone_number, String tax_code,
                                       LocalDate birth_date, int salary, LocalDate startDate, LocalDate endDate){
-        PersonalTrainer pt = new PersonalTrainer(name, surname, username, password, email, phone_number, tax_code, birth_date, salary, startDate, endDate);
+
+        //Questo era sbagliato, non si deve creare un nuovo PersonalTrainer, ma recuperare quello esistente e modificarlo
+        //PersonalTrainer pt = new PersonalTrainer(name, surname, username, password, email, phone_number, tax_code, birth_date, salary, startDate, endDate);
+        PersonalTrainer pt = personalTrainerDAO.getPersonalTrainerById(id);
+        pt.setName(name);
+        pt.setSurname(surname);
+        pt.setUsername(username);
+        pt.setPassword(password);
+        pt.setEmail(email);
+        pt.setPhone_number(phone_number);
+        pt.setTax_code(tax_code);
+        pt.setBirth_date(birth_date);
+        pt.setSalary(salary);
+        pt.setStartDate(startDate);
+        pt.setEndDate(endDate);
+        // Usa il merge
         personalTrainerDAO.updatePersonalTrainer(pt);
     }
 

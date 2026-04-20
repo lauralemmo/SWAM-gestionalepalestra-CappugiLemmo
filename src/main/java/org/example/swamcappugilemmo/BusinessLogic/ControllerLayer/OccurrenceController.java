@@ -23,7 +23,11 @@ public class OccurrenceController {
     public void addOccurrence(Long courseId, LocalDate date, LocalTime hours) {
         try {
             Course course = courseDAO.getCourseById(courseId); // Lancia IllegalArgumentException se non trovato
-            Occurrence newOccurrence = new Occurrence(date, hours, course);
+            //Occurrence newOccurrence = new Occurrence(date, hours, course);
+            Occurrence newOccurrence = new Occurrence();
+            newOccurrence.setDate(date);
+            newOccurrence.setHours(hours);
+            newOccurrence.setCourse(course);
             occurrenceDAO.createOccurrence(newOccurrence);
         }
 

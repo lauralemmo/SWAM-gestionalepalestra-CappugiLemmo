@@ -17,12 +17,18 @@ public class BookingMapper {
     AthleteMapper athleteMapper;
 
     public Booking toEntity(LocalDate localDate, LocalTime h, Course course, Athlete athlete) {
-    return new Booking(localDate ,h , course, athlete) ;
+    //return new Booking(localDate ,h , course, athlete) ;
+    Booking booking = new Booking();
+    booking.setDate(localDate);
+    booking.setHours(h);
+    booking.setCourse(course);
+    booking.setAthlete(athlete);
+    return booking;
     }
     public BookingDTO toDto(Booking booking) {
         BookingDTO dto = new BookingDTO();
-        dto.setTaxCode(athleteMapper.toDto(booking.getAthlete()).getTax_code());
-        dto.setIdCourse(booking.getCourse().getId());
+        dto.setTax_code(athleteMapper.toDto(booking.getAthlete()).getTax_code());
+        dto.setIdCourse(booking.getCourse().getIdCourse());
         dto.setDate(booking.getDate());
         dto.setHours(booking.getHours());
 

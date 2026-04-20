@@ -19,7 +19,10 @@ public class WorkoutPlanController {
     @Transactional
     public void createWorkoutPlan(LocalDate data, PersonalTrainer personalTrainer, Athlete athlete) {
         Athlete _athlete = athleteDAO.findAthleteByTaxCode(athlete.getTax_code());
-        WorkoutPlan workoutPlan = new WorkoutPlan(data, personalTrainer, _athlete);
+        //WorkoutPlan workoutPlan = new WorkoutPlan(data, personalTrainer, _athlete);
+        WorkoutPlan workoutPlan = new WorkoutPlan();
+        workoutPlan.setDate(data);
+        workoutPlan.setPersonalTrainer(personalTrainer);
         _athlete.setWorkoutPlan(workoutPlan);
         workoutPlanDAO.saveWorkoutPlan(workoutPlan);
     }

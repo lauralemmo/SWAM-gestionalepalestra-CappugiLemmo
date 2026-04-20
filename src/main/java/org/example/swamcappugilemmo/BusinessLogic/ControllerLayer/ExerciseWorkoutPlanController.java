@@ -26,7 +26,12 @@ public class ExerciseWorkoutPlanController {
         if (plan == null || exercise == null) {
             throw new IllegalArgumentException("Reference not found for workout plan id: " + workoutPlanId + " or exercise id: " + exerciseId);
         }
-        ExerciseWorkoutPlan details = new ExerciseWorkoutPlan(series, reps, weight, exercise);
+        //ExerciseWorkoutPlan details = new ExerciseWorkoutPlan(series, reps, weight, exercise);
+        ExerciseWorkoutPlan details = new ExerciseWorkoutPlan();
+        details.setNumSeries(series);
+        details.setNumRepetitions(reps);
+        details.setWeight(weight);
+        details.setExercise(exercise);
         plan.addExercise(details);
         exerciseWorkoutPlanDAO.saveExerciseWorkoutPlan(details);
     }

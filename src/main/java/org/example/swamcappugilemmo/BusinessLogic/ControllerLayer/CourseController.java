@@ -102,7 +102,12 @@ public class CourseController {
 
     @Transactional
     public void updateCourse(String name, int numMembers, int numMax, PersonalTrainer personalTrainer){
-        Course course = new Course(name, numMembers, numMax, personalTrainer);
+        //Course course = new Course(name, numMembers, numMax, personalTrainer);
+        Course course = new Course();
+        course.setName(name);
+        course.setNumMembers(numMembers);
+        course.setNumMax(numMax);
+        course.setPersonalTrainer(personalTrainer);
         courseDAO.updateCourse(course);
     }
 

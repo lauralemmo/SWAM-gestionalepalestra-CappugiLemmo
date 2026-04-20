@@ -16,7 +16,7 @@ import java.time.LocalDate;
 public abstract class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long idUser;
     @Column(length = 16)
     private String tax_code;

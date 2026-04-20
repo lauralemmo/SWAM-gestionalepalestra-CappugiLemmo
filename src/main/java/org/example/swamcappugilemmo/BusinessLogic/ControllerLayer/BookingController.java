@@ -32,7 +32,7 @@ public class BookingController {
     @Transactional
     public void createBooking(BookingDTO request) {
         // Recupero delle entità necessarie tramite i DAO
-        Athlete athlete = athleteDAO.findAthleteByTaxCode(request.getTaxCode());
+        Athlete athlete = athleteDAO.findAthleteByTaxCode(request.getTax_code());
 
         Course course = courseDAO.getCourseById(request.getIdCourse());
 

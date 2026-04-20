@@ -3,6 +3,7 @@ package org.example.swamcappugilemmo.DAO;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import org.example.swamcappugilemmo.BusinessLogic.DTO.AthleteResponseDTO;
 import org.example.swamcappugilemmo.DomainModel.Athlete;
 import org.example.swamcappugilemmo.DomainModel.Course;
 import org.example.swamcappugilemmo.DomainModel.Subscription;
@@ -26,6 +27,14 @@ public class AthleteDAO {
         return em.createQuery("SELECT a FROM Athlete a", Athlete.class).getResultList();
     }
 
+    public Athlete findById(long id) {
+        Athlete athlete = em.find(Athlete.class, id);
+        if (athlete == null) {
+            throw new IllegalArgumentException("Athlete with id " + id + " not found.");
+        }
+        return athlete;
+    }
+
     public Athlete findAthleteByTaxCode(String taxCode) {
         Athlete athlete = em.find(Athlete.class, taxCode);
         if (athlete == null) {
@@ -37,7 +46,10 @@ public class AthleteDAO {
     public void createNewSubscription(String taxCode, SubscriptionType subscriptionType, LocalDate startDate) {
         Athlete athlete = em.find(Athlete.class,taxCode);
         if (athlete != null) {
-            Subscription subscription = new Subscription(subscriptionType, startDate);
+            //Subscription subscription = new Subscription(subscriptionType, startDate);
+            Subscription subscription = new Subscription();
+            subscription.setType(subscriptionType);
+            subscription.setStart_date(startDate);
             athlete.addSubscription(subscription);
             em.merge(athlete);
         }
@@ -77,6 +89,15 @@ public class AthleteDAO {
 
     public void deleteAthlete(String username){
         Athlete a = em.find(Athlete.class, username);
+        if(a == null){
+            throw new RuntimeException("Atleta non trovato");
+        }
+        em.remove(a);
+        System.out.println("Atleta eliminato");
+    }
+
+    public void deleteAthlete(Long id){
+        Athlete a = em.find(Athlete.class, id);
         if(a == null){
             throw new RuntimeException("Atleta non trovato");
         }

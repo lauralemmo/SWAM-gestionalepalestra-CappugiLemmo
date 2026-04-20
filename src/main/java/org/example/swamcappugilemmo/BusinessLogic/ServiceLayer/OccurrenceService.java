@@ -20,7 +20,7 @@ public class OccurrenceService {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createOccurrence(Occurrence occurrence) {
         try {
-            occurrenceController.addOccurrence(occurrence.getCourse().getId(), occurrence.getDate(), occurrence.getHours());
+            occurrenceController.addOccurrence(occurrence.getCourse().getIdCourse(), occurrence.getDate(), occurrence.getHours());
             return Response.status(Response.Status.CREATED).entity(occurrence).build();
         }
         catch (Exception e) {

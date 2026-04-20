@@ -12,12 +12,18 @@ import org.example.swamcappugilemmo.DomainModel.Subscription;
 public class CourseMapper {
 
     public Course toEntity(CourseDTO dto, PersonalTrainer pt){
-        return new Course(
-                dto.getName(),
-                dto.getNumMembers(),
-                dto.getNumMax(),
-                pt
-        );
+        Course entity = new Course();
+        entity.setName(dto.getName());
+        entity.setNumMembers(dto.getNumMembers());
+        entity.setNumMax(dto.getNumMax());
+        entity.setPersonalTrainer(pt);
+        return entity;
+//        return new Course(
+//                dto.getName(),
+//                dto.getNumMembers(),
+//                dto.getNumMax(),
+//                pt
+//        );
     }
 
 

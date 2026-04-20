@@ -9,19 +9,32 @@ import org.example.swamcappugilemmo.DomainModel.PersonalTrainer;
 public class PersonalTrainerMapper {
 
     public PersonalTrainer toEntity(PersonalTrainerRequestDTO dto) {
-        return new PersonalTrainer(
-                dto.getTax_code(),
-                dto.getName(),
-                dto.getSurname(),
-                dto.getUsername(),
-                dto.getPassword(),
-                dto.getEmail(),
-                dto.getPhone_number(),
-                dto.getBirth_date(),
-                dto.getSalary(),
-                dto.getStartDate(),
-                dto.getEndDate()
-        );
+        PersonalTrainer entity = new PersonalTrainer();
+        entity.setTax_code(dto.getTax_code());
+        entity.setName(dto.getName());
+        entity.setSurname(dto.getSurname());
+        entity.setUsername(dto.getUsername());
+        entity.setPassword(dto.getPassword());
+        entity.setEmail(dto.getEmail());
+        entity.setPhone_number(dto.getPhone_number());
+        entity.setBirth_date(dto.getBirth_date());
+        entity.setSalary(dto.getSalary());
+        entity.setStartDate(dto.getStartDate());
+        entity.setEndDate(dto.getEndDate());
+        return entity;
+//        return new PersonalTrainer(
+//                dto.getTax_code(),
+//                dto.getName(),
+//                dto.getSurname(),
+//                dto.getUsername(),
+//                dto.getPassword(),
+//                dto.getEmail(),
+//                dto.getPhone_number(),
+//                dto.getBirth_date(),
+//                dto.getSalary(),
+//                dto.getStartDate(),
+//                dto.getEndDate()
+//        );
     }
 
 

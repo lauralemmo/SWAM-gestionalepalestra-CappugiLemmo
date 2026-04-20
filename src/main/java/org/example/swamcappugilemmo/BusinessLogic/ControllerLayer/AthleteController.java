@@ -52,7 +52,10 @@ public class AthleteController {
     @Transactional
     public AthleteResponseDTO registerNewAthlete(AthleteRequestDTO request) {
         Athlete newAthlete = athleteMapper.toEntity(request);
-        Subscription initialSubscription = new Subscription(request.getSubscriptionType(), request.getStartDate());
+        //Subscription initialSubscription = new Subscription(request.getSubscriptionType(), request.getStartDate());
+        Subscription initialSubscription = new Subscription();
+        initialSubscription.setType(request.getSubscriptionType());
+        initialSubscription.setStart_date(request.getStartDate());
         newAthlete.addSubscription(initialSubscription);
         athleteDAO.saveAthlete(newAthlete);
         return athleteMapper.toDto(newAthlete);
@@ -105,6 +108,10 @@ public class AthleteController {
     @Transactional
     public void deleteAthlete(String username){
         athleteDAO.deleteAthlete(username);
+    }
+    @Transactional
+    public void deleteAthleta(Long Id){
+        athleteDAO.deleteAthlete(Id);
     }
 
 
