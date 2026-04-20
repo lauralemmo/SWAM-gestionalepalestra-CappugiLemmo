@@ -36,9 +36,23 @@ public class AthleteDAO {
     }
 
     public Athlete findAthleteByTaxCode(String taxCode) {
-        Athlete athlete = em.find(Athlete.class, taxCode);
+        Athlete athlete;
+        athlete = em.createQuery("SELECT a FROM Athlete a WHERE a.tax_code = :tc", Athlete.class)
+                .setParameter("tc", taxCode)
+                .getSingleResult();
         if (athlete == null) {
             throw new IllegalArgumentException("Athlete with tax code " + taxCode + " not found.");
+      }
+        return athlete;
+    }
+
+    public Athlete findAthleteByUsername(String username) {
+        Athlete athlete;
+        athlete = em.createQuery("SELECT a FROM Athlete a WHERE a.username = :un", Athlete.class)
+                .setParameter("un", username)
+                .getSingleResult();
+        if (athlete == null) {
+            throw new IllegalArgumentException("Athlete with username " + username + " not found.");
         }
         return athlete;
     }

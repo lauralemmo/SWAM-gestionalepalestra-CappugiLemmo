@@ -1,8 +1,10 @@
 package org.example.swamcappugilemmo.BusinessLogic.ServiceLayer;
 
+import lombok.extern.java.Log;
 import org.example.swamcappugilemmo.BusinessLogic.ControllerLayer.AthleteController;
 import org.example.swamcappugilemmo.BusinessLogic.DTO.AthleteRequestDTO;
 import org.example.swamcappugilemmo.BusinessLogic.DTO.AthleteResponseDTO;
+import org.example.swamcappugilemmo.BusinessLogic.DTO.LoginDTO;
 import org.example.swamcappugilemmo.BusinessLogic.DTO.SubscriptionDTO;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
@@ -58,6 +60,16 @@ public class AthleteService {
     }
 
 
+    @GET
+    @Path("/{id}")
+    public Response getAthleteById(@PathParam("id") Long id) {
+        try {
+            AthleteResponseDTO response = athleteController.getAthleteById(id);
+            return Response.ok(response).build();
+        } catch (IllegalArgumentException e) {
+            return Response.status(Response.Status.NOT_FOUND).entity(e.getMessage()).build();
+        }
+    }
 
     @GET
     @Path("/{taxCode}")
@@ -69,6 +81,23 @@ public class AthleteService {
         } catch (IllegalArgumentException e) {
             // Se l'atleta non esiste, restituisce 404 Not Found
             return Response.status(Response.Status.NOT_FOUND).entity(e.getMessage()).build();
+        }
+    }
+
+    @POST
+    @Path("/login")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response login(LoginDTO loginRequest) {
+        try {
+            AthleteResponseDTO response = athleteController.loginAthlete(
+                    loginRequest.getUsername(),
+                    loginRequest.getPassword()
+            );
+            return Response.ok(response).build();
+        } catch (IllegalArgumentException e) {
+            return Response.status(Response.Status.UNAUTHORIZED)
+                    .entity(e.getMessage())
+                    .build();
         }
     }
 

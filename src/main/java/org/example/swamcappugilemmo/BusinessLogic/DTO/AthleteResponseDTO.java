@@ -10,6 +10,7 @@ import java.util.List;
 @Setter
 public class AthleteResponseDTO {
     // Getter (necessari per la conversione JSON)
+    Long id;
     private String tax_code;
     private String name;
     private String surname;

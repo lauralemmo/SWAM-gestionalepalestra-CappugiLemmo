@@ -27,6 +27,7 @@ public class AthleteMapper {
                 request.getWeight()
         );*/
         Athlete athlete = new Athlete();
+        athlete.setTax_code(request.getTax_code());
         athlete.setName(request.getName());
         athlete.setSurname(request.getSurname());
         athlete.setUsername(request.getUsername());
@@ -42,6 +43,7 @@ public class AthleteMapper {
     // Da Entità a DTO (per la risposta)
     public AthleteResponseDTO toDto(Athlete athlete) {
         AthleteResponseDTO response = new AthleteResponseDTO();
+        response.setId(athlete.getIdUser());
         response.setTax_code(athlete.getTax_code());
         response.setName(athlete.getName());
         response.setSurname(athlete.getSurname());

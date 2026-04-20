@@ -54,8 +54,16 @@ public class AthleteController {
         Athlete newAthlete = athleteMapper.toEntity(request);
         //Subscription initialSubscription = new Subscription(request.getSubscriptionType(), request.getStartDate());
         Subscription initialSubscription = new Subscription();
-        initialSubscription.setType(request.getSubscriptionType());
-        initialSubscription.setStart_date(request.getStartDate());
+        SubscriptionType type = request.getSubscriptionType();
+        LocalDate start = request.getStartDate();
+
+        //gestione della subscription
+        if (type != null && start != null) {
+            initialSubscription.setType(type);
+            initialSubscription.setStart_date(start);
+            initialSubscription.setPrice(type.getDefaultPrice());
+            initialSubscription.setEnd_date(start.plusMonths(type.getMonths()));
+        }
         newAthlete.addSubscription(initialSubscription);
         athleteDAO.saveAthlete(newAthlete);
         return athleteMapper.toDto(newAthlete);
@@ -67,6 +75,16 @@ public class AthleteController {
                 .stream()
                 .map(athleteMapper::toDto)
                 .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public AthleteResponseDTO getAthleteById(Long id) {
+        Athlete athlete = athleteDAO.findById(id);
+        if (athlete != null) {
+            return athleteMapper.toDto(athlete);
+        } else {
+            return null;
+        }
     }
 
     @Transactional
@@ -84,6 +102,16 @@ public class AthleteController {
         Athlete athlete = athleteDAO.findAthleteByTaxCode(tax_code);
         if (athlete != null) {
             athlete.setUsername(request);
+        }
+    }
+
+    @Transactional
+    public AthleteResponseDTO loginAthlete(String username, String password) {
+        Athlete athlete = athleteDAO.findAthleteByUsername(username);
+        if (athlete != null && athlete.getPassword().equals(password)) {
+            return athleteMapper.toDto(athlete);
+        } else {
+            throw new IllegalArgumentException("Credenziali non valide: username o password errati.");
         }
     }
 
@@ -113,6 +141,7 @@ public class AthleteController {
     public void deleteAthleta(Long Id){
         athleteDAO.deleteAthlete(Id);
     }
+
 
 
 }
