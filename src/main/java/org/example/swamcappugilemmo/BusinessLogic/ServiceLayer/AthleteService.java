@@ -1,11 +1,8 @@
 package org.example.swamcappugilemmo.BusinessLogic.ServiceLayer;
 
-import lombok.extern.java.Log;
 import org.example.swamcappugilemmo.BusinessLogic.ControllerLayer.AthleteController;
-import org.example.swamcappugilemmo.BusinessLogic.DTO.AthleteRequestDTO;
-import org.example.swamcappugilemmo.BusinessLogic.DTO.AthleteResponseDTO;
-import org.example.swamcappugilemmo.BusinessLogic.DTO.LoginDTO;
-import org.example.swamcappugilemmo.BusinessLogic.DTO.SubscriptionDTO;
+import org.example.swamcappugilemmo.BusinessLogic.ControllerLayer.SubscriptionController;
+import org.example.swamcappugilemmo.BusinessLogic.DTO.*;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -20,6 +17,8 @@ public class AthleteService {
 
     @Inject
     private AthleteController athleteController;
+    @Inject
+    private SubscriptionController subscriptionController;
 
     //=================================================POST=================================================
     @POST
@@ -43,6 +42,35 @@ public class AthleteService {
             return Response.status(Response.Status.BAD_REQUEST)
                     .entity(e.getMessage())
                     .build();
+        }
+    }
+
+    @POST
+    @Path("/login")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response login(LoginDTO loginRequest) {
+        try {
+            AthleteResponseDTO response = athleteController.loginAthlete(
+                    loginRequest.getUsername(),
+                    loginRequest.getPassword()
+            );
+            return Response.ok(response).build();
+        } catch (IllegalArgumentException e) {
+            return Response.status(Response.Status.UNAUTHORIZED)
+                    .entity(e.getMessage())
+                    .build();
+        }
+    }
+
+    @POST
+    @Path("/registerNewSubscription")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response registerNewSubscription(SubscriptionRequestDTO request) {
+        try {
+            subscriptionController.crateNewSubscription(request);
+            return Response.status(Response.Status.OK).build();
+        } catch (IllegalArgumentException e) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
         }
     }
 
@@ -84,45 +112,33 @@ public class AthleteService {
         }
     }
 
-    @POST
-    @Path("/login")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response login(LoginDTO loginRequest) {
-        try {
-            AthleteResponseDTO response = athleteController.loginAthlete(
-                    loginRequest.getUsername(),
-                    loginRequest.getPassword()
-            );
-            return Response.ok(response).build();
-        } catch (IllegalArgumentException e) {
-            return Response.status(Response.Status.UNAUTHORIZED)
-                    .entity(e.getMessage())
-                    .build();
-        }
-    }
-
 
     @GET
     @Path("/{taxCode}/activeSubscription")
     public Response getActiveSubscription(@PathParam("taxCode") String taxCode) {
         try {
-            AthleteResponseDTO athleteResponse = athleteController.getAthleteByTaxCode(taxCode);
-            if (athleteResponse.getSubscriptions() == null || athleteResponse.getSubscriptions().isEmpty()) {
-                return Response.status(Response.Status.NOT_FOUND).entity("No subscriptions found for this athlete").build();
-            }
-            // Assuming the active subscription is the one with the latest end date
-            SubscriptionDTO activeSubscription = athleteResponse.getSubscriptions().stream()
-                    .filter(sub -> sub.getEndDate() == null || sub.getEndDate().isAfter(java.time.LocalDate.now()))
-                    .findFirst()
-                    .orElse(null);
+            // Iniezione di SubscriptionController anziché AthleteController
+            SubscriptionResponseDTO activeSubscription = subscriptionController.getActiveSubscriptionDTO(taxCode);
 
             if (activeSubscription == null) {
-                return Response.status(Response.Status.NOT_FOUND).entity("No active subscription found for this athlete").build();
+                return Response.status(Response.Status.NOT_FOUND)
+                        .entity("Nessun abbonamento attivo trovato")
+                        .build();
             }
-
             return Response.ok(activeSubscription).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
+        }
+    }
+
+    @DELETE
+    @Path("/{taxCode}/delete")
+    public Response deleteAthlete(@PathParam("taxCode") String taxCode) {
+        try {
+            athleteController.deleteAthlete(taxCode);
+            return Response.status(Response.Status.OK).build();
         } catch (IllegalArgumentException e) {
-            return Response.status(Response.Status.NOT_FOUND).entity(e.getMessage()).build();
+            return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
         }
     }
 //=================================================PUT=================================================

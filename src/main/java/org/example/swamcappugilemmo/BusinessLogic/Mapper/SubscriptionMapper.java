@@ -1,17 +1,15 @@
 package org.example.swamcappugilemmo.BusinessLogic.Mapper;
 
 import jakarta.enterprise.context.ApplicationScoped;
-import org.example.swamcappugilemmo.BusinessLogic.DTO.SubscriptionDTO;
+import org.example.swamcappugilemmo.BusinessLogic.DTO.SubscriptionResponseDTO;
 import org.example.swamcappugilemmo.DomainModel.Subscription;
-
-import java.time.LocalDate;
 
 @ApplicationScoped
 public class SubscriptionMapper {
 
-    public SubscriptionDTO toDto(Subscription s) {
-        SubscriptionDTO dto = new SubscriptionDTO();
-        dto.setType(s.getType().name());
+    public SubscriptionResponseDTO toDto(Subscription s) {
+        SubscriptionResponseDTO dto = new SubscriptionResponseDTO();
+        dto.setType(s.getType());
         dto.setPrice(s.getPrice());
         dto.setActive(s.isActive());
         dto.setStartDate(s.getStart_date());

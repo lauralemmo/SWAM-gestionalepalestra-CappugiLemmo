@@ -142,6 +142,4 @@ public class AthleteController {
         athleteDAO.deleteAthlete(Id);
     }
 
-
-
 }

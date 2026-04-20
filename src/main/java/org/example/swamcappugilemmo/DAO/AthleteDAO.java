@@ -57,13 +57,17 @@ public class AthleteDAO {
         return athlete;
     }
 
-    public void createNewSubscription(String taxCode, SubscriptionType subscriptionType, LocalDate startDate) {
-        Athlete athlete = em.find(Athlete.class,taxCode);
+    public void createNewSubscription(String taxCode, SubscriptionType subscriptionType, LocalDate startDate, LocalDate endDate, String price) {
+        Athlete athlete = findAthleteByTaxCode(taxCode);
         if (athlete != null) {
             //Subscription subscription = new Subscription(subscriptionType, startDate);
             Subscription subscription = new Subscription();
+
             subscription.setType(subscriptionType);
             subscription.setStart_date(startDate);
+            subscription.setEnd_date(endDate);
+            subscription.setPrice(price);
+
             athlete.addSubscription(subscription);
             em.merge(athlete);
         }
@@ -72,7 +76,7 @@ public class AthleteDAO {
         }
     }
     public Subscription getActiveSubscription(String tax_code) {
-        Athlete athlete = em.find(Athlete.class,tax_code);
+        Athlete athlete = findAthleteByTaxCode(tax_code);
         if (athlete != null) {
             return athlete.getSubscriptions().stream()
                     .filter(Subscription::isActive)
@@ -84,7 +88,7 @@ public class AthleteDAO {
         }
     }
     public List<Subscription> getSubscriptions(String tax_code){
-        Athlete athlete = em.find(Athlete.class,tax_code);
+        Athlete athlete = findAthleteByTaxCode(tax_code);
         if (athlete != null) {
             return athlete.getSubscriptions();
         }
@@ -102,6 +106,7 @@ public class AthleteDAO {
     }
 
     public void deleteAthlete(String username){
+        //TODO correggere questo metodo, find non funziona con username, bisogna fare una query per trovare l'atleta con quel username e poi eliminarlo
         Athlete a = em.find(Athlete.class, username);
         if(a == null){
             throw new RuntimeException("Atleta non trovato");

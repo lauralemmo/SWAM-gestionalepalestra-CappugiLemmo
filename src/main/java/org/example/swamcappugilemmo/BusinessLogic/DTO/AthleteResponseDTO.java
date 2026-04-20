@@ -20,7 +20,7 @@ public class AthleteResponseDTO {
     private LocalDate birth_date;
     private String height;
     private String weight;
-    private List<SubscriptionDTO> subscriptions;
+    private List<SubscriptionResponseDTO> subscriptions;
 
     // Costruttore che copia i dati dall'Entità Athlete
    /* public AthleteResponse(Athlete athlete) {
