@@ -18,7 +18,7 @@ public abstract class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long idUser;
-    @Column(length = 16)
+    @Column(length = 16, unique = true)
     private String tax_code;
     private String name;
     private String surname;

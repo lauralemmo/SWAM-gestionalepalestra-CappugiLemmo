@@ -1,5 +1,6 @@
 package org.example.swamcappugilemmo.BusinessLogic.ControllerLayer;
 
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.context.Dependent;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -11,85 +12,79 @@ import org.example.swamcappugilemmo.DomainModel.PersonalTrainer;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
-@Dependent
+@ApplicationScoped
 public class PersonalTrainerController {
     @Inject
     PersonalTrainerDAO personalTrainerDAO;
     @Inject
     PersonalTrainerMapper ptMapper;
 
-    public PersonalTrainerController(){
-        this.personalTrainerDAO = new PersonalTrainerDAO();
+
+    @Transactional
+    public PersonalTrainerResponseDTO addPersonalTrainer(PersonalTrainerRequestDTO request){
+        PersonalTrainer newPT = ptMapper.toEntity(request);
+        personalTrainerDAO.createPersonalTrainer(newPT);
+        return ptMapper.toDto(newPT);
     }
+
+
+    @Transactional
+    public PersonalTrainerResponseDTO getPersonalTrainerById(Long id){
+        PersonalTrainer pt = personalTrainerDAO.getPersonalTrainerById(id);
+        return ptMapper.toDto(pt);
+    }
+
+
+    @Transactional
+    public List<PersonalTrainerResponseDTO> getAllPersonalTrainers(){
+        return personalTrainerDAO.getAllPersonalTrainers()
+                .stream()
+                .map(ptMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
+
+    @Transactional
+    public PersonalTrainerResponseDTO updatePersonalTrainer(Long id, PersonalTrainerRequestDTO request){
+        //non si deve creare un nuovo PersonalTrainer, ma recuperare quello esistente e modificarlo
+        PersonalTrainer pt = personalTrainerDAO.getPersonalTrainerById(id);
+        pt.setTax_code(request.getTax_code());
+        pt.setName(request.getName());
+        pt.setSurname(request.getSurname());
+        pt.setUsername(request.getUsername());
+        pt.setPassword(request.getPassword());
+        pt.setEmail(request.getEmail());
+        pt.setPhone_number(request.getPhone_number());
+        pt.setBirth_date(request.getBirth_date());
+        pt.setSalary(request.getSalary());
+        pt.setActive(request.isActive());
+        pt.setStartDate(request.getStartDate());
+        pt.setEndDate(request.getEndDate());
+
+        PersonalTrainer updatedPT = personalTrainerDAO.updatePersonalTrainer(pt);
+        return ptMapper.toDto(updatedPT);
+    }
+
+
+    @Transactional
+    public PersonalTrainerResponseDTO deletePersonalTrainer(Long id){
+        PersonalTrainer pt = personalTrainerDAO.deletePersonalTrainer(id);
+        return ptMapper.toDto(pt);
+    }
+
+
 
 
 
     /*@Transactional
-    public void addPersonalTrainer(String name, String surname, String username, String password, String email, String phone_number, String tax_code,
-                                   LocalDate birth_date, int salary, LocalDate startDate, LocalDate endDate){
-        PersonalTrainer pt = new PersonalTrainer(name, surname, username, password, email, phone_number, tax_code, birth_date, salary, startDate, endDate);
-        personalTrainerDAO.createPersonalTrainer(pt);
-    }*/
-
-    @Transactional
-    public void addPersonalTrainer(PersonalTrainerRequestDTO request){
-        PersonalTrainer newPT = ptMapper.toEntity(request);
-        personalTrainerDAO.createPersonalTrainer(newPT);
-    }
-
-    @Transactional
     public void addNewSubscriptionToPersonalTrainer(String taxCode, LocalDate startDate, LocalDate endDate){
         PersonalTrainer pt = personalTrainerDAO.getPersonalTrainerByTaxCode(taxCode);
         pt.setActive(true);
         pt.setStartDate(startDate);
         pt.setEndDate(endDate);
         personalTrainerDAO.updatePersonalTrainer(pt);
-    }
-
-
-    /*@Transactional
-    public PersonalTrainer getPersonalTrainerByTaxCode(String taxCode){
-        return personalTrainerDAO.getPersonalTrainerByTaxCode(taxCode);
     }*/
-
-    @Transactional
-    public PersonalTrainerResponseDTO getPersonalTrainerByTaxCode(String taxCode){
-        PersonalTrainer pt = personalTrainerDAO.getPersonalTrainerByTaxCode(taxCode);
-        return ptMapper.toDto(pt);
-    }
-
-    @Transactional
-    public List<PersonalTrainer> getAllPersonalTrainer(){
-        return personalTrainerDAO.getAllPersonalTrainers();
-    }
-
-    @Transactional
-    public void updatePersonalTrainer(Long id, String name, String surname, String username, String password, String email, String phone_number, String tax_code,
-                                      LocalDate birth_date, int salary, LocalDate startDate, LocalDate endDate){
-
-        //Questo era sbagliato, non si deve creare un nuovo PersonalTrainer, ma recuperare quello esistente e modificarlo
-        //PersonalTrainer pt = new PersonalTrainer(name, surname, username, password, email, phone_number, tax_code, birth_date, salary, startDate, endDate);
-        PersonalTrainer pt = personalTrainerDAO.getPersonalTrainerById(id);
-        pt.setName(name);
-        pt.setSurname(surname);
-        pt.setUsername(username);
-        pt.setPassword(password);
-        pt.setEmail(email);
-        pt.setPhone_number(phone_number);
-        pt.setTax_code(tax_code);
-        pt.setBirth_date(birth_date);
-        pt.setSalary(salary);
-        pt.setStartDate(startDate);
-        pt.setEndDate(endDate);
-        // Usa il merge
-        personalTrainerDAO.updatePersonalTrainer(pt);
-    }
-
-    @Transactional
-    public void deletePersonalTrainer(String taxCode){
-        personalTrainerDAO.deletePersonalTrainer(taxCode);
-    }
-
 
 }

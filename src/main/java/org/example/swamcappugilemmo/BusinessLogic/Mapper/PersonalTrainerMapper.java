@@ -9,45 +9,36 @@ import org.example.swamcappugilemmo.DomainModel.PersonalTrainer;
 public class PersonalTrainerMapper {
 
     public PersonalTrainer toEntity(PersonalTrainerRequestDTO dto) {
-        PersonalTrainer entity = new PersonalTrainer();
-        entity.setTax_code(dto.getTax_code());
-        entity.setName(dto.getName());
-        entity.setSurname(dto.getSurname());
-        entity.setUsername(dto.getUsername());
-        entity.setPassword(dto.getPassword());
-        entity.setEmail(dto.getEmail());
-        entity.setPhone_number(dto.getPhone_number());
-        entity.setBirth_date(dto.getBirth_date());
-        entity.setSalary(dto.getSalary());
-        entity.setStartDate(dto.getStartDate());
-        entity.setEndDate(dto.getEndDate());
-        return entity;
-//        return new PersonalTrainer(
-//                dto.getTax_code(),
-//                dto.getName(),
-//                dto.getSurname(),
-//                dto.getUsername(),
-//                dto.getPassword(),
-//                dto.getEmail(),
-//                dto.getPhone_number(),
-//                dto.getBirth_date(),
-//                dto.getSalary(),
-//                dto.getStartDate(),
-//                dto.getEndDate()
-//        );
+        PersonalTrainer pt = new PersonalTrainer();
+        pt.setTax_code(dto.getTax_code());
+        pt.setName(dto.getName());
+        pt.setSurname(dto.getSurname());
+        pt.setUsername(dto.getUsername());
+        pt.setPassword(dto.getPassword());
+        pt.setEmail(dto.getEmail());
+        pt.setPhone_number(dto.getPhone_number());
+        pt.setBirth_date(dto.getBirth_date());
+        pt.setSalary(dto.getSalary());
+        pt.setActive(dto.isActive());
+        pt.setStartDate(dto.getStartDate());
+        pt.setEndDate(dto.getEndDate());
+        return pt;
     }
 
 
     public PersonalTrainerResponseDTO toDto(PersonalTrainer pt){
         PersonalTrainerResponseDTO response = new PersonalTrainerResponseDTO();
+        response.setIdUser(pt.getIdUser());
+        response.setTax_code(pt.getTax_code());
         response.setName(pt.getName());
         response.setSurname(pt.getSurname());
         response.setEmail(pt.getEmail());
         response.setPhone_number(pt.getPhone_number());
+        response.setBirth_date(pt.getBirth_date());
+        response.setSalary(pt.getSalary());
         response.setActive(pt.isActive());
         response.setStartDate(pt.getStartDate());
         response.setEndDate(pt.getEndDate());
-
         return response;
     }
 

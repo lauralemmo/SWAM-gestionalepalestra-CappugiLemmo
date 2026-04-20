@@ -19,7 +19,7 @@ import java.util.List;
 public class PersonalTrainer extends User {
 
     private int salary;
-    private boolean active = false;
+    private boolean active;
     private LocalDate startDate;
     private LocalDate endDate;
 
@@ -32,17 +32,9 @@ public class PersonalTrainer extends User {
     private List<Course> courses = new ArrayList<>();
 
 
-    public void setWorkoutPlans(ArrayList<WorkoutPlan> workoutPlans) {
-        this.workoutPlans = workoutPlans;
-    }
-
-    public void setCourses(ArrayList<Course> courses) {
-        this.courses = courses;
-    }
-
-    public void addCourse(Course course){
+    /*public void addCourse(Course course){
         this.courses.add(course);
         //course.setPersonalTrainer(this);
-    }
+    }*/
 
 }
