@@ -69,8 +69,10 @@ public class AthleteService {
         try {
             subscriptionController.crateNewSubscription(request);
             return Response.status(Response.Status.OK).build();
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException | IllegalStateException e) { // <-- Aggiunto IllegalStateException
             return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Errore interno: " + e.getMessage()).build();
         }
     }
 
@@ -89,7 +91,7 @@ public class AthleteService {
 
 
     @GET
-    @Path("/{id}")
+    @Path("/id/{id}")
     public Response getAthleteById(@PathParam("id") Long id) {
         try {
             AthleteResponseDTO response = athleteController.getAthleteById(id);
@@ -132,10 +134,10 @@ public class AthleteService {
     }
 
     @DELETE
-    @Path("/{taxCode}/delete")
-    public Response deleteAthlete(@PathParam("taxCode") String taxCode) {
+    @Path("/{username}/delete")
+    public Response deleteAthlete(@PathParam("username") String username) {
         try {
-            athleteController.deleteAthlete(taxCode);
+            athleteController.deleteAthlete(username);
             return Response.status(Response.Status.OK).build();
         } catch (IllegalArgumentException e) {
             return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
@@ -164,6 +166,17 @@ public class AthleteService {
         } catch (IllegalArgumentException e) {
             return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
         }
+    }
 
+    @PUT
+    @Path("/{id}/update")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response updateAthleteUsername(@PathParam("id") Long id, String request) {
+        try {
+            athleteController.updateAthleteUsername(id, request);
+            return Response.status(Response.Status.OK).build();
+        } catch (IllegalArgumentException e) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
+        }
     }
 }

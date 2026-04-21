@@ -9,7 +9,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 public class SubscriptionRequestDTO {
-    private String taxCode;
+    Long idUser;
     private SubscriptionType type;
     private LocalDate startDate;
 }

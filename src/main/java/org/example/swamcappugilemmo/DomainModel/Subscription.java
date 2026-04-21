@@ -22,9 +22,16 @@ public class Subscription {
     private boolean active;
 
     public boolean isActive() {
-        this.active = LocalDate.now().isAfter(this.start_date) && LocalDate.now().isBefore(this.end_date);
-        return active;
+        if (this.start_date == null || this.end_date == null) {
+            this.active = false;
+            return false;
+        }
 
+        LocalDate today = LocalDate.now();
+        // È attivo se oggi NON è prima della data di inizio e NON è dopo la data di fine
+        this.active = !today.isBefore(this.start_date) && !today.isAfter(this.end_date);
+
+        return active;
     }
 
 }

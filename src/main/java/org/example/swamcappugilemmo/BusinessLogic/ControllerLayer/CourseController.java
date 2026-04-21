@@ -34,7 +34,7 @@ public class CourseController {
 
     @Transactional
     public void addCourse(CourseDTO request) {
-        PersonalTrainer pt = personalTrainerDAO.getPersonalTrainerByTaxCode(request.getTaxCode());
+        PersonalTrainer pt = personalTrainerDAO.getPersonalTrainerById(request.getIdPersonalTrainer());
         Course newC = courseMapper.toEntity(request,pt);
         courseDAO.createCourse(newC);
         //pt.addCourse(newC);

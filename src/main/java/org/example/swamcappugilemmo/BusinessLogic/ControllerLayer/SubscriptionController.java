@@ -26,16 +26,16 @@ public class SubscriptionController {
     // crea un nuovo abbonamento per un atleta, se ne ha già uno attivo, non ha senso crearne un altro, quindi prima di creare un nuovo abbonamento, bisogna verificare se l'atleta ha già un abbonamento attivo
     @Transactional
     public void crateNewSubscription(SubscriptionRequestDTO subscriptionRequestDTO) {
-        Subscription activeSub = athleteDAO.getActiveSubscription(subscriptionRequestDTO.getTaxCode());
+        Athlete athlete = athleteDAO.findById(subscriptionRequestDTO.getIdUser());
+        Subscription activeSub = athleteDAO.getActiveSubscription(athlete.getTax_code());
         if (activeSub != null && activeSub.isActive()) {
             throw new IllegalStateException("Impossibile aggiungere un nuovo abbonamento: quello attuale è ancora attivo fino al " + activeSub.getEnd_date());
         }
         if (subscriptionRequestDTO.getStartDate() == null || subscriptionRequestDTO.getStartDate().isBefore(LocalDate.now())) {
             throw new IllegalArgumentException("Data di inizio non valida.");
         }
-        LocalDate endDate = subscriptionRequestDTO.getStartDate().plusMonths(subscriptionRequestDTO.getType().getMonths());
-        String price = subscriptionRequestDTO.getType().getDefaultPrice();
-        athleteDAO.createNewSubscription(subscriptionRequestDTO.getTaxCode(), subscriptionRequestDTO.getType(), subscriptionRequestDTO.getStartDate(), endDate, price);
+        Subscription sub = subscriptionMapper.toEntity(subscriptionRequestDTO);
+        athleteDAO.createNewSubscription(athlete.getTax_code(), sub);
     }
 
     @Transactional

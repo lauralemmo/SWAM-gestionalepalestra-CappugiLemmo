@@ -36,14 +36,15 @@ public class AthleteDAO {
     }
 
     public Athlete findAthleteByTaxCode(String taxCode) {
-        Athlete athlete;
-        athlete = em.createQuery("SELECT a FROM Athlete a WHERE a.tax_code = :tc", Athlete.class)
-                .setParameter("tc", taxCode)
-                .getSingleResult();
-        if (athlete == null) {
-            throw new IllegalArgumentException("Athlete with tax code " + taxCode + " not found.");
-      }
-        return athlete;
+        try {
+            return em.createQuery("SELECT a FROM Athlete a WHERE a.tax_code = :tc", Athlete.class)
+                    .setParameter("tc", taxCode)
+                    .getSingleResult();
+        } catch (jakarta.persistence.NoResultException e) {
+            return null; // Ora restituisce null correttamente se non lo trova
+        } catch (jakarta.persistence.NonUniqueResultException e) {
+            throw new RuntimeException("Errore critico: database corrotto, trovati più atleti con lo stesso codice fiscale!");
+        }
     }
 
     public Athlete findAthleteByUsername(String username) {
@@ -57,17 +58,10 @@ public class AthleteDAO {
         return athlete;
     }
 
-    public void createNewSubscription(String taxCode, SubscriptionType subscriptionType, LocalDate startDate, LocalDate endDate, String price) {
+    public void createNewSubscription(String taxCode, Subscription subscription) {
         Athlete athlete = findAthleteByTaxCode(taxCode);
         if (athlete != null) {
             //Subscription subscription = new Subscription(subscriptionType, startDate);
-            Subscription subscription = new Subscription();
-
-            subscription.setType(subscriptionType);
-            subscription.setStart_date(startDate);
-            subscription.setEnd_date(endDate);
-            subscription.setPrice(price);
-
             athlete.addSubscription(subscription);
             em.merge(athlete);
         }

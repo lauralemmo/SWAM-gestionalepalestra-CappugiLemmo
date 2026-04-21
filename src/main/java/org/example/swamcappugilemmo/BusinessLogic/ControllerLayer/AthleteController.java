@@ -102,6 +102,17 @@ public class AthleteController {
         Athlete athlete = athleteDAO.findAthleteByTaxCode(tax_code);
         if (athlete != null) {
             athlete.setUsername(request);
+        } else {
+            throw new IllegalArgumentException("Atleta con codice fiscale " + tax_code + " non trovato.");
+        }
+    }
+    @Transactional
+    public void updateAthleteUsername(Long id, String request) {
+        Athlete athlete = athleteDAO.findById(id);
+        if (athlete != null) {
+            athlete.setUsername(request);
+        } else {
+            throw new IllegalArgumentException("Atleta con codice: " + id + " non trovato.");
         }
     }
 
@@ -115,6 +126,15 @@ public class AthleteController {
         }
     }
 
+    @Transactional
+    public void deleteAthlete(String username){
+        athleteDAO.deleteAthlete(username);
+    }
+
+    @Transactional
+    public void deleteAthleta(Long Id){
+        athleteDAO.deleteAthlete(Id);
+    }
    /* @Transactional
     public void updateAthleteInfo(String tax_code, String height, String weight) {
         Athlete athlete = athleteDAO.findAthleteByTaxCode(tax_code);
@@ -132,14 +152,5 @@ public class AthleteController {
         Athlete athlete = new Athlete(tax_code, name, surname, username, password, email, phone_number, birth_date, height, weight);
         athleteDAO.updateAthlete(athlete);
     }*/
-
-    @Transactional
-    public void deleteAthlete(String username){
-        athleteDAO.deleteAthlete(username);
-    }
-    @Transactional
-    public void deleteAthleta(Long Id){
-        athleteDAO.deleteAthlete(Id);
-    }
 
 }
