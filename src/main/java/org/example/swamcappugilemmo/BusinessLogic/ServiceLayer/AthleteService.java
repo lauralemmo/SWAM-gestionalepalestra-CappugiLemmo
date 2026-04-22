@@ -7,8 +7,11 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.example.swamcappugilemmo.Security.JwtUtil;
+import org.example.swamcappugilemmo.Security.Secured;
 
 import java.util.List;
+import java.util.Map;
 
 @Path("/athletes")
 @Produces(MediaType.APPLICATION_JSON)
@@ -54,7 +57,11 @@ public class AthleteService {
                     loginRequest.getUsername(),
                     loginRequest.getPassword()
             );
-            return Response.ok(response).build();
+            // Se il login è riuscito, genera un token JWT e includilo nella risposta
+            String token = JwtUtil.generateToken(response.getUsername());
+            return Response.ok(response)
+                    .entity(Map.of("token", token, "user", response))
+                    .build();
         } catch (IllegalArgumentException e) {
             return Response.status(Response.Status.UNAUTHORIZED)
                     .entity(e.getMessage())
@@ -91,6 +98,7 @@ public class AthleteService {
 
 
     @GET
+    @Secured
     @Path("/id/{id}")
     public Response getAthleteById(@PathParam("id") Long id) {
         try {
@@ -102,6 +110,7 @@ public class AthleteService {
     }
 
     @GET
+    @Secured
     @Path("/{taxCode}")
     public Response getAthlete(@PathParam("taxCode") String taxCode) {
         try {
@@ -159,9 +168,10 @@ public class AthleteService {
     @PUT
     @Path("/{taxCode}/update")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response updateAthleteUsername(@PathParam("taxCode") String taxCode, String request) {
+    public Response updateAthleteUsername(@PathParam("taxCode") String taxCode, Map<String, String> body) {
         try {
-            athleteController.updateAthleteUsername(taxCode, request);
+            String newUsername = body.get("newUsername");
+            athleteController.updateAthleteUsername(taxCode, newUsername);
             return Response.status(Response.Status.OK).build();
         } catch (IllegalArgumentException e) {
             return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();

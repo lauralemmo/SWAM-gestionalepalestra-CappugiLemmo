@@ -10,6 +10,7 @@ import jakarta.transaction.Transactional;
 import org.example.swamcappugilemmo.DomainModel.Athlete;
 import org.example.swamcappugilemmo.DomainModel.Subscription;
 import org.example.swamcappugilemmo.DomainModel.SubscriptionType;
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -52,7 +53,11 @@ public class AthleteController {
     @Transactional
     public AthleteResponseDTO registerNewAthlete(AthleteRequestDTO request) {
         Athlete newAthlete = athleteMapper.toEntity(request);
-        //Subscription initialSubscription = new Subscription(request.getSubscriptionType(), request.getStartDate());
+
+        //cripta la password prima di salvarla
+        String hashedPassword = BCrypt.hashpw(request.getPassword(), BCrypt.gensalt());
+        newAthlete.setPassword(hashedPassword);
+
         Subscription initialSubscription = new Subscription();
         SubscriptionType type = request.getSubscriptionType();
         LocalDate start = request.getStartDate();
@@ -69,6 +74,15 @@ public class AthleteController {
         return athleteMapper.toDto(newAthlete);
     }
 
+    @Transactional
+    public AthleteResponseDTO loginAthlete(String username, String password) {
+        Athlete athlete = athleteDAO.findAthleteByUsername(username);
+        if (athlete != null && BCrypt.checkpw(password, athlete.getPassword())) {
+            return athleteMapper.toDto(athlete);
+        } else {
+            throw new IllegalArgumentException("Credenziali non valide: username o password errati.");
+        }
+    }
     @Transactional
     public List<AthleteResponseDTO> getAllAthletes() {
         return athleteDAO.findAll()
@@ -100,10 +114,10 @@ public class AthleteController {
     @Transactional
     public void updateAthleteUsername(String tax_code, String request) {
         Athlete athlete = athleteDAO.findAthleteByTaxCode(tax_code);
-        if (athlete != null) {
+        if (athlete != null && !request.isBlank()) {
             athlete.setUsername(request);
         } else {
-            throw new IllegalArgumentException("Atleta con codice fiscale " + tax_code + " non trovato.");
+            throw new IllegalArgumentException("Atleta con codice fiscale " + tax_code + " non trovato o username non valido.");
         }
     }
     @Transactional
@@ -116,15 +130,6 @@ public class AthleteController {
         }
     }
 
-    @Transactional
-    public AthleteResponseDTO loginAthlete(String username, String password) {
-        Athlete athlete = athleteDAO.findAthleteByUsername(username);
-        if (athlete != null && athlete.getPassword().equals(password)) {
-            return athleteMapper.toDto(athlete);
-        } else {
-            throw new IllegalArgumentException("Credenziali non valide: username o password errati.");
-        }
-    }
 
     @Transactional
     public void deleteAthlete(String username){
