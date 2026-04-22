@@ -31,6 +31,17 @@ public class PersonalTrainerDAO {
         return pt;
     }
 
+    @Transactional
+    public PersonalTrainer getPersonalTrainerByUsername(String username) {
+        PersonalTrainer pt = em.createQuery("SELECT pt FROM PersonalTrainer pt WHERE pt.username = :username", PersonalTrainer.class)
+                .setParameter("username", username)
+                .getSingleResult();
+        if (pt == null) {
+            throw new EntityNotFoundException("Personal trainer with username " + username + " not found.");
+            }
+        return pt;
+    }
+
 
     @Transactional
     public List<PersonalTrainer>  getAllPersonalTrainers(){

@@ -12,6 +12,7 @@ public class PersonalTrainerResponseDTO {
     private String tax_code;
     private String name;
     private String surname;
+    private String username;
     private String email;
     private String phone_number;
     private LocalDate birth_date;

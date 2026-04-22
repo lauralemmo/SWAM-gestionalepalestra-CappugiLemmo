@@ -9,8 +9,10 @@ import jakarta.ws.rs.core.Response;
 import org.example.swamcappugilemmo.BusinessLogic.ControllerLayer.PersonalTrainerController;
 import org.example.swamcappugilemmo.BusinessLogic.DTO.PersonalTrainerRequestDTO;
 import org.example.swamcappugilemmo.BusinessLogic.DTO.PersonalTrainerResponseDTO;
+import org.example.swamcappugilemmo.Security.JwtUtil;
 
 import java.util.List;
+import java.util.Map;
 
 
 @Path("/personaltrainers")

@@ -9,6 +9,8 @@ import org.example.swamcappugilemmo.BusinessLogic.DTO.PersonalTrainerResponseDTO
 import org.example.swamcappugilemmo.BusinessLogic.Mapper.PersonalTrainerMapper;
 import org.example.swamcappugilemmo.DAO.PersonalTrainerDAO;
 import org.example.swamcappugilemmo.DomainModel.PersonalTrainer;
+import org.example.swamcappugilemmo.Security.Secured;
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -25,10 +27,11 @@ public class PersonalTrainerController {
     @Transactional
     public PersonalTrainerResponseDTO addPersonalTrainer(PersonalTrainerRequestDTO request){
         PersonalTrainer newPT = ptMapper.toEntity(request);
+        String hashedPassword = BCrypt.hashpw(request.getPassword(), BCrypt.gensalt());
+        newPT.setPassword(hashedPassword);
         personalTrainerDAO.createPersonalTrainer(newPT);
         return ptMapper.toDto(newPT);
     }
-
 
     @Transactional
     public PersonalTrainerResponseDTO getPersonalTrainerById(Long id){
@@ -44,7 +47,6 @@ public class PersonalTrainerController {
                 .map(ptMapper::toDto)
                 .collect(Collectors.toList());
     }
-
 
     @Transactional
     public PersonalTrainerResponseDTO updatePersonalTrainer(Long id, PersonalTrainerRequestDTO request){

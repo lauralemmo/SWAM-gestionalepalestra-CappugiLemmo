@@ -48,29 +48,11 @@ public class AthleteService {
         }
     }
 
-    @POST
-    @Path("/login")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response login(LoginDTO loginRequest) {
-        try {
-            AthleteResponseDTO response = athleteController.loginAthlete(
-                    loginRequest.getUsername(),
-                    loginRequest.getPassword()
-            );
-            // Se il login è riuscito, genera un token JWT e includilo nella risposta
-            String token = JwtUtil.generateToken(response.getUsername());
-            return Response.ok(response)
-                    .entity(Map.of("token", token, "user", response))
-                    .build();
-        } catch (IllegalArgumentException e) {
-            return Response.status(Response.Status.UNAUTHORIZED)
-                    .entity(e.getMessage())
-                    .build();
-        }
-    }
+
 
     @POST
     @Path("/registerNewSubscription")
+    @Secured({"ADMIN"})
     @Consumes(MediaType.APPLICATION_JSON)
     public Response registerNewSubscription(SubscriptionRequestDTO request) {
         try {
@@ -98,7 +80,7 @@ public class AthleteService {
 
 
     @GET
-    @Secured
+    @Secured({"ATHLETE", "ADMIN"})
     @Path("/id/{id}")
     public Response getAthleteById(@PathParam("id") Long id) {
         try {
@@ -110,7 +92,7 @@ public class AthleteService {
     }
 
     @GET
-    @Secured
+    @Secured({"ATHLETE", "ADMIN"})
     @Path("/{taxCode}")
     public Response getAthlete(@PathParam("taxCode") String taxCode) {
         try {
@@ -143,6 +125,7 @@ public class AthleteService {
     }
 
     @DELETE
+    @Secured({"ATHLETE", "ADMIN"})
     @Path("/{username}/delete")
     public Response deleteAthlete(@PathParam("username") String username) {
         try {
@@ -167,6 +150,7 @@ public class AthleteService {
 
     @PUT
     @Path("/{taxCode}/update")
+    @Secured({"ATHLETE", "ADMIN"})
     @Consumes(MediaType.APPLICATION_JSON)
     public Response updateAthleteUsername(@PathParam("taxCode") String taxCode, Map<String, String> body) {
         try {
@@ -180,6 +164,7 @@ public class AthleteService {
 
     @PUT
     @Path("/{id}/update")
+    @Secured({"ATHLETE", "ADMIN"})
     @Consumes(MediaType.APPLICATION_JSON)
     public Response updateAthleteUsername(@PathParam("id") Long id, String request) {
         try {

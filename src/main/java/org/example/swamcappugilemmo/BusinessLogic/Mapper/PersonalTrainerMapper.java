@@ -32,6 +32,7 @@ public class PersonalTrainerMapper {
         response.setTax_code(pt.getTax_code());
         response.setName(pt.getName());
         response.setSurname(pt.getSurname());
+        response.setUsername(pt.getUsername());
         response.setEmail(pt.getEmail());
         response.setPhone_number(pt.getPhone_number());
         response.setBirth_date(pt.getBirth_date());

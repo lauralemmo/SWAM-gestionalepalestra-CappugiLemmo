@@ -1,17 +1,25 @@
 package org.example.swamcappugilemmo.Security;
 
+import io.jsonwebtoken.Claims;
 import jakarta.annotation.Priority;
 import jakarta.ws.rs.Priorities;
 import jakarta.ws.rs.container.ContainerRequestContext;
 import jakarta.ws.rs.container.ContainerRequestFilter;
+import jakarta.ws.rs.container.ResourceInfo;
+import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.Provider;
+
+import java.lang.reflect.Method;
+import java.util.Arrays;
 
 @Secured // Associa questo buttafuori al cartello "Secured"
 @Provider // Dice al server JAX-RS che questo è un componente attivo
 @Priority(Priorities.AUTHENTICATION) // Deve essere eseguito prima di tutto il resto
 public class AuthenticationFilter implements ContainerRequestFilter {
+    @Context
+    private ResourceInfo resourceInfo;
 
     @Override
     public void filter(ContainerRequestContext requestContext) {
@@ -28,13 +36,29 @@ public class AuthenticationFilter implements ContainerRequestFilter {
         String token = authorizationHeader.substring("Bearer".length()).trim();
 
         try {
-            // Chiedi a JwtUtil di controllare se il token è valido
-            JwtUtil.validateToken(token);
+            // Valida il token e ottieni le informazioni (Claims)
+            Claims claims = JwtUtil.validateTokenAndGetClaims(token);
+            String userRole = claims.get("role", String.class); // Legge il ruolo dal token
 
-            // Se arriviamo qui, il token è OK!
+            // Scopri quale metodo sta cercando di chiamare l'utente
+            Method method = resourceInfo.getResourceMethod();
+            Secured securedAnnotation = method.getAnnotation(Secured.class);
+
+            if (securedAnnotation != null) {
+                String[] allowedRoles = securedAnnotation.value(); // Es: ["ADMIN", "PT"]
+
+                // Se il metodo richiede ruoli specifici, controlla se l'utente ce l'ha!
+                if (allowedRoles.length > 0) {
+                    boolean hasRole = Arrays.asList(allowedRoles).contains(userRole);
+                    if (!hasRole) {
+                        // L'utente ha un token valido, ma non è del ruolo giusto
+                        requestContext.abortWith(Response.status(Response.Status.FORBIDDEN)
+                                .entity("Accesso negato: non hai i permessi per questa operazione").build());
+                    }
+                }
+            }
 
         } catch (Exception e) {
-            // Il token è falso o scaduto: blocca tutto e restituisci Errore 401
             requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).entity("Token non valido o scaduto").build());
         }
     }
