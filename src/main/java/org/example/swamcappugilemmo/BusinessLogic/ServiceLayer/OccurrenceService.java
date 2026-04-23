@@ -6,6 +6,9 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.example.swamcappugilemmo.BusinessLogic.ControllerLayer.OccurrenceController;
 import org.example.swamcappugilemmo.DomainModel.Occurrence;
+import org.example.swamcappugilemmo.Security.Secured;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.ws.rs.core.Context;
 
 
 @Path("/occurrences")
@@ -17,6 +20,7 @@ public class OccurrenceService {
     OccurrenceController occurrenceController;
 
     @POST
+    @Secured({"ADMIN"})
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createOccurrence(Occurrence occurrence) {
         try {
@@ -41,6 +45,35 @@ public class OccurrenceService {
         }
         catch (Exception e) {
             return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
+        }
+    }
+
+    @PUT
+    @Path("/{idOccurrence}/update")
+    @Secured({"ADMIN", "PT"})
+    public Response updateOccurrence(
+            @PathParam("idOccurrence") Long idOccurrence,
+            Occurrence updatedData,
+            @Context HttpServletRequest request) {
+
+        try {
+            // Leggo chi ha fatto la richiesta
+            Long callerId = (Long) request.getAttribute("caller_id");
+            String callerRole = (String) request.getAttribute("caller_role");
+            occurrenceController.updateOccurrenceSecurely(
+                    idOccurrence, updatedData, callerId, callerRole
+            );
+
+            return Response.status(Response.Status.OK).entity("Orario aggiornato con successo").build();
+
+        } catch (SecurityException e) {
+            // Eccezione di sicurezza se l'utente non ha i permessi
+            return Response.status(Response.Status.FORBIDDEN).entity(e.getMessage()).build();
+        } catch (IllegalArgumentException e) {
+            // Se i dati non si trovano
+            return Response.status(Response.Status.NOT_FOUND).entity(e.getMessage()).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Errore: " + e.getMessage()).build();
         }
     }
 

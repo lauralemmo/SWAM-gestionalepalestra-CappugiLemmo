@@ -101,9 +101,13 @@ public class CourseController {
     }
 
     @Transactional
-    public void updateCourse(String name, int numMembers, int numMax, PersonalTrainer personalTrainer){
+    public void updateCourse(Long id, CourseDTO request){
+        String name = request.getName();
+        int numMembers = request.getNumMembers();
+        int numMax = request.getNumMax();
+        PersonalTrainer personalTrainer = personalTrainerDAO.getPersonalTrainerById(request.getIdPersonalTrainer());
         //Course course = new Course(name, numMembers, numMax, personalTrainer);
-        Course course = new Course();
+        Course course = courseDAO.getCourseById(id);
         course.setName(name);
         course.setNumMembers(numMembers);
         course.setNumMax(numMax);

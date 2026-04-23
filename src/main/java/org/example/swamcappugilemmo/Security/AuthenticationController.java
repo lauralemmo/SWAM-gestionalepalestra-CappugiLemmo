@@ -42,13 +42,14 @@ public class AuthenticationController {
                     throw new IllegalArgumentException("Ruolo utente sconosciuto.");
                 }
                 // Genera il token mettendo dentro il ruolo
-                String token = JwtUtil.generateToken(user.getUsername(), role);
+                String token = JwtUtil.generateToken(user.getUsername(), role, user.getIdUser());
 
                 // Prepara la risposta
                 Map<String, Object> response = new HashMap<>();
                 response.put("token", token);
                 response.put("role", role);
                 response.put("username", user.getUsername());
+                response.put("idUser", user.getIdUser());
 
                 return response;
             } else {

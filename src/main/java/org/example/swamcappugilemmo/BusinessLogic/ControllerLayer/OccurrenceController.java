@@ -54,4 +54,28 @@ public class OccurrenceController {
         return occurrenceDAO.getOccurrencesByCourse(corso);
    }
 
+    public void updateOccurrenceSecurely(Long idOccurrence, Occurrence updatedData, Long callerId, String callerRole) {
+
+        // Controlliamo se l'occorrenza esiste
+        Occurrence existingOccurrence = occurrenceDAO.getOccurrenceById(idOccurrence);
+        if (existingOccurrence == null) {
+            throw new IllegalArgumentException("Data lezione non trovata nel database");
+        }
+        // Troviamo il corso collegato
+        Long courseId = existingOccurrence.getCourse().getIdCourse();
+        Course course = courseDAO.getCourseById(courseId);
+
+        // Verifichiamo i permessi
+        if (!"ADMIN".equals(callerRole) && !course.getPersonalTrainer().getIdUser().equals(callerId)) {
+            throw new SecurityException("Accesso negato: Puoi modificare solo le date dei TUOI corsi!");
+        }
+
+        // Modifica dei dati sicura
+        existingOccurrence.setDate(updatedData.getDate());
+        existingOccurrence.setHours(updatedData.getHours());
+
+        // Salvataggio
+        occurrenceDAO.updateOccurrence(existingOccurrence);
+    }
+
 }

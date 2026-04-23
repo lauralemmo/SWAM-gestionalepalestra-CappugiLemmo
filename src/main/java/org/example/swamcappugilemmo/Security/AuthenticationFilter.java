@@ -39,6 +39,10 @@ public class AuthenticationFilter implements ContainerRequestFilter {
             // Valida il token e ottieni le informazioni (Claims)
             Claims claims = JwtUtil.validateTokenAndGetClaims(token);
             String userRole = claims.get("role", String.class); // Legge il ruolo dal token
+            Long id = claims.get("id", Long.class);
+            // Salva l'ID e il ruolo dell'utente nel contesto della richiesta per usarli dopo nei servizi
+            requestContext.setProperty("caller_id", id);
+            requestContext.setProperty("caller_role", userRole);
 
             // Scopri quale metodo sta cercando di chiamare l'utente
             Method method = resourceInfo.getResourceMethod();

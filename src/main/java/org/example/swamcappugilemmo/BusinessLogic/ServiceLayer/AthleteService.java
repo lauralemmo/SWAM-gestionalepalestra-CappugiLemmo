@@ -1,5 +1,7 @@
 package org.example.swamcappugilemmo.BusinessLogic.ServiceLayer;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.ws.rs.core.Context;
 import org.example.swamcappugilemmo.BusinessLogic.ControllerLayer.AthleteController;
 import org.example.swamcappugilemmo.BusinessLogic.ControllerLayer.SubscriptionController;
 import org.example.swamcappugilemmo.BusinessLogic.DTO.*;
@@ -67,6 +69,8 @@ public class AthleteService {
 
     //=================================================GET=================================================
     @GET
+    @Secured({"ADMIN"})
+    @Path("/all")
     public Response getAllAthletes() {
         try{
             List<AthleteResponseDTO> athletes = athleteController.getAllAthletes();
@@ -80,7 +84,7 @@ public class AthleteService {
 
 
     @GET
-    @Secured({"ATHLETE", "ADMIN"})
+    @Secured({"ADMIN"})
     @Path("/id/{id}")
     public Response getAthleteById(@PathParam("id") Long id) {
         try {
@@ -92,7 +96,7 @@ public class AthleteService {
     }
 
     @GET
-    @Secured({"ATHLETE", "ADMIN"})
+    @Secured({"ADMIN"})
     @Path("/{taxCode}")
     public Response getAthlete(@PathParam("taxCode") String taxCode) {
         try {
@@ -108,6 +112,7 @@ public class AthleteService {
 
     @GET
     @Path("/{taxCode}/activeSubscription")
+    @Secured({"ATHLETE", "ADMIN"})
     public Response getActiveSubscription(@PathParam("taxCode") String taxCode) {
         try {
             // Iniezione di SubscriptionController anziché AthleteController
@@ -125,16 +130,20 @@ public class AthleteService {
     }
 
     @DELETE
-    @Secured({"ATHLETE", "ADMIN"})
-    @Path("/{username}/delete")
-    public Response deleteAthlete(@PathParam("username") String username) {
+    @Secured({"ADMIN"})
+    @Path("/{id}/delete")
+    public Response deleteAthlete(@PathParam("id") Long id) {
         try {
-            athleteController.deleteAthlete(username);
+            // Usiamo il metodo corretto che prende il Long id
+            athleteController.deleteAthleta(id);
             return Response.status(Response.Status.OK).build();
         } catch (IllegalArgumentException e) {
             return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
         }
     }
+
 //=================================================PUT=================================================
     /*@POST
     @Path("/registerNewSubscription")
@@ -149,29 +158,33 @@ public class AthleteService {
     }*/
 
     @PUT
-    @Path("/{taxCode}/update")
+    @Path("/{id}/update")
     @Secured({"ATHLETE", "ADMIN"})
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response updateAthleteUsername(@PathParam("taxCode") String taxCode, Map<String, String> body) {
+    public Response updateAthleteUsername(
+            @PathParam("id") Long id,
+            Map<String, String> body,
+            @Context HttpServletRequest requestContext) {
+
         try {
+            Long callerId = (Long) requestContext.getAttribute("caller_id");
+            String callerRole = (String) requestContext.getAttribute("caller_role");
+            // Se non sei admin, e l'ID che vuoi modificare (id) è diverso dal tuo (callerId) -> BLOCCO!
+            if (!"ADMIN".equals(callerRole) && !id.equals(callerId)) {
+                return Response.status(Response.Status.FORBIDDEN)
+                        .entity("Accesso negato: Non puoi modificare il profilo di un altro atleta!")
+                        .build();
+            }
+
+            // Se sei qui, l'operazione è sicura.
             String newUsername = body.get("newUsername");
-            athleteController.updateAthleteUsername(taxCode, newUsername);
+            athleteController.updateAthleteUsername(id, newUsername);
+
             return Response.status(Response.Status.OK).build();
+
         } catch (IllegalArgumentException e) {
             return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
         }
     }
 
-    @PUT
-    @Path("/{id}/update")
-    @Secured({"ATHLETE", "ADMIN"})
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response updateAthleteUsername(@PathParam("id") Long id, String request) {
-        try {
-            athleteController.updateAthleteUsername(id, request);
-            return Response.status(Response.Status.OK).build();
-        } catch (IllegalArgumentException e) {
-            return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
-        }
-    }
 }

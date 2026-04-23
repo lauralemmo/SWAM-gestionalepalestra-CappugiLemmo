@@ -25,6 +25,7 @@ public class PersonalTrainerController {
 
 
     @Transactional
+    @Secured("ADMIN") //solo l' admin può aggiungere un nuovo personal trainer (senno si puo scegliere da solo il salario!)
     public PersonalTrainerResponseDTO addPersonalTrainer(PersonalTrainerRequestDTO request){
         PersonalTrainer newPT = ptMapper.toEntity(request);
         String hashedPassword = BCrypt.hashpw(request.getPassword(), BCrypt.gensalt());

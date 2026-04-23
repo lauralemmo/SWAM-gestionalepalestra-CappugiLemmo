@@ -6,6 +6,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.example.swamcappugilemmo.BusinessLogic.ControllerLayer.CourseController;
 import org.example.swamcappugilemmo.BusinessLogic.DTO.CourseDTO;
+import org.example.swamcappugilemmo.Security.Secured;
 
 
 @Path("/courses")
@@ -20,6 +21,7 @@ public class CourseService {
 
     @POST
     @Path("/register")
+    @Secured({"ADMIN"})
     @Consumes(MediaType.APPLICATION_JSON)
     public Response registerCourse(CourseDTO dto){
         try{
@@ -33,6 +35,7 @@ public class CourseService {
 
     @GET
     @Path("/name")
+    //@Secured({"ADMIN", "ATHLETE", "PERSONAL_TRAINER"}) non serve dato che è una info pubblica
     public Response getCourseName(@QueryParam("name") Long idCourse){
         try{
             CourseDTO response = courseController.getCourseById(idCourse);
@@ -41,6 +44,23 @@ public class CourseService {
             return Response.status(Response.Status.NOT_FOUND).entity(e.getMessage()).build();
         }
     }
+
+    @PUT
+    @Path("/update/{id}")
+    @Secured({"ADMIN"})
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response updateCourse(@PathParam("id") Long id, CourseDTO dto){
+        try{
+            courseController.updateCourse(id, dto);
+            return Response.status(Response.Status.OK).build();
+        } catch (IllegalArgumentException e) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+        }
+    }
+
+
 
 
 
