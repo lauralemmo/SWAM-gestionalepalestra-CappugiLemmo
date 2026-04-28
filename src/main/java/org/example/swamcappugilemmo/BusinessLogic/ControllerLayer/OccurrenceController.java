@@ -3,6 +3,8 @@ package org.example.swamcappugilemmo.BusinessLogic.ControllerLayer;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
+import org.example.swamcappugilemmo.BusinessLogic.DTO.OccurrenceDTO;
+import org.example.swamcappugilemmo.BusinessLogic.Mapper.OccurrenceMapper;
 import org.example.swamcappugilemmo.DAO.CourseDAO;
 import org.example.swamcappugilemmo.DAO.OccurrenceDAO;
 import org.example.swamcappugilemmo.DomainModel.Course;
@@ -19,10 +21,12 @@ public class OccurrenceController {
     private OccurrenceDAO occurrenceDAO;
     @Inject
     private CourseDAO courseDAO;
+    @Inject
+    private OccurrenceMapper occurrenceMapper;
 
     @Secured({"ADMIN"}) // Solo l' admin può aggiungere nuove date
     @Transactional
-    public Occurrence addOccurrence(Long courseId, LocalDate date, LocalTime hours) {
+    public OccurrenceDTO addOccurrence(Long courseId, LocalDate date, LocalTime hours) {
         try {
             Course course = courseDAO.getCourseById(courseId); // Lancia IllegalArgumentException se non trovato
             //Occurrence newOccurrence = new Occurrence(date, hours, course);
