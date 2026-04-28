@@ -9,9 +9,11 @@ import jakarta.ws.rs.container.ResourceInfo;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.SecurityContext;
 import jakarta.ws.rs.ext.Provider;
 
 import java.lang.reflect.Method;
+import java.security.Principal;
 import java.util.Arrays;
 
 @Secured // Associa questo buttafuori al cartello "Secured"
@@ -39,10 +41,12 @@ public class AuthenticationFilter implements ContainerRequestFilter {
             // Valida il token e ottieni le informazioni (Claims)
             Claims claims = JwtUtil.validateTokenAndGetClaims(token);
             String userRole = claims.get("role", String.class); // Legge il ruolo dal token
-            Long id = claims.get("id", Long.class);
-            // Salva l'ID e il ruolo dell'utente nel contesto della richiesta per usarli dopo nei servizi
-            requestContext.setProperty("caller_id", id);
-            requestContext.setProperty("caller_role", userRole);
+            String username = claims.getSubject(); // <-- Legge l'username!
+
+            // Usa il metodo privato per creare e impostare il SecurityContext
+            requestContext.setSecurityContext(
+                    createSecurityContext(username, userRole, requestContext.getSecurityContext())
+            );
 
             // Scopri quale metodo sta cercando di chiamare l'utente
             Method method = resourceInfo.getResourceMethod();
@@ -65,5 +69,29 @@ public class AuthenticationFilter implements ContainerRequestFilter {
         } catch (Exception e) {
             requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).entity("Token non valido o scaduto").build());
         }
+    }
+
+    private SecurityContext createSecurityContext(String username, String userRole, SecurityContext currentSecurityContext) {
+        return new SecurityContext() {
+            @Override
+            public Principal getUserPrincipal() {
+                return () -> username;
+            }
+
+            @Override
+            public boolean isUserInRole(String role) {
+                return userRole.equals(role);
+            }
+
+            @Override
+            public boolean isSecure() {
+                return currentSecurityContext != null && currentSecurityContext.isSecure();
+            }
+
+            @Override
+            public String getAuthenticationScheme() {
+                return "Bearer";
+            }
+        };
     }
 }

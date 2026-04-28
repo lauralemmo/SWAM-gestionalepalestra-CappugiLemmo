@@ -2,6 +2,7 @@ package org.example.swamcappugilemmo.BusinessLogic.ServiceLayer;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.ws.rs.core.Context;
+import jakarta.ws.rs.core.SecurityContext;
 import org.example.swamcappugilemmo.BusinessLogic.ControllerLayer.AthleteController;
 import org.example.swamcappugilemmo.BusinessLogic.ControllerLayer.SubscriptionController;
 import org.example.swamcappugilemmo.BusinessLogic.DTO.*;
@@ -158,32 +159,32 @@ public class AthleteService {
     }*/
 
     @PUT
-    @Path("/{id}/update")
+    @Path("/{username}/update")
     @Secured({"ATHLETE", "ADMIN"})
     @Consumes(MediaType.APPLICATION_JSON)
     public Response updateAthleteUsername(
-            @PathParam("id") Long id,
+            @PathParam("username") String username,
             Map<String, String> body,
-            @Context HttpServletRequest requestContext) {
+            @Context SecurityContext securityContext) {
 
         try {
-            Long callerId = (Long) requestContext.getAttribute("caller_id");
-            String callerRole = (String) requestContext.getAttribute("caller_role");
-            // Se non sei admin, e l'ID che vuoi modificare (id) è diverso dal tuo (callerId) -> BLOCCO!
-            if (!"ADMIN".equals(callerRole) && !id.equals(callerId)) {
-                return Response.status(Response.Status.FORBIDDEN)
-                        .entity("Accesso negato: Non puoi modificare il profilo di un altro atleta!")
-                        .build();
-            }
-
-            // Se sei qui, l'operazione è sicura.
+            // Estraiamo i dati dal contesto e dal body (Lavoro del Service)
+            String callerUsername = securityContext.getUserPrincipal().getName();
+            boolean isAdmin = securityContext.isUserInRole("ADMIN");
             String newUsername = body.get("newUsername");
-            athleteController.updateAthleteUsername(id, newUsername);
 
+            athleteController.updateAthleteUsernameSecurely(username, newUsername, callerUsername, isAdmin);
             return Response.status(Response.Status.OK).build();
 
+        } catch (SecurityException e) {
+            // Se il controller blocca l'utente, intercettiamo e restituiamo 403 Forbidden
+            return Response.status(Response.Status.FORBIDDEN).entity(e.getMessage()).build();
         } catch (IllegalArgumentException e) {
+            // Se c'è un errore nei dati, restituiamo 400 Bad Request
             return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
+        } catch (Exception e) {
+            // Rete di sicurezza per altri errori
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Errore interno del server").build();
         }
     }
 

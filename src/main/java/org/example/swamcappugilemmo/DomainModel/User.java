@@ -22,7 +22,7 @@ public abstract class User {
     private String tax_code;
     private String name;
     private String surname;
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String username;
     private String password;
     private String email;

@@ -4,6 +4,7 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.SecurityContext;
 import org.example.swamcappugilemmo.BusinessLogic.ControllerLayer.OccurrenceController;
 import org.example.swamcappugilemmo.DomainModel.Occurrence;
 import org.example.swamcappugilemmo.Security.Secured;
@@ -24,13 +25,16 @@ public class OccurrenceService {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createOccurrence(Occurrence occurrence) {
         try {
-            occurrenceController.addOccurrence(occurrence.getCourse().getIdCourse(), occurrence.getDate(), occurrence.getHours());
-            return Response.status(Response.Status.CREATED).entity(occurrence).build();
+            Occurrence savedOccurrence = occurrenceController.addOccurrence(
+                    occurrence.getCourse().getIdCourse(),
+                    occurrence.getDate(),
+                    occurrence.getHours()
+            );
+            return Response.status(Response.Status.CREATED).entity(savedOccurrence).build();
         }
         catch (Exception e) {
             return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
         }
-
     }
 
     @GET
@@ -54,14 +58,15 @@ public class OccurrenceService {
     public Response updateOccurrence(
             @PathParam("idOccurrence") Long idOccurrence,
             Occurrence updatedData,
-            @Context HttpServletRequest request) {
+            @Context SecurityContext securityContext) {
 
         try {
             // Leggo chi ha fatto la richiesta
-            Long callerId = (Long) request.getAttribute("caller_id");
-            String callerRole = (String) request.getAttribute("caller_role");
+            String callerUsername = securityContext.getUserPrincipal().getName();
+            boolean isAdmin = securityContext.isUserInRole("ADMIN");
+
             occurrenceController.updateOccurrenceSecurely(
-                    idOccurrence, updatedData, callerId, callerRole
+                    idOccurrence, updatedData, callerUsername, isAdmin
             );
 
             return Response.status(Response.Status.OK).entity("Orario aggiornato con successo").build();

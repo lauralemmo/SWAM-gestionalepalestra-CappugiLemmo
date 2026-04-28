@@ -112,12 +112,12 @@ public class AthleteController {
     }
 
     @Transactional
-    public void updateAthleteUsername(Long id, String request) {
-        Athlete athlete = athleteDAO.findById(id);
+    public void updateAthleteUsername(String username, String request) {
+        Athlete athlete = athleteDAO.findAthleteByUsername(username);
         if (athlete != null && !request.isBlank()) {
             athlete.setUsername(request);
         } else {
-            throw new IllegalArgumentException("Atleta con id: " + id + " non trovato o username non valido.");
+            throw new IllegalArgumentException("Atleta con username: " + username + " non trovato o username non valido.");
         }
     }
 
@@ -125,6 +125,23 @@ public class AthleteController {
     @Transactional
     public void deleteAthleta(Long Id){
         athleteDAO.deleteAthlete(Id);
+    }
+
+    @Transactional
+    public void updateAthleteUsernameSecurely(String username, String newUsername, String callerUsername, boolean isAdmin) {
+        if (!isAdmin && !username.equals(callerUsername)) {
+            throw new SecurityException("Accesso negato: Non puoi modificare il profilo di un altro atleta!");
+        }
+
+        Athlete athlete = athleteDAO.findAthleteByUsername(username);
+
+        // Se l'atleta esiste e il nuovo username è valido, aggiorniamo; altrimenti lanciamo un'eccezione
+        if (athlete != null && newUsername != null && !newUsername.isBlank()) {
+            athlete.setUsername(newUsername);
+
+        } else {
+            throw new IllegalArgumentException("Atleta non trovato o nuovo username non valido.");
+        }
     }
    /* @Transactional
     public void updateAthleteInfo(String tax_code, String height, String weight) {

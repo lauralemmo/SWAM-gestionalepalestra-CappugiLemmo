@@ -32,4 +32,5 @@ public class AuthenticationService {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Errore interno").build();
         }
     }
+
 }

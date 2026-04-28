@@ -7,6 +7,7 @@ import org.example.swamcappugilemmo.DAO.CourseDAO;
 import org.example.swamcappugilemmo.DAO.OccurrenceDAO;
 import org.example.swamcappugilemmo.DomainModel.Course;
 import org.example.swamcappugilemmo.DomainModel.Occurrence;
+import org.example.swamcappugilemmo.Security.Secured;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -19,8 +20,9 @@ public class OccurrenceController {
     @Inject
     private CourseDAO courseDAO;
 
+    @Secured({"ADMIN"}) // Solo l' admin può aggiungere nuove date
     @Transactional
-    public void addOccurrence(Long courseId, LocalDate date, LocalTime hours) {
+    public Occurrence addOccurrence(Long courseId, LocalDate date, LocalTime hours) {
         try {
             Course course = courseDAO.getCourseById(courseId); // Lancia IllegalArgumentException se non trovato
             //Occurrence newOccurrence = new Occurrence(date, hours, course);
@@ -29,6 +31,7 @@ public class OccurrenceController {
             newOccurrence.setHours(hours);
             newOccurrence.setCourse(course);
             occurrenceDAO.createOccurrence(newOccurrence);
+            return newOccurrence;
         }
 
         catch (IllegalArgumentException e) {
@@ -54,7 +57,8 @@ public class OccurrenceController {
         return occurrenceDAO.getOccurrencesByCourse(corso);
    }
 
-    public void updateOccurrenceSecurely(Long idOccurrence, Occurrence updatedData, Long callerId, String callerRole) {
+   @Transactional
+    public void updateOccurrenceSecurely(Long idOccurrence, Occurrence updatedData, String callerUsername, boolean callerRole) {
 
         // Controlliamo se l'occorrenza esiste
         Occurrence existingOccurrence = occurrenceDAO.getOccurrenceById(idOccurrence);
@@ -66,7 +70,7 @@ public class OccurrenceController {
         Course course = courseDAO.getCourseById(courseId);
 
         // Verifichiamo i permessi
-        if (!"ADMIN".equals(callerRole) && !course.getPersonalTrainer().getIdUser().equals(callerId)) {
+        if (!callerRole && !course.getPersonalTrainer().getUsername().equals(callerUsername)) {
             throw new SecurityException("Accesso negato: Puoi modificare solo le date dei TUOI corsi!");
         }
 
