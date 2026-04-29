@@ -12,6 +12,9 @@ import org.example.swamcappugilemmo.DomainModel.Athlete;
 import org.example.swamcappugilemmo.DomainModel.Course;
 import org.example.swamcappugilemmo.DomainModel.Booking;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import static java.util.Arrays.stream;
 
 @Dependent
@@ -30,11 +33,11 @@ public class BookingController {
     private BookingMapper bookingMapper;
 
     @Transactional
-    public void createBooking(BookingDTO request) {
+    public void createBooking(BookingDTO request, String callerUsername) {
         // Recupero delle entità necessarie tramite i DAO
-        Athlete athlete = athleteDAO.findAthleteByTaxCode(request.getTax_code());
-
+        Athlete athlete = athleteDAO.findAthleteByUsername(callerUsername);
         Course course = courseDAO.getCourseById(request.getIdCourse());
+        request.setUsername(callerUsername);
 
         if (athlete == null || course == null) {
             throw new IllegalArgumentException("Atleta o Corso non trovato");
@@ -63,5 +66,19 @@ public class BookingController {
     public BookingDTO getBookingDTOfromId(Long bookingId) {
         Booking booking = bookingDAO.findBookingById(bookingId);
         return bookingMapper.toDto(booking);
+    }
+
+    @Transactional
+    public List<BookingDTO> getBookingsByAthleteUsername(String username) {
+        // Cerchiamo l'atleta tramite username
+        Athlete athlete = athleteDAO.findAthleteByUsername(username);
+        if (athlete == null) {
+            throw new IllegalArgumentException("Atleta non trovato");
+        }
+
+        // Lista di prenotazioni e la mappiamo in DTO
+        return athlete.getBookings().stream()
+                .map(bookingMapper::toDto)
+                .collect(Collectors.toList());
     }
 }

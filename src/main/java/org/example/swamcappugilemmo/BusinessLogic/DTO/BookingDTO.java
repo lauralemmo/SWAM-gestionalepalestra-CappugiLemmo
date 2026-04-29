@@ -10,10 +10,8 @@ import java.time.LocalTime;
 @Getter
 @Setter
 public class BookingDTO {
-
-    private String tax_code;
+    private String username;
     private Long idCourse;
     private LocalDate date;
     private LocalTime hours;
-
 }

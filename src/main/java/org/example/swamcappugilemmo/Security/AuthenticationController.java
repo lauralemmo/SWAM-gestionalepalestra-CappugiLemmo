@@ -1,6 +1,7 @@
 package org.example.swamcappugilemmo.Security;
 
 import jakarta.enterprise.context.Dependent;
+import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
@@ -16,17 +17,15 @@ import java.util.Map;
 
 @Dependent
 public class AuthenticationController {
-    @PersistenceContext
-    private EntityManager em;
+
+    @Inject
+    private AuthenticationDAO authDAO;
 
     @Transactional
     public Map<String, Object> login(String username, String password) {
         try {
             // Cerca l'utente in tutte le tabelle grazie all'ereditarietà di User
-            User user = em.createQuery("SELECT u FROM User u WHERE u.username = :un", User.class)
-                    .setParameter("un", username)
-                    .getSingleResult();
-
+            User user = authDAO.findByUsername(username);
             // Controlla la password con BCrypt
             if (BCrypt.checkpw(password, user.getPassword())) {
 

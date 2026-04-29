@@ -27,7 +27,7 @@ public class BookingMapper {
     }
     public BookingDTO toDto(Booking booking) {
         BookingDTO dto = new BookingDTO();
-        dto.setTax_code(athleteMapper.toDto(booking.getAthlete()).getTax_code());
+        dto.setUsername(booking.getAthlete().getUsername());
         dto.setIdCourse(booking.getCourse().getIdCourse());
         dto.setDate(booking.getDate());
         dto.setHours(booking.getHours());

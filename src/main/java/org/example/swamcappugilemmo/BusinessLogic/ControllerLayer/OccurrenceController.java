@@ -35,7 +35,7 @@ public class OccurrenceController {
             newOccurrence.setHours(hours);
             newOccurrence.setCourse(course);
             occurrenceDAO.createOccurrence(newOccurrence);
-            return newOccurrence;
+            return occurrenceMapper.toDTO(newOccurrence);
         }
 
         catch (IllegalArgumentException e) {

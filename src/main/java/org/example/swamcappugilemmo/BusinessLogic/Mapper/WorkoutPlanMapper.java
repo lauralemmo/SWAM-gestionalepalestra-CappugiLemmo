@@ -1,5 +1,6 @@
 package org.example.swamcappugilemmo.BusinessLogic.Mapper;
 
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import org.example.swamcappugilemmo.BusinessLogic.DTO.WorkoutPlanRequestDTO;
 import org.example.swamcappugilemmo.BusinessLogic.DTO.WorkoutPlanResponseDTO;
@@ -10,6 +11,7 @@ import org.example.swamcappugilemmo.DomainModel.WorkoutPlan;
 import java.util.Collections;
 import java.util.stream.Collectors;
 
+@ApplicationScoped
 public class WorkoutPlanMapper {
     @Inject
     private ExerciseWorkoutPlanMapper ewpMapper;

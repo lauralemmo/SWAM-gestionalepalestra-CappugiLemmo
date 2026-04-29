@@ -2,10 +2,15 @@ package org.example.swamcappugilemmo.BusinessLogic.ServiceLayer;
 
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.SecurityContext;
 import org.example.swamcappugilemmo.BusinessLogic.ControllerLayer.BookingController;
 import org.example.swamcappugilemmo.BusinessLogic.DTO.BookingDTO;
+import org.example.swamcappugilemmo.Security.Secured;
+
+import java.util.List;
 
 @Path("/bookings")
 @Produces(MediaType.APPLICATION_JSON)
@@ -18,11 +23,13 @@ public class BookingService {
 //=================================================POST=================================================
 
     @POST
+    @Secured({"ATHLETE"})
     @Path("/register")
-    public Response registerBooking(BookingDTO request) {
+    public Response registerBooking(BookingDTO request, @Context SecurityContext securityContext) {
         try {
-            // Delega la logica di creazione al controller
-            bookingController.createBooking(request);
+            // Chi ha fatto la richiesta
+            String callerUsername = securityContext.getUserPrincipal().getName();
+            bookingController.createBooking(request, callerUsername);
 
             return Response.status(Response.Status.CREATED)
                     .entity("Prenotazione registrata con successo")
@@ -58,6 +65,29 @@ public class BookingService {
             // Gestisce errori generici del server
             return Response.status(Response.Status.BAD_REQUEST)
                     .entity("Errore nel recupero della prenotazione: " + e.getMessage())
+                    .build();
+        }
+    }
+
+    @GET
+    @Path("/my-bookings")
+    @Secured({"ATHLETE"})
+    public Response getMyBookings(@Context SecurityContext securityContext) {
+        try {
+            // Chi cha fatto la richiesta
+            String callerUsername = securityContext.getUserPrincipal().getName();
+
+            // Chiediamo al controller la lista delle prenotazioni
+            List<BookingDTO> myBookings = bookingController.getBookingsByAthleteUsername(callerUsername);
+
+            // Restituiamo la lista al frontend
+            return Response.ok(myBookings).build();
+
+        } catch (IllegalArgumentException e) {
+            return Response.status(Response.Status.NOT_FOUND).entity(e.getMessage()).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Errore nel recupero delle prenotazioni: " + e.getMessage())
                     .build();
         }
     }

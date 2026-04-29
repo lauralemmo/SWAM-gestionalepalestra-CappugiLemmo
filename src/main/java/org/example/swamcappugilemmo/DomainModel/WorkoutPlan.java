@@ -30,11 +30,9 @@ public class WorkoutPlan {
     @JoinColumn(name = "athlete_id")
     private Athlete athlete;
 
-
-
-    /*public void addExercise(ExerciseWorkoutPlan exercise) {
+    public void addExercise(ExerciseWorkoutPlan exercise) {
         this.specificExercises.add(exercise);
-    }*/
+    }
 
 
 }

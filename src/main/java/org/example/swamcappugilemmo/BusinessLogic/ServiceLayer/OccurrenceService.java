@@ -6,6 +6,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.SecurityContext;
 import org.example.swamcappugilemmo.BusinessLogic.ControllerLayer.OccurrenceController;
+import org.example.swamcappugilemmo.BusinessLogic.DTO.OccurrenceDTO;
 import org.example.swamcappugilemmo.DomainModel.Occurrence;
 import org.example.swamcappugilemmo.Security.Secured;
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,7 +26,7 @@ public class OccurrenceService {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createOccurrence(Occurrence occurrence) {
         try {
-            Occurrence savedOccurrence = occurrenceController.addOccurrence(
+            OccurrenceDTO savedOccurrence = occurrenceController.addOccurrence(
                     occurrence.getCourse().getIdCourse(),
                     occurrence.getDate(),
                     occurrence.getHours()
