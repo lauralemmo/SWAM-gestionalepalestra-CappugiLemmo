@@ -40,7 +40,7 @@ public class WorkoutPlanDAO {
     @Transactional
     public WorkoutPlan update(WorkoutPlan wp) {
         WorkoutPlan newWp = em.merge(wp);
-        if(wp == null){
+        if(newWp == null){
             throw new RuntimeException("Aggiornamento fallito");
         }
         System.out.println("Scheda di allenamento modificata");
@@ -50,7 +50,11 @@ public class WorkoutPlanDAO {
     @Transactional
     public WorkoutPlan deleteWorkoutPlan(Long id) {
         WorkoutPlan workoutPlan = findById(id);
-        em.remove(workoutPlan);
+        if (workoutPlan != null) {
+            em.remove(workoutPlan);
+        } else {
+            throw new IllegalArgumentException("WorkoutPlan with id " + id + " not found.");
+        }
         System.out.println("Scheda di allenamento eliminata");
         return workoutPlan;
     }

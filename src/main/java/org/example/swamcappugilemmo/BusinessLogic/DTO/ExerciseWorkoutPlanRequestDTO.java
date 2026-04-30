@@ -3,11 +3,9 @@ package org.example.swamcappugilemmo.BusinessLogic.DTO;
 import lombok.Getter;
 import lombok.Setter;
 
-
 @Getter
 @Setter
-public class ExerciseWorkoutPlanResponseDTO {
-    private Long id;
+public class ExerciseWorkoutPlanRequestDTO {
     private int numSeries;
     private int numRepetitions;
     private double weight;
