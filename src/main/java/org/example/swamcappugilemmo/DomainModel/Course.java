@@ -33,4 +33,7 @@ public class Course {
     private List<Booking> bookings = new ArrayList<>();
 
 
+    public void addBookings(Booking booking) {
+        this.bookings.add(booking);
+    }
 }

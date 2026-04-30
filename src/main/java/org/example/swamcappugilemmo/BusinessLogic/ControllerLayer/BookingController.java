@@ -36,11 +36,19 @@ public class BookingController {
     public void createBooking(BookingDTO request, String callerUsername) {
         // Recupero delle entità necessarie tramite i DAO
         Athlete athlete = athleteDAO.findAthleteByUsername(callerUsername);
-        Course course = courseDAO.getCourseById(request.getIdCourse());
+        Course course = courseDAO.getCourseByIdforUpdate(request.getIdCourse());
         request.setUsername(callerUsername);
 
         if (athlete == null || course == null) {
             throw new IllegalArgumentException("Atleta o Corso non trovato");
+        }
+
+        // true se l'atleta ha già una prenotazione per quel corso
+        boolean alreadyBooked = athlete.getBookings().stream()
+                .anyMatch(b -> b.getCourse().getIdCourse().equals(course.getIdCourse()));
+        // se true, lancia eccezione
+        if (alreadyBooked) {
+            throw new IllegalStateException("Sei già iscritto a questo corso!");
         }
 
         if (course.getNumMembers() < course.getNumMax()) {
@@ -57,6 +65,8 @@ public class BookingController {
 
         // Aggiunta della prenotazione all'atleta
         athlete.addBookings(booking);
+        // Aggiunta della prenotazione al corso
+        course.addBookings(booking);
 
         // Salvataggio tramite DAO
         bookingDAO.saveBooking(booking);
@@ -80,5 +90,32 @@ public class BookingController {
         return athlete.getBookings().stream()
                 .map(bookingMapper::toDto)
                 .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void cancelBooking(Long bookingId, String callerUsername) {
+        Booking booking = bookingDAO.findBookingById(bookingId);
+        if (booking == null) {
+            throw new IllegalArgumentException("Prenotazione non trovata");
+        }
+
+        if (!booking.getAthlete().getUsername().equals(callerUsername)) {
+            throw new IllegalStateException("Non hai il permesso di cancellare questa prenotazione");
+        }
+
+        // Blocchiamo il corso per assicurarci che nessuno si prenoti mentre liberiamo il posto
+        Course course = courseDAO.getCourseByIdforUpdate(booking.getCourse().getIdCourse());
+        int current = course.getNumMembers();
+        if (current <= 0) {
+            throw new IllegalStateException("Numero membri non valido");
+        }
+        else course.setNumMembers(current - 1);
+
+        // coerenza della memoria
+        booking.getAthlete().getBookings().remove(booking);
+        course.getBookings().remove(booking);
+
+        // Cancellazione vera e propria della prenotazione
+        bookingDAO.deleteBooking(booking.getIdBooking());
     }
 }

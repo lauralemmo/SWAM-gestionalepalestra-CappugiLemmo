@@ -21,4 +21,12 @@ public class BookingDAO {
         }
         return booking;
     }
+
+    public void deleteBooking(Long id) {
+        Booking booking = em.find(Booking.class, id);
+        if (booking == null) {
+            throw new IllegalArgumentException("Booking with id " + id + " not found.");
+        }
+        em.remove(booking);
+    }
 }

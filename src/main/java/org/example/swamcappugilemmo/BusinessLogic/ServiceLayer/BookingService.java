@@ -1,6 +1,7 @@
 package org.example.swamcappugilemmo.BusinessLogic.ServiceLayer;
 
 import jakarta.inject.Inject;
+import jakarta.persistence.PessimisticLockException;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
@@ -34,6 +35,11 @@ public class BookingService {
             return Response.status(Response.Status.CREATED)
                     .entity("Prenotazione registrata con successo")
                     .build();
+        } catch (PessimisticLockException e) {
+            // Il lock è fallito o è andato in timeout
+            return Response.status(Response.Status.CONFLICT)
+                    .entity("Il sistema è sovraccarico di prenotazioni. Riprova tra qualche istante.")
+                    .build();
         } catch (IllegalArgumentException e) {
             // Gestisce errori di validazione (es. atleta o corso non trovati)
             return Response.status(Response.Status.NOT_FOUND)
@@ -50,6 +56,7 @@ public class BookingService {
 //=================================================GET=================================================
 
     @GET
+    @Secured ({"ATHLETE", "ADMIN"})
     @Path("/{bookingId}")
     public Response getBooking(@PathParam("bookingId") Long bookingId) {
         try {
@@ -91,5 +98,30 @@ public class BookingService {
                     .build();
         }
     }
+    @DELETE
+    @Path("/{bookingId}/cancel")
+    @Secured({"ATHLETE"})
+    public Response cancelBooking(@PathParam("bookingId") Long bookingId, @Context SecurityContext securityContext) {
+        try {
+            // Chi ha fatto la richiesta
+            String callerUsername = securityContext.getUserPrincipal().getName();
+            bookingController.cancelBooking(bookingId, callerUsername);
+            return Response.ok("Prenotazione cancellata con successo").build();
 
+        }catch (SecurityException e) {
+            return Response.status(Response.Status.FORBIDDEN).entity(e.getMessage()).build();
+        } catch (IllegalArgumentException e) {
+            return Response.status(Response.Status.NOT_FOUND).entity(e.getMessage()).build();
+        } catch (PessimisticLockException e) {
+            return Response.status(Response.Status.CONFLICT)
+                    .entity("Il sistema è temporaneamente occupato. Riprova tra qualche istante.")
+                    .build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Errore durante la cancellazione: " + e.getMessage())
+                    .build();
+        }
+
+    }
 }
+
