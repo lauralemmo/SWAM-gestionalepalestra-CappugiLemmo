@@ -12,8 +12,8 @@ import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class ExerciseMapper {
-    @Inject
-    private ExerciseWorkoutPlanMapper ewpMapper;
+    //@Inject
+    //private ExerciseWorkoutPlanMapper ewpMapper;
 
     public Exercise toEntity(ExerciseRequestDTO request){
         Exercise e = new Exercise();
@@ -22,18 +22,19 @@ public class ExerciseMapper {
         return e;
     }
 
+
     public ExerciseResponseDTO toDTO(Exercise e){
         ExerciseResponseDTO response = new ExerciseResponseDTO();
         response.setId(e.getIdExercise());
         response.setName(e.getName());
         response.setDescription(e.getDescription());
-        response.setSpecificExercises(
+        /*response.setSpecificExercises(
                 e.getSpecificExercises() == null ? Collections.emptyList() :
                         e.getSpecificExercises()
                                 .stream()
                                 .map(ewpMapper :: toDTO)
                                 .collect(Collectors.toList())
-        );
+        );*/
         return response;
     }
 

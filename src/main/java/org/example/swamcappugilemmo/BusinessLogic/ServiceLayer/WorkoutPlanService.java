@@ -93,8 +93,8 @@ public class WorkoutPlanService {
     @Path("/{id}")
     public Response deleteWorkoutPlan(@PathParam("id") Long id) {
         try {
-            wpController.deleteWorkoutPlan(id);
-            return Response.noContent().build();
+            WorkoutPlanResponseDTO response = wpController.deleteWorkoutPlan(id);
+            return Response.ok(response).build();
         } catch (EntityNotFoundException e) {
             return Response.status(Response.Status.NOT_FOUND)
                     .entity(e.getMessage())

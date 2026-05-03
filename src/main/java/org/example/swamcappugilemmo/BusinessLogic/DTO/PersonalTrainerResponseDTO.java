@@ -21,7 +21,7 @@ public class PersonalTrainerResponseDTO {
     private boolean active;
     private LocalDate startDate;
     private LocalDate endDate;
-    private List<WorkoutPlanResponseDTO> workoutPlans;
-    private List<CourseResponseDTO> courses;
+    //private List<WorkoutPlanResponseDTO> workoutPlans;
+    //private List<CourseResponseDTO> courses;
 
 }

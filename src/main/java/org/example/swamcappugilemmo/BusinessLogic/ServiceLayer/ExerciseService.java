@@ -93,8 +93,8 @@ public class ExerciseService {
     @Path("/{id}")
     public Response deleteExercise(@PathParam("id") Long id) {
         try {
-            eController.deleteExercise(id);
-            return Response.noContent().build();
+            ExerciseResponseDTO response = eController.deleteExercise(id);
+            return Response.ok(response).build();
         } catch (EntityNotFoundException e) {
             return Response.status(Response.Status.NOT_FOUND)
                     .entity(e.getMessage())

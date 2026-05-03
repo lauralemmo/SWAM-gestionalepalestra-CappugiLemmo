@@ -16,5 +16,5 @@ public class WorkoutPlanResponseDTO {
     private LocalDate date;
     private Long athleteId;
     private Long personalTrainerId;
-    private List<ExerciseWorkoutPlanResponseDTO> specificExercises;
+    //private List<ExerciseWorkoutPlanResponseDTO> specificExercises;
 }

@@ -1,12 +1,14 @@
 package org.example.swamcappugilemmo.BusinessLogic.ServiceLayer;
 
 import jakarta.inject.Inject;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.example.swamcappugilemmo.BusinessLogic.ControllerLayer.CourseController;
-import org.example.swamcappugilemmo.BusinessLogic.DTO.CourseDTO;
+import org.example.swamcappugilemmo.BusinessLogic.DTO.CourseRequestDTO;
 import org.example.swamcappugilemmo.BusinessLogic.DTO.CourseResponseDTO;
+import org.example.swamcappugilemmo.BusinessLogic.DTO.ExerciseResponseDTO;
 import org.example.swamcappugilemmo.Security.Secured;
 
 
@@ -23,16 +25,23 @@ public class CourseService {
     @POST
     @Path("/register")
     @Secured({"ADMIN"})
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response registerCourse(CourseDTO dto){
-        try{
-            courseController.addCourse(dto);
-
-            return Response.status(Response.Status.CREATED).build();
-        } catch(Exception e){
-            return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
+    public Response registerCourse(CourseRequestDTO request){
+        try {
+            CourseResponseDTO response = courseController.addCourse(request);
+            return Response.status(Response.Status.CREATED)
+                    .entity(response)
+                    .build();
+        } catch (EntityNotFoundException e) {
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity(e.getMessage())
+                    .build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Errore interno del server")
+                    .build();
         }
     }
+
 
     @GET
     @Path("/name")
@@ -43,17 +52,21 @@ public class CourseService {
             return Response.ok(response).build();
         } catch(IllegalArgumentException e){
             return Response.status(Response.Status.NOT_FOUND).entity(e.getMessage()).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
         }
     }
+
 
     @PUT
     @Path("/update/{id}")
     @Secured({"ADMIN"})
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response updateCourse(@PathParam("id") Long id, CourseDTO dto){
+    public Response updateCourse(@PathParam("id") Long id, CourseRequestDTO dto){
         try{
-            courseController.updateCourse(id, dto);
-            return Response.status(Response.Status.OK).build();
+            CourseResponseDTO response = courseController.updateCourse(id, dto);
+            return Response.status(Response.Status.OK)
+                    .entity(response)
+                    .build();
         } catch (IllegalArgumentException e) {
             return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
         } catch (Exception e) {

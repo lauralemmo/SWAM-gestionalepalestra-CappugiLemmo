@@ -13,8 +13,8 @@ import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class WorkoutPlanMapper {
-    @Inject
-    private ExerciseWorkoutPlanMapper ewpMapper;
+    //@Inject
+    //private ExerciseWorkoutPlanMapper ewpMapper;
 
     public WorkoutPlan toEntity(WorkoutPlanRequestDTO request, Athlete athlete, PersonalTrainer pt){
         WorkoutPlan wp = new WorkoutPlan();
@@ -30,13 +30,13 @@ public class WorkoutPlanMapper {
         response.setDate(wp.getDate());
         response.setAthleteId(wp.getAthlete().getIdUser());
         response.setPersonalTrainerId(wp.getPersonalTrainer().getIdUser());
-        response.setSpecificExercises(
+        /*response.setSpecificExercises(
                 wp.getSpecificExercises() == null ? Collections.emptyList() :
                         wp.getSpecificExercises()
                                 .stream()
                                 .map(ewpMapper :: toDTO)
                                 .collect(Collectors.toList())
-        );
+        );*/
 
         return response;
     }

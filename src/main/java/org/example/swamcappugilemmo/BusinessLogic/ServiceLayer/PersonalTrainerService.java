@@ -98,8 +98,8 @@ public class PersonalTrainerService {
     @Path("/{id}")
     public Response deletePersonalTrainer(@PathParam("id") Long id) {
         try {
-            personalTrainerController.deletePersonalTrainer(id);
-            return Response.noContent().build();
+            PersonalTrainerResponseDTO response = personalTrainerController.deletePersonalTrainer(id);
+            return Response.ok(response).build();
         } catch (EntityNotFoundException e) {
             return Response.status(Response.Status.NOT_FOUND)
                     .entity(e.getMessage())

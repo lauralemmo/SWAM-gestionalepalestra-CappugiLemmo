@@ -11,10 +11,10 @@ import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class PersonalTrainerMapper {
-    @Inject
-    private WorkoutPlanMapper wpMapper;
-    @Inject
-    private CourseMapper cMapper;
+    //@Inject
+    //private WorkoutPlanMapper wpMapper;
+    //@Inject
+    //private CourseMapper cMapper;
 
     public PersonalTrainer toEntity(PersonalTrainerRequestDTO dto) {
         PersonalTrainer pt = new PersonalTrainer();
@@ -48,20 +48,20 @@ public class PersonalTrainerMapper {
         response.setActive(pt.isActive());
         response.setStartDate(pt.getStartDate());
         response.setEndDate(pt.getEndDate());
-        response.setWorkoutPlans(
+        /*response.setWorkoutPlans(
                 pt.getWorkoutPlans() == null ? Collections.emptyList() :
                         pt.getWorkoutPlans()
                                 .stream()
                                 .map(wpMapper :: toDTO)
                                 .collect(Collectors.toList())
-        );
-        response.setCourses(
+        );*/
+        /*response.setCourses(
                 pt.getCourses() == null ? Collections.emptyList() :
                         pt.getCourses()
                                 .stream()
                                 .map(cMapper :: toDto)
                                 .collect(Collectors.toList())
-        );
+        );*/
         return response;
     }
 

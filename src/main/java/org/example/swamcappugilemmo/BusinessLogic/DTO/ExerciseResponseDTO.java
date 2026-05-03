@@ -13,5 +13,5 @@ public class ExerciseResponseDTO {
     private Long id;
     private String name;
     private String description;
-    private List<ExerciseWorkoutPlanResponseDTO> specificExercises;
+    //private List<ExerciseWorkoutPlanResponseDTO> specificExercises;
 }

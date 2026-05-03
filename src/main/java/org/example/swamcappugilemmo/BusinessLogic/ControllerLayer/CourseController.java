@@ -1,18 +1,23 @@
 package org.example.swamcappugilemmo.BusinessLogic.ControllerLayer;
 
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.context.Dependent;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
-import org.example.swamcappugilemmo.BusinessLogic.DTO.CourseDTO;
+import org.example.swamcappugilemmo.BusinessLogic.DTO.CourseRequestDTO;
 import org.example.swamcappugilemmo.BusinessLogic.DTO.CourseResponseDTO;
+import org.example.swamcappugilemmo.BusinessLogic.DTO.ExerciseRequestDTO;
+import org.example.swamcappugilemmo.BusinessLogic.DTO.ExerciseResponseDTO;
 import org.example.swamcappugilemmo.BusinessLogic.Mapper.CourseMapper;
 import org.example.swamcappugilemmo.DAO.CourseDAO;
 import org.example.swamcappugilemmo.DAO.PersonalTrainerDAO;
 import org.example.swamcappugilemmo.DomainModel.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
-@Dependent
+
+@ApplicationScoped
 public class CourseController {
     @Inject
     CourseDAO courseDAO;
@@ -21,31 +26,15 @@ public class CourseController {
     @Inject
     private PersonalTrainerDAO personalTrainerDAO;
 
-    public CourseController(){
-        this.courseDAO = new CourseDAO();
-    }
-
-
-
-    /*@Transactional
-    public void addCourse(String name, int numMembers, int numMax, PersonalTrainer personalTrainer){
-        Course c = new Course(name, numMembers, numMax, personalTrainer);
-        courseDAO.createCourse(c);
-    }*/
 
     @Transactional
-    public void addCourse(CourseDTO request) {
+    public CourseResponseDTO addCourse(CourseRequestDTO request) {
         PersonalTrainer pt = personalTrainerDAO.getPersonalTrainerById(request.getIdPersonalTrainer());
         Course newC = courseMapper.toEntity(request,pt);
         courseDAO.createCourse(newC);
-        //pt.addCourse(newC);
+        return courseMapper.toDto(newC);
     }
 
-
-    /*@Transactional
-    public Course getCourseByName(String name){
-        return courseDAO.getCourseByName(name);
-    }*/
 
     @Transactional
     public CourseResponseDTO getCourseById(Long id) {
@@ -58,12 +47,6 @@ public class CourseController {
     }
 
 
-
-    /*@Transactional
-    public Course getCourseByOccurrence(Occurrence o){
-        return courseDAO.getCourseByOccurrence(o);
-    }*/
-
     @Transactional
     public CourseResponseDTO getCourseByOccurrence(Occurrence o){
         Course c = courseDAO.getCourseByOccurrence(o);
@@ -75,50 +58,45 @@ public class CourseController {
     }
 
 
-
-    /*@Transactional
-    public List<Course> getCoursesByPersonalTrainer(PersonalTrainer pt){
-        return courseDAO.getCoursesByPersonalTrainer(pt);
-    }*/
-
     @Transactional
-    public List<CourseDTO> getCoursesByPersonalTrainer(PersonalTrainer pt){
+    public List<CourseResponseDTO> getCoursesByPersonalTrainer(PersonalTrainer pt){
         List<Course> cc = courseDAO.getCoursesByPersonalTrainer(pt);
         if (cc != null) {
-            return null;
-            // TODO tolto perche dava errore, va rimesso!
-            //return courseMapper.toDto(cc);
+            return cc
+                    .stream()
+                    .map(courseMapper::toDto)
+                    .collect(Collectors.toList());
         } else{
             return null;
         }
     }
 
 
-
-
     @Transactional
-    public List<Course> getAllCourses(){
-        return courseDAO.getAllCourses();
+    public List<CourseResponseDTO> getAllCourses(){
+        return courseDAO.getAllCourses()
+                .stream()
+                .map(courseMapper::toDto)
+                .collect(Collectors.toList());
     }
 
+
     @Transactional
-    public void updateCourse(Long id, CourseDTO request){
-        String name = request.getName();
-        int numMembers = request.getNumMembers();
-        int numMax = request.getNumMax();
-        PersonalTrainer personalTrainer = personalTrainerDAO.getPersonalTrainerById(request.getIdPersonalTrainer());
-        //Course course = new Course(name, numMembers, numMax, personalTrainer);
+    public CourseResponseDTO updateCourse(Long id, CourseRequestDTO request){
+        PersonalTrainer pt = personalTrainerDAO.getPersonalTrainerById(request.getIdPersonalTrainer());
         Course course = courseDAO.getCourseById(id);
-        course.setName(name);
-        course.setNumMembers(numMembers);
-        course.setNumMax(numMax);
-        course.setPersonalTrainer(personalTrainer);
-        courseDAO.updateCourse(course);
+        course.setName(request.getName());
+        course.setNumMembers(request.getNumMembers());
+        course.setNumMax(request.getNumMax());
+        course.setPersonalTrainer(pt);
+        Course updatedCourse = courseDAO.updateCourse(course);
+        return courseMapper.toDto(updatedCourse);
     }
 
+
     @Transactional
-    public void deleteCourse(String name){
-        courseDAO.deleteCourse(name);
+    public CourseResponseDTO deleteCourse(String name){
+        return courseMapper.toDto(courseDAO.deleteCourse(name));
     }
 
 }
