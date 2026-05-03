@@ -39,6 +39,7 @@ public class OccurrenceService {
     }
 
     @GET
+    @Secured({"ATHLETE", "PT", "ADMIN"})
     @Path("/{idOccurrence}")
     public Response getOccurrences(@PathParam("idOccurrence") Long idOccurrence) {
         try{
@@ -83,5 +84,18 @@ public class OccurrenceService {
         }
     }
 
+    @DELETE
+    @Path("/{idOccurrence}/delete")
+    @Secured({"ADMIN"})
+    public Response deleteOccurrence(@PathParam("idOccurrence") Long idOccurrence) {
+        try {
+            occurrenceController.deleteOccurrence(idOccurrence);
+            return Response.status(Response.Status.OK).entity("Occorrenza cancellata con successo").build();
+        } catch (IllegalArgumentException e) {
+            return Response.status(Response.Status.NOT_FOUND).entity(e.getMessage()).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Errore: " + e.getMessage()).build();
+        }
+    }
 
 }

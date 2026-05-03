@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 public class PersonalTrainerMapper {
     @Inject
     private WorkoutPlanMapper wpMapper;
+    @Inject
     private CourseMapper cMapper;
 
     public PersonalTrainer toEntity(PersonalTrainerRequestDTO dto) {
