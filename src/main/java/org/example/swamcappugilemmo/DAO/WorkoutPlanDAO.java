@@ -50,11 +50,7 @@ public class WorkoutPlanDAO {
     @Transactional
     public WorkoutPlan deleteWorkoutPlan(Long id) {
         WorkoutPlan workoutPlan = findById(id);
-        if (workoutPlan != null) {
-            em.remove(workoutPlan);
-        } else {
-            throw new IllegalArgumentException("WorkoutPlan with id " + id + " not found.");
-        }
+        em.remove(workoutPlan);
         System.out.println("Scheda di allenamento eliminata");
         return workoutPlan;
     }
