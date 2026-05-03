@@ -23,14 +23,14 @@ public class Course {
     //@ElementCollection
     //@CollectionTable(name = "course_occurrences", joinColumns = @JoinColumn(name = "course_id"))
     @OneToMany(mappedBy = "course")
-    private List<Occurrence> occurrences = new ArrayList<>();
+    private List<Occurrence> occurrences;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "personal_trainer_tax_code")
     private PersonalTrainer personalTrainer;
 
     @OneToMany(mappedBy = "course")
-    private List<Booking> bookings = new ArrayList<>();
+    private List<Booking> bookings;
 
 
     public void addBookings(Booking booking) {

@@ -25,11 +25,11 @@ public class PersonalTrainer extends User {
 
     @OneToMany(mappedBy = "personalTrainer")
     //Il "personalTrainer" è il nome dell'attributo in WorkoutPlan che fa riferimento a PersonalTrainer
-    private List<WorkoutPlan> workoutPlans = new ArrayList<>();
+    private List<WorkoutPlan> workoutPlans;
 
     @OneToMany(mappedBy = "personalTrainer")
     //Il "personalTrainer" è il nome dell'attributo in Course che fa riferimento a PersonalTrainer
-    private List<Course> courses = new ArrayList<>();
+    private List<Course> courses;
 
 
     /*public void addCourse(Course course){

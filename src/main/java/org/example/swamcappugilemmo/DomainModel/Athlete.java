@@ -18,13 +18,13 @@ public class Athlete extends User{
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "subscription", joinColumns = @JoinColumn(name = "athlete_id", nullable = false))
-    private List<Subscription> subscriptions = new ArrayList<>();
+    private List<Subscription> subscriptions;
 
     @OneToOne(mappedBy = "athlete", cascade = CascadeType.ALL , orphanRemoval = true)
     private WorkoutPlan workoutPlan;
 
     @OneToMany(mappedBy = "athlete", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Booking> bookings =  new ArrayList<>();
+    private List<Booking> bookings;
 
 
 
