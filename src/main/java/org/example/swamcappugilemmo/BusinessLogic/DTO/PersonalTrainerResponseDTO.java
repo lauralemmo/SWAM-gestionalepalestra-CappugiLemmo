@@ -3,6 +3,7 @@ package org.example.swamcappugilemmo.BusinessLogic.DTO;
 import lombok.Getter;
 import lombok.Setter;
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @Setter
@@ -20,5 +21,7 @@ public class PersonalTrainerResponseDTO {
     private boolean active;
     private LocalDate startDate;
     private LocalDate endDate;
+    private List<WorkoutPlanResponseDTO> workoutPlans;
+    private List<CourseResponseDTO> courses;
 
 }

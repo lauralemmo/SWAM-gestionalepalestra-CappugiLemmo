@@ -4,6 +4,7 @@ import jakarta.enterprise.context.Dependent;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import org.example.swamcappugilemmo.BusinessLogic.DTO.CourseDTO;
+import org.example.swamcappugilemmo.BusinessLogic.DTO.CourseResponseDTO;
 import org.example.swamcappugilemmo.BusinessLogic.Mapper.CourseMapper;
 import org.example.swamcappugilemmo.DAO.CourseDAO;
 import org.example.swamcappugilemmo.DAO.PersonalTrainerDAO;
@@ -47,7 +48,7 @@ public class CourseController {
     }*/
 
     @Transactional
-    public CourseDTO getCourseById(Long id) {
+    public CourseResponseDTO getCourseById(Long id) {
         Course c = courseDAO.getCourseById(id);
         if (c != null) {
             return courseMapper.toDto(c);
@@ -64,7 +65,7 @@ public class CourseController {
     }*/
 
     @Transactional
-    public CourseDTO getCourseByOccurrence(Occurrence o){
+    public CourseResponseDTO getCourseByOccurrence(Occurrence o){
         Course c = courseDAO.getCourseByOccurrence(o);
         if (c != null) {
             return courseMapper.toDto(c);

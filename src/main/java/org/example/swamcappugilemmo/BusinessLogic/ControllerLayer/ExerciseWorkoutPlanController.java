@@ -29,7 +29,7 @@ public class ExerciseWorkoutPlanController {
 
     @Transactional
     public ExerciseWorkoutPlanResponseDTO addExerciseToPlan(ExerciseWorkoutPlanRequestDTO request) {
-        Exercise exercise = exerciseDAO.findById(request.getExerciseId());
+        Exercise exercise = exerciseDAO.getExerciseById(request.getExerciseId());
         WorkoutPlan plan = workoutPlanDAO.findById(request.getWorkoutPlanId());
         if (plan == null || exercise == null) {
             throw new IllegalArgumentException("Reference not found");
@@ -52,7 +52,7 @@ public class ExerciseWorkoutPlanController {
         ewp.setNumSeries(request.getNumSeries());
         ewp.setNumRepetitions(request.getNumRepetitions());
         ewp.setWeight(request.getWeight());
-        ewp.setExercise(exerciseDAO.findById(request.getExerciseId()));
+        ewp.setExercise(exerciseDAO.getExerciseById(request.getExerciseId()));
         ewp.setWorkoutPlan(workoutPlanDAO.findById(request.getWorkoutPlanId()));
         ExerciseWorkoutPlan updatedEwp = ewpDAO.update(ewp);
         return ewpMapper.toDTO(updatedEwp);

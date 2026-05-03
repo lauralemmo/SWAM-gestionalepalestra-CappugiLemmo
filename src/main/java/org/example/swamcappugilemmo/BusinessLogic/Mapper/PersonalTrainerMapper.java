@@ -1,12 +1,19 @@
 package org.example.swamcappugilemmo.BusinessLogic.Mapper;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import org.example.swamcappugilemmo.BusinessLogic.DTO.PersonalTrainerRequestDTO;
 import org.example.swamcappugilemmo.BusinessLogic.DTO.PersonalTrainerResponseDTO;
 import org.example.swamcappugilemmo.DomainModel.PersonalTrainer;
 
+import java.util.Collections;
+import java.util.stream.Collectors;
+
 @ApplicationScoped
 public class PersonalTrainerMapper {
+    @Inject
+    private WorkoutPlanMapper wpMapper;
+    private CourseMapper cMapper;
 
     public PersonalTrainer toEntity(PersonalTrainerRequestDTO dto) {
         PersonalTrainer pt = new PersonalTrainer();
@@ -40,6 +47,20 @@ public class PersonalTrainerMapper {
         response.setActive(pt.isActive());
         response.setStartDate(pt.getStartDate());
         response.setEndDate(pt.getEndDate());
+        response.setWorkoutPlans(
+                pt.getWorkoutPlans() == null ? Collections.emptyList() :
+                        pt.getWorkoutPlans()
+                                .stream()
+                                .map(wpMapper :: toDTO)
+                                .collect(Collectors.toList())
+        );
+        response.setCourses(
+                pt.getCourses() == null ? Collections.emptyList() :
+                        pt.getCourses()
+                                .stream()
+                                .map(cMapper :: toDto)
+                                .collect(Collectors.toList())
+        );
         return response;
     }
 

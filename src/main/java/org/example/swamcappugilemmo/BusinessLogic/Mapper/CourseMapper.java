@@ -2,6 +2,7 @@ package org.example.swamcappugilemmo.BusinessLogic.Mapper;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import org.example.swamcappugilemmo.BusinessLogic.DTO.CourseDTO;
+import org.example.swamcappugilemmo.BusinessLogic.DTO.CourseResponseDTO;
 import org.example.swamcappugilemmo.DomainModel.Course;
 import org.example.swamcappugilemmo.DomainModel.PersonalTrainer;
 
@@ -24,8 +25,8 @@ public class CourseMapper {
     }
 
 
-    public CourseDTO toDto(Course c){
-        CourseDTO dto = new CourseDTO();
+    public CourseResponseDTO toDto(Course c){
+        CourseResponseDTO dto = new CourseResponseDTO();
         dto.setName(c.getName());
         dto.setNumMembers(c.getNumMembers());
         dto.setNumMax(c.getNumMax());

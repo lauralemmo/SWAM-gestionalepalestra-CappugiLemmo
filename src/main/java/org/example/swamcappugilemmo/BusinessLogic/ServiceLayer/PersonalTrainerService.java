@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 
-@Path("/personaltrainers")
+@Path("/personaltrainer")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class PersonalTrainerService {
@@ -34,6 +34,10 @@ public class PersonalTrainerService {
         } catch (EntityNotFoundException e){
             return Response.status(Response.Status.NOT_FOUND)
                     .entity(e.getMessage())
+                    .build();
+        }catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Errore interno del server")
                     .build();
         }
 
@@ -56,8 +60,6 @@ public class PersonalTrainerService {
 
 
     @POST
-    @Path("/register")
-    @Consumes(MediaType.APPLICATION_JSON)
     public Response registerPersonalTrainer(PersonalTrainerRequestDTO request) {
         try {
             PersonalTrainerResponseDTO response = personalTrainerController.addPersonalTrainer(request);
@@ -83,6 +85,10 @@ public class PersonalTrainerService {
         } catch (EntityNotFoundException e) {
             return Response.status(Response.Status.NOT_FOUND)
                     .entity(e.getMessage())
+                    .build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Errore interno del server")
                     .build();
         }
     }

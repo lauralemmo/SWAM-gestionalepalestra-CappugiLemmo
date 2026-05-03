@@ -6,6 +6,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.example.swamcappugilemmo.BusinessLogic.ControllerLayer.CourseController;
 import org.example.swamcappugilemmo.BusinessLogic.DTO.CourseDTO;
+import org.example.swamcappugilemmo.BusinessLogic.DTO.CourseResponseDTO;
 import org.example.swamcappugilemmo.Security.Secured;
 
 
@@ -38,7 +39,7 @@ public class CourseService {
     //@Secured({"ADMIN", "ATHLETE", "PERSONAL_TRAINER"}) non serve dato che è una info pubblica
     public Response getCourseName(@QueryParam("name") Long idCourse){
         try{
-            CourseDTO response = courseController.getCourseById(idCourse);
+            CourseResponseDTO response = courseController.getCourseById(idCourse);
             return Response.ok(response).build();
         } catch(IllegalArgumentException e){
             return Response.status(Response.Status.NOT_FOUND).entity(e.getMessage()).build();
