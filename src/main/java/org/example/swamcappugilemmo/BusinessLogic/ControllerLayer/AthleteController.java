@@ -1,5 +1,6 @@
 package org.example.swamcappugilemmo.BusinessLogic.ControllerLayer;
 
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.context.Dependent;
 import jakarta.inject.Inject;
 import org.example.swamcappugilemmo.BusinessLogic.DTO.AthleteRequestDTO;
@@ -16,13 +17,14 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Dependent
+@ApplicationScoped
 public class AthleteController {
     @Inject
     private AthleteDAO athleteDAO;
 
     @Inject
     private AthleteMapper athleteMapper;
+
 
     @Transactional
     public AthleteResponseDTO registerNewAthlete(AthleteRequestDTO request) {
@@ -57,6 +59,7 @@ public class AthleteController {
             throw new IllegalArgumentException("Credenziali non valide: username o password errati.");
         }
     }
+
     @Transactional
     public List<AthleteResponseDTO> getAllAthletes() {
         return athleteDAO.findAll()
@@ -86,7 +89,7 @@ public class AthleteController {
     }
 
     @Transactional
-    public void deleteAthleta(Long Id){
+    public void deleteAthlete(Long Id){
         athleteDAO.deleteAthlete(Id);
     }
 

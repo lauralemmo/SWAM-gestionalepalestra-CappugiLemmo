@@ -21,13 +21,14 @@ public class AthleteDAO {
 
     public void saveAthlete(Athlete newAthlete) {
         em.persist(newAthlete);
+        System.out.println("Atleta salvato con successo");
     }
 
     public List<Athlete> findAll() {
         return em.createQuery("SELECT a FROM Athlete a", Athlete.class).getResultList();
     }
 
-    public Athlete findById(long id) {
+    public Athlete findById(Long id) {
         Athlete athlete = em.find(Athlete.class, id);
         if (athlete == null) {
             throw new IllegalArgumentException("Athlete with id " + id + " not found.");
@@ -58,6 +59,25 @@ public class AthleteDAO {
         return athlete;
     }
 
+    public void updateAthlete(Athlete athlete){
+        Athlete newA = em.merge(athlete);
+        if(newA == null){
+            throw new RuntimeException("Update failed");
+        }
+        System.out.println("Atleta aggiornato");
+    }
+
+    public void deleteAthlete(Long id){
+        Athlete a = em.find(Athlete.class, id);
+        if(a == null){
+            throw new RuntimeException("Atleta non trovato");
+        }
+        em.remove(a);
+        System.out.println("Atleta eliminato");
+    }
+
+
+
     public void createNewSubscription(Long id, Subscription subscription) {
         Athlete athlete = findById(id);
         if (athlete != null) {
@@ -81,6 +101,7 @@ public class AthleteDAO {
             throw new IllegalArgumentException("Athlete with tax code " + tax_code + " not found.");
         }
     }
+
     public List<Subscription> getSubscriptions(Long id){
         Athlete athlete = findById(id);
         if (athlete != null) {
@@ -91,21 +112,6 @@ public class AthleteDAO {
         }
     }
 
-    public void updateAthlete(Athlete athlete){
-        Athlete newA = em.merge(athlete);
-        if(newA == null){
-            throw new RuntimeException("Update failed");
-        }
-        System.out.println("Atleta aggiornato");
-    }
 
-    public void deleteAthlete(Long id){
-        Athlete a = em.find(Athlete.class, id);
-        if(a == null){
-            throw new RuntimeException("Atleta non trovato");
-        }
-        em.remove(a);
-        System.out.println("Atleta eliminato");
-    }
 
 }

@@ -24,7 +24,7 @@ public class SubscriptionController {
     /// ////////////// SUBSCRIPTION MANAGEMENT ///////////////
 
     @Transactional
-    public void crateNewSubscription(SubscriptionRequestDTO subscriptionRequestDTO) {
+    public void createNewSubscription(SubscriptionRequestDTO subscriptionRequestDTO) {
         if (subscriptionRequestDTO.getStartDate() == null || subscriptionRequestDTO.getStartDate().isBefore(LocalDate.now())) {
             throw new IllegalArgumentException("Data di inizio non valida: deve essere oggi o in futuro.");
         }

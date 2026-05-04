@@ -24,7 +24,7 @@ public class Athlete extends User{
     private WorkoutPlan workoutPlan;
 
     @OneToMany(mappedBy = "athlete", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Booking> bookings = new ArrayList<>();
+    private List<Booking> bookings;
 
 
 

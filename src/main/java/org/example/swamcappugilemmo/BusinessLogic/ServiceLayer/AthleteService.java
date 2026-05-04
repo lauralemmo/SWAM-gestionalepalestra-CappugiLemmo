@@ -59,7 +59,7 @@ public class AthleteService {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response registerNewSubscription(SubscriptionRequestDTO request) {
         try {
-            subscriptionController.crateNewSubscription(request);
+            subscriptionController.createNewSubscription(request);
             return Response.status(Response.Status.OK).build();
         } catch (IllegalArgumentException | IllegalStateException e) { // <-- Aggiunto IllegalStateException
             return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
@@ -136,7 +136,7 @@ public class AthleteService {
     public Response deleteAthlete(@PathParam("id") Long id) {
         try {
             // Usiamo il metodo corretto che prende il Long id
-            athleteController.deleteAthleta(id);
+            athleteController.deleteAthlete(id);
             return Response.status(Response.Status.OK).build();
         } catch (IllegalArgumentException e) {
             return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
