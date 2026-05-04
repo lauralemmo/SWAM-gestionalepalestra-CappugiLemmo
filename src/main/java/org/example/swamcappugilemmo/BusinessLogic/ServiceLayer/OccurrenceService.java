@@ -6,8 +6,8 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.SecurityContext;
 import org.example.swamcappugilemmo.BusinessLogic.ControllerLayer.OccurrenceController;
-import org.example.swamcappugilemmo.BusinessLogic.DTO.OccurrenceDTO;
-import org.example.swamcappugilemmo.DomainModel.Occurrence;
+import org.example.swamcappugilemmo.BusinessLogic.DTO.OccurrenceRequestDTO;
+import org.example.swamcappugilemmo.BusinessLogic.DTO.OccurrenceResponseDTO;
 import org.example.swamcappugilemmo.Security.Secured;
 import jakarta.ws.rs.core.Context;
 
@@ -23,9 +23,9 @@ public class OccurrenceService {
     @POST
     @Secured({"ADMIN"})
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response createOccurrence(OccurrenceDTO occurrencedto) {
+    public Response createOccurrence(OccurrenceRequestDTO requestDTO) {
         try {
-            OccurrenceDTO savedOccurrence = occurrenceController.addOccurrence(occurrencedto);
+            OccurrenceResponseDTO savedOccurrence = occurrenceController.addOccurrence(requestDTO);
             return Response.status(Response.Status.CREATED).entity(savedOccurrence).build();
         }
         catch (Exception e) {
@@ -38,7 +38,7 @@ public class OccurrenceService {
     @Path("/{idOccurrence}")
     public Response getOccurrences(@PathParam("idOccurrence") Long idOccurrence) {
         try{
-            OccurrenceDTO occurrenceDTO = occurrenceController.getOccurrenceById(idOccurrence);
+            OccurrenceResponseDTO occurrenceDTO = occurrenceController.getOccurrenceById(idOccurrence);
             if (occurrenceDTO == null) {
                 return Response.status(Response.Status.NOT_FOUND).entity("Occurrence not found").build();
             }
@@ -54,7 +54,7 @@ public class OccurrenceService {
     @Secured({"ADMIN", "PT"})
     public Response updateOccurrence(
             @PathParam("idOccurrence") Long idOccurrence,
-            OccurrenceDTO updatedData,
+            OccurrenceRequestDTO updatedData,
             @Context SecurityContext securityContext) {
 
         try {
@@ -62,7 +62,7 @@ public class OccurrenceService {
             String callerUsername = securityContext.getUserPrincipal().getName();
             boolean isAdmin = securityContext.isUserInRole("ADMIN");
 
-            OccurrenceDTO updatedDTO = occurrenceController.updateOccurrenceSecurely(
+            OccurrenceResponseDTO updatedDTO = occurrenceController.updateOccurrenceSecurely(
                     idOccurrence, updatedData, callerUsername, isAdmin
             );
 
@@ -84,7 +84,7 @@ public class OccurrenceService {
     @Secured({"ADMIN"})
     public Response deleteOccurrence(@PathParam("idOccurrence") Long idOccurrence) {
         try {
-            OccurrenceDTO deletedOccurrence = occurrenceController.deleteOccurrence(idOccurrence);
+            OccurrenceResponseDTO deletedOccurrence = occurrenceController.deleteOccurrence(idOccurrence);
             return Response.status(Response.Status.OK).entity(deletedOccurrence).build();
         } catch (IllegalArgumentException e) {
             return Response.status(Response.Status.NOT_FOUND).entity(e.getMessage()).build();
