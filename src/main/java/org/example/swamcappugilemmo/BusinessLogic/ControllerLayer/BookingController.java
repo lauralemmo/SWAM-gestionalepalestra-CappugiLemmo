@@ -1,5 +1,6 @@
 package org.example.swamcappugilemmo.BusinessLogic.ControllerLayer;
 
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.context.Dependent;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -18,7 +19,7 @@ import java.util.stream.Collectors;
 
 import static java.util.Arrays.stream;
 
-@Dependent
+@ApplicationScoped
 public class BookingController {
 
     @Inject
@@ -33,7 +34,7 @@ public class BookingController {
 
 
     @Transactional
-    public void createBooking(BookingRequestDTO request, String callerUsername) {
+    public void createBooking(BookingRequestDTO request) {
         // Recupero delle entità necessarie tramite i DAO
         Athlete athlete = athleteDAO.findById(request.getAthleteId());
         Course course = courseDAO.getCourseByIdforUpdate(request.getCourseId());
