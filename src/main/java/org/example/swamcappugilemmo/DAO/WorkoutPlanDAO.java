@@ -16,13 +16,13 @@ public class WorkoutPlanDAO {
     private EntityManager em;
 
 
-    @Transactional
+
     public void saveWorkoutPlan(WorkoutPlan workoutPlan) {
         em.persist(workoutPlan);
         System.out.println("Nuova scheda di allenamento creata");
     }
 
-    @Transactional
+
     public WorkoutPlan findById(Long id) {
         WorkoutPlan workoutPlan = em.find(WorkoutPlan.class, id);
         if (workoutPlan == null) {
@@ -31,13 +31,13 @@ public class WorkoutPlanDAO {
         return workoutPlan;
     }
 
-    @Transactional
+
     public List<WorkoutPlan> findAll() {
         return em.createQuery("SELECT w FROM WorkoutPlan w", WorkoutPlan.class)
                 .getResultList();
     }
 
-    @Transactional
+
     public WorkoutPlan update(WorkoutPlan wp) {
         WorkoutPlan newWp = em.merge(wp);
         if(newWp == null){
@@ -47,7 +47,7 @@ public class WorkoutPlanDAO {
         return newWp;
     }
 
-    @Transactional
+
     public WorkoutPlan deleteWorkoutPlan(Long id) {
         WorkoutPlan workoutPlan = findById(id);
         em.remove(workoutPlan);

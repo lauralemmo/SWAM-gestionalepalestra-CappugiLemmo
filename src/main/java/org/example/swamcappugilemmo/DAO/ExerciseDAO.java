@@ -16,18 +16,18 @@ public class ExerciseDAO {
     private EntityManager em;
 
 
-    @Transactional
+
     public void createExercise(Exercise exercise) {
         em.persist(exercise);
         System.out.println("Esercizio creato");
     }
 
-    @Transactional
+
     public List<Exercise> getAllExercises() {
         return em.createQuery("SELECT e FROM Exercise e", Exercise.class).getResultList();
     }
 
-    @Transactional
+
     public Exercise getExerciseById(Long exerciseId) {
         Exercise e = em.find(Exercise.class, exerciseId);
         if (e == null) {
@@ -36,7 +36,7 @@ public class ExerciseDAO {
         return e;
     }
 
-    @Transactional
+
     public Exercise updateExercise(Exercise e) {
         Exercise newE = em.merge(e);
         if (newE == null) {
@@ -46,7 +46,7 @@ public class ExerciseDAO {
         return newE;
     }
 
-    @Transactional
+
     public Exercise deleteExercise(Long exerciseId) {
         Exercise e = getExerciseById(exerciseId);
         em.remove(e);

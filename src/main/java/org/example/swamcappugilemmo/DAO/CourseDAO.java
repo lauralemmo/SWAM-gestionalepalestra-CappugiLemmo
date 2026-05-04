@@ -17,13 +17,13 @@ public class CourseDAO {
     private EntityManager em;
 
 
-    @Transactional
+
     public void createCourse(Course course){
         em.persist(course);
         System.out.println("Nuovo corso aggiunto");
     }
 
-    @Transactional
+
     public Course getCourseById(Long id){
         Course course = em.find(Course.class, id);
         if (course == null) {
@@ -32,12 +32,12 @@ public class CourseDAO {
         return course;
     }
 
-    @Transactional
+
     public Course getCourseByIdforUpdate(Long id){
         return em.find(Course.class, id, LockModeType.PESSIMISTIC_WRITE);
     }
 
-    @Transactional
+
     public Course getCourseByOccurrence(Occurrence occurrence){
         Course course = em.find(Course.class, occurrence);
         if (course == null) {
@@ -46,7 +46,7 @@ public class CourseDAO {
         return course;
     }
 
-    @Transactional
+
     public List<Course> getCoursesByPersonalTrainer(PersonalTrainer pt){
         return em.createQuery(
                         "SELECT c FROM Course c WHERE c.personalTrainer = :pt", Course.class)
@@ -54,12 +54,12 @@ public class CourseDAO {
                 .getResultList();
     }
 
-    @Transactional
+
     public List<Course> getAllCourses(){
         return em.createQuery("SELECT c FROM Course c", Course.class).getResultList();
     }
 
-    @Transactional
+
     public Course updateCourse(Course course){
         Course newC = em.merge(course);
         if(newC == null){
@@ -69,7 +69,7 @@ public class CourseDAO {
         return newC;
     }
 
-    @Transactional
+
     public Course deleteCourse(String name){
         Course c = em.find(Course.class, name);
         if (c == null) {

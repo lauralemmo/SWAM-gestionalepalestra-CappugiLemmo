@@ -15,14 +15,13 @@ public class PersonalTrainerDAO {
     @PersistenceContext
     private EntityManager em;
 
-    @Transactional
+
     public void createPersonalTrainer(PersonalTrainer pt){
         em.persist(pt);
         System.out.println("Nuovo personal trainer aggiunto");
     }
 
 
-    @Transactional
     public PersonalTrainer getPersonalTrainerById(Long id){
         PersonalTrainer pt = em.find(PersonalTrainer.class, id);
         if (pt == null) {
@@ -31,7 +30,7 @@ public class PersonalTrainerDAO {
         return pt;
     }
 
-    @Transactional
+
     public PersonalTrainer getPersonalTrainerByUsername(String username) {
         PersonalTrainer pt = em.createQuery("SELECT pt FROM PersonalTrainer pt WHERE pt.username = :username", PersonalTrainer.class)
                 .setParameter("username", username)
@@ -43,13 +42,11 @@ public class PersonalTrainerDAO {
     }
 
 
-    @Transactional
     public List<PersonalTrainer>  getAllPersonalTrainers(){
         return em.createQuery("SELECT pt FROM PersonalTrainer pt", PersonalTrainer.class).getResultList();
     }
 
 
-    @Transactional
     public PersonalTrainer updatePersonalTrainer(PersonalTrainer pt){
         PersonalTrainer newPt = em.merge(pt);
         if(newPt == null){
@@ -60,7 +57,6 @@ public class PersonalTrainerDAO {
     }
 
 
-    @Transactional
     public PersonalTrainer deletePersonalTrainer(Long id){
         PersonalTrainer pt = getPersonalTrainerById(id);
         em.remove(pt);
