@@ -143,6 +143,29 @@ public class AthleteController {
             throw new IllegalArgumentException("Atleta non trovato o nuovo username non valido.");
         }
     }
+
+    @Transactional
+    public AthleteResponseDTO updateAthlete(Long id, AthleteRequestDTO request) {
+        Athlete athlete = athleteDAO.findById(id);
+
+        athlete.setName(request.getName());
+        athlete.setSurname(request.getSurname());
+        athlete.setUsername(request.getUsername());
+        athlete.setEmail(request.getEmail());
+        athlete.setPhone_number(request.getPhone_number());
+        athlete.setTax_code(request.getTax_code());
+        athlete.setBirth_date(request.getBirth_date());
+        athlete.setHeight(request.getHeight());
+        athlete.setWeight(request.getWeight());
+
+        if (request.getPassword() != null && !request.getPassword().isEmpty()) {
+            String hashedPassword = BCrypt.hashpw(request.getPassword(), BCrypt.gensalt());
+            athlete.setPassword(hashedPassword);
+        }
+
+        athleteDAO.updateAthlete(athlete);
+        return athleteMapper.toDto(athlete);
+    }
    /* @Transactional
     public void updateAthleteInfo(String tax_code, String height, String weight) {
         Athlete athlete = athleteDAO.findAthleteByTaxCode(tax_code);

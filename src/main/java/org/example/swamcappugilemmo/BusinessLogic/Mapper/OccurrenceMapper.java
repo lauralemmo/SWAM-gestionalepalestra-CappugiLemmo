@@ -17,18 +17,19 @@ public class OccurrenceMapper {
             dto.setHours(occurrence.getHours());
             if (occurrence.getCourse() != null) {
                 dto.setCourseName(occurrence.getCourse().getName());
+                dto.setCourseId(occurrence.getCourse().getIdCourse());
             }
             return dto;
         }
 
     // Ricorda di passare anche l'entità Course quando converti da DTO a Entità, altrimenti non saprai a quale corso associare l'occorrenza
-        public Occurrence toEntity(OccurrenceDTO occurrenceDTO, Course course) {
-            if (occurrenceDTO == null) {
+        public Occurrence toEntity(OccurrenceDTO occurrenceRequestDTO, Course course) {
+            if (occurrenceRequestDTO == null) {
                 return null;
             }
             Occurrence occurrence = new Occurrence();
-            occurrence.setDate(occurrenceDTO.getDate());
-            occurrence.setHours(occurrenceDTO.getHours());
+            occurrence.setDate(occurrenceRequestDTO.getDate());
+            occurrence.setHours(occurrenceRequestDTO.getHours());
             occurrence.setCourse(course); // Colleghiamo l'entità corso
             return occurrence;
         }

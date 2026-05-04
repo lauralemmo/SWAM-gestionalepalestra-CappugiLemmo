@@ -11,9 +11,8 @@ import org.example.swamcappugilemmo.DomainModel.Course;
 import org.example.swamcappugilemmo.DomainModel.Occurrence;
 import org.example.swamcappugilemmo.Security.Secured;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class OccurrenceController {
@@ -26,13 +25,13 @@ public class OccurrenceController {
 
     @Secured({"ADMIN"}) // Solo l' admin può aggiungere nuove date
     @Transactional
-    public OccurrenceDTO addOccurrence(Long courseId, LocalDate date, LocalTime hours) {
+    public OccurrenceDTO addOccurrence(OccurrenceDTO occurrenceDTO) {
         try {
-            Course course = courseDAO.getCourseById(courseId); // Lancia IllegalArgumentException se non trovato
+            Course course = courseDAO.getCourseById(occurrenceDTO.getCourseId()); // Lancia IllegalArgumentException se non trovato
             //Occurrence newOccurrence = new Occurrence(date, hours, course);
             Occurrence newOccurrence = new Occurrence();
-            newOccurrence.setDate(date);
-            newOccurrence.setHours(hours);
+            newOccurrence.setDate(occurrenceDTO.getDate());
+            newOccurrence.setHours(occurrenceDTO.getHours());
             newOccurrence.setCourse(course);
             occurrenceDAO.createOccurrence(newOccurrence);
             return occurrenceMapper.toDTO(newOccurrence);
@@ -40,7 +39,7 @@ public class OccurrenceController {
 
         catch (IllegalArgumentException e) {
             // Qui capisci se l'ID del corso era sbagliato
-            System.err.println("Errore: Corso con ID " + courseId + " non trovato. " + e.getMessage());
+            System.err.println("Errore: Corso con ID " + occurrenceDTO.getCourseId() + " non trovato. " + e.getMessage());
             throw e; // Rilancia per informare il Service
         }
 
@@ -51,18 +50,22 @@ public class OccurrenceController {
     }
 
    @Transactional
-    public Occurrence getOccurrenceById(Long id) {
-        return occurrenceDAO.getOccurrenceById(id);
+    public OccurrenceDTO getOccurrenceById(Long id) {
+        Occurrence occurrence = occurrenceDAO.getOccurrenceById(id);
+        return occurrenceMapper.toDTO(occurrence);
    }
 
    @Transactional
-    public List<Occurrence> getOccurrencesByCourseId(Long courseId) {
+    public List<OccurrenceDTO> getOccurrencesByCourseId(Long courseId) {
         Course corso = courseDAO.getCourseById(courseId);
-        return occurrenceDAO.getOccurrencesByCourse(corso);
+        List<Occurrence> occurrences = occurrenceDAO.getOccurrencesByCourse(corso);
+        return occurrences.stream()
+               .map(occurrenceMapper::toDTO)
+               .collect(Collectors.toList());
    }
 
    @Transactional
-    public void updateOccurrenceSecurely(Long idOccurrence, Occurrence updatedData, String callerUsername, boolean callerRole) {
+    public OccurrenceDTO updateOccurrenceSecurely(Long idOccurrence, OccurrenceDTO updatedData, String callerUsername, boolean callerRole) {
 
         // Controlliamo se l'occorrenza esiste
         Occurrence existingOccurrence = occurrenceDAO.getOccurrenceById(idOccurrence);
@@ -84,14 +87,17 @@ public class OccurrenceController {
 
         // Salvataggio
         occurrenceDAO.updateOccurrence(existingOccurrence);
+        return occurrenceMapper.toDTO(existingOccurrence);
     }
 
     @Transactional
-    public void deleteOccurrence(Long idOccurrence) {
+    public OccurrenceDTO deleteOccurrence(Long idOccurrence) {
         Occurrence occurrence = occurrenceDAO.getOccurrenceById(idOccurrence);
         if (occurrence == null) {
             throw new IllegalArgumentException("Data lezione non trovata nel database");
         }
+        OccurrenceDTO dto = occurrenceMapper.toDTO(occurrence);
         occurrenceDAO.deleteOccurrence(idOccurrence);
+        return dto;
     }
 }

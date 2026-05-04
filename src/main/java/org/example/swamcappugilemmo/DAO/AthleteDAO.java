@@ -58,17 +58,17 @@ public class AthleteDAO {
         return athlete;
     }
 
-    public void createNewSubscription(String taxCode, Subscription subscription) {
-        Athlete athlete = findAthleteByTaxCode(taxCode);
+    public void createNewSubscription(Long id, Subscription subscription) {
+        Athlete athlete = findById(id);
         if (athlete != null) {
-            //Subscription subscription = new Subscription(subscriptionType, startDate);
             athlete.addSubscription(subscription);
             em.merge(athlete);
         }
         else {
-            throw new IllegalArgumentException("Athlete with tax code " + taxCode + " not found.");
+            throw new IllegalArgumentException("Athlete with id " + id + " not found.");
         }
     }
+
     public Subscription getActiveSubscription(String tax_code) {
         Athlete athlete = findAthleteByTaxCode(tax_code);
         if (athlete != null) {

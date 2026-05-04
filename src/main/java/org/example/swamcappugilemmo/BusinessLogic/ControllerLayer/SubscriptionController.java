@@ -35,7 +35,7 @@ public class SubscriptionController {
             throw new IllegalArgumentException("Data di inizio non valida.");
         }
         Subscription sub = subscriptionMapper.toEntity(subscriptionRequestDTO);
-        athleteDAO.createNewSubscription(athlete.getTax_code(), sub);
+        athleteDAO.createNewSubscription(athlete.getIdUser(), sub);
     }
 
     @Transactional

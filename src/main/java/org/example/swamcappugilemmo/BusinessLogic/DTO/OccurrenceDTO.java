@@ -9,9 +9,11 @@ import java.time.LocalTime;
 @Getter
 @Setter
 public class OccurrenceDTO {
+
         private Long idOccurrence;
         private LocalDate date;
         private LocalTime hours;
+        private Long courseId;
         private String courseName;
 
 }
