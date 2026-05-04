@@ -24,7 +24,7 @@ public class SubscriptionController {
     /// ////////////// SUBSCRIPTION MANAGEMENT ///////////////
 
     @Transactional
-    public void createNewSubscription(SubscriptionRequestDTO subscriptionRequestDTO) {
+    public SubscriptionResponseDTO createNewSubscription(SubscriptionRequestDTO subscriptionRequestDTO) {
         if (subscriptionRequestDTO.getStartDate() == null || subscriptionRequestDTO.getStartDate().isBefore(LocalDate.now())) {
             throw new IllegalArgumentException("Data di inizio non valida: deve essere oggi o in futuro.");
         }
@@ -50,6 +50,7 @@ public class SubscriptionController {
 
         Subscription sub = subscriptionMapper.toEntity(subscriptionRequestDTO);
         athleteDAO.createNewSubscription(athlete.getIdUser(), sub);
+        return subscriptionMapper.toDto(sub, athlete.getIdUser());
     }
 
     @Transactional

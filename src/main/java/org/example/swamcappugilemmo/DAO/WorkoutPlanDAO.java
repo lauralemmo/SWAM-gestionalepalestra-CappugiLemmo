@@ -48,11 +48,11 @@ public class WorkoutPlanDAO {
     }
 
 
-    public WorkoutPlan deleteWorkoutPlan(Long id) {
+    public void deleteWorkoutPlan(Long id) {
         WorkoutPlan workoutPlan = findById(id);
         em.remove(workoutPlan);
         System.out.println("Scheda di allenamento eliminata");
-        return workoutPlan;
+
     }
 
 }

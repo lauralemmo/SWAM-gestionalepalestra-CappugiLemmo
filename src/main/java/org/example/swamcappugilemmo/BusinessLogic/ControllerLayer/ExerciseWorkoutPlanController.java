@@ -60,8 +60,12 @@ public class ExerciseWorkoutPlanController {
 
 
     @Transactional
-    public ExerciseWorkoutPlanResponseDTO deleteExerciseInPlan(Long id) {
-        return ewpMapper.toDTO(ewpDAO.deleteExerciseWorkoutPlan(id));
+    public void deleteExerciseInPlan(Long id) {
+        ExerciseWorkoutPlan ewp = ewpDAO.findById(id);
+        if (ewp == null) {
+            throw new IllegalArgumentException("ExerciseWorkoutPlan with id " + id + " not found");
+        }
+        ewpDAO.deleteExerciseWorkoutPlan(id);
     }
 
 

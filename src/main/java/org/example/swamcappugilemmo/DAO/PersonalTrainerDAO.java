@@ -57,11 +57,10 @@ public class PersonalTrainerDAO {
     }
 
 
-    public PersonalTrainer deletePersonalTrainer(Long id){
+    public void deletePersonalTrainer(Long id){
         PersonalTrainer pt = getPersonalTrainerById(id);
         em.remove(pt);
         System.out.println("Personal trainer eliminato");
-        return pt;
     }
 
 

@@ -47,11 +47,10 @@ public class ExerciseDAO {
     }
 
 
-    public Exercise deleteExercise(Long exerciseId) {
+    public void deleteExercise(Long exerciseId) {
         Exercise e = getExerciseById(exerciseId);
         em.remove(e);
         System.out.println("Esercizio eliminato");
-        return e;
     }
 
 

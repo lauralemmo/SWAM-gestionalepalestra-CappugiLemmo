@@ -80,9 +80,9 @@ public class ExerciseWorkoutPlanService {
     @Path("/{id}")
     public Response deleteExerciseWorkoutPlan(@PathParam("id") Long id) {
         try{
-            ExerciseWorkoutPlanResponseDTO response = ewpController.deleteExerciseInPlan(id);
-            return Response.ok(response).build();
-        }catch (EntityNotFoundException e) {
+            ewpController.deleteExerciseInPlan(id);
+            return Response.noContent().build();
+        }catch (EntityNotFoundException |IllegalArgumentException e) {
             return Response.status(Response.Status.NOT_FOUND)
                     .entity(e.getMessage())
                     .build();

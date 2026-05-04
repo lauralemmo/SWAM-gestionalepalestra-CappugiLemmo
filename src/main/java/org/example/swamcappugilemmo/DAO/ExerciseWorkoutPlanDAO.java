@@ -40,7 +40,7 @@ public class ExerciseWorkoutPlanDAO {
     }
 
 
-    public ExerciseWorkoutPlan deleteExerciseWorkoutPlan(Long id) {
+    public void deleteExerciseWorkoutPlan(Long id) {
         ExerciseWorkoutPlan ewpToDelete = findById(id);
         if (ewpToDelete != null) {
             em.remove(ewpToDelete);
@@ -48,6 +48,5 @@ public class ExerciseWorkoutPlanDAO {
             throw new IllegalArgumentException("ExerciseWorkoutPlan with id " + id + " not found.");
         }
         System.out.println("Esercizio della scheda eliminato");
-        return ewpToDelete;
     }
 }

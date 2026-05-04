@@ -84,8 +84,8 @@ public class OccurrenceService {
     @Secured({"ADMIN"})
     public Response deleteOccurrence(@PathParam("idOccurrence") Long idOccurrence) {
         try {
-            OccurrenceResponseDTO deletedOccurrence = occurrenceController.deleteOccurrence(idOccurrence);
-            return Response.status(Response.Status.OK).entity(deletedOccurrence).build();
+            occurrenceController.deleteOccurrence(idOccurrence);
+            return Response.noContent().build();
         } catch (IllegalArgumentException e) {
             return Response.status(Response.Status.NOT_FOUND).entity(e.getMessage()).build();
         } catch (Exception e) {

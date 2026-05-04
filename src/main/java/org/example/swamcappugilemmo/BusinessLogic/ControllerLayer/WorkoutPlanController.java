@@ -67,8 +67,12 @@ public class WorkoutPlanController {
     }
 
     @Transactional
-    public WorkoutPlanResponseDTO deleteWorkoutPlan(Long id){
-        return wpMapper.toDTO(wpDAO.deleteWorkoutPlan(id));
+    public void deleteWorkoutPlan(Long id){
+        WorkoutPlan wp = wpDAO.findById(id);
+        if (wp == null) {
+            throw new IllegalArgumentException("WorkoutPlan with id " + id + " not found");
+        }
+        wpDAO.deleteWorkoutPlan(id);
     }
 
 

@@ -68,14 +68,14 @@ public class CourseDAO {
     }
 
 
-    public Course deleteCourse(String name){
-        Course c = em.find(Course.class, name);
+    public void deleteCourse(Long id){
+        Course c = em.find(Course.class, id);
         if (c == null) {
             throw new RuntimeException("Course not found");
         }
         em.remove(c);
         System.out.println("Corso eliminato");
-        return c;
+
     }
 
 

@@ -95,8 +95,8 @@ public class CourseController {
 
 
     @Transactional
-    public CourseResponseDTO deleteCourse(String name){
-        return courseMapper.toDto(courseDAO.deleteCourse(name));
+    public void deleteCourse(Long id){
+        courseDAO.deleteCourse(id);
     }
 
 }

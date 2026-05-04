@@ -50,8 +50,12 @@ public class ExerciseController {
     }
 
     @Transactional
-    public ExerciseResponseDTO deleteExercise(Long id){
-        return eMapper.toDTO(eDAO.deleteExercise(id));
+    public void deleteExercise(Long id){
+        Exercise e = eDAO.getExerciseById(id);
+        if (e == null){
+            throw new IllegalArgumentException("Exercise with id " + id + " not found");
+        }
+        eDAO.deleteExercise(id);
     }
 
 }

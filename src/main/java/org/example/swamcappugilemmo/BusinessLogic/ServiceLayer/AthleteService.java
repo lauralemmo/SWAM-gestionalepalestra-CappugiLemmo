@@ -59,9 +59,9 @@ public class AthleteService {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response registerNewSubscription(SubscriptionRequestDTO request) {
         try {
-            subscriptionController.createNewSubscription(request);
-            return Response.status(Response.Status.OK).build();
-        } catch (IllegalArgumentException | IllegalStateException e) { // <-- Aggiunto IllegalStateException
+            SubscriptionResponseDTO response = subscriptionController.createNewSubscription(request);
+            return Response.status(Response.Status.CREATED).entity(response).build();
+        } catch (IllegalArgumentException | IllegalStateException e) {
             return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Errore interno: " + e.getMessage()).build();
@@ -137,7 +137,7 @@ public class AthleteService {
         try {
             // Usiamo il metodo corretto che prende il Long id
             athleteController.deleteAthlete(id);
-            return Response.status(Response.Status.OK).build();
+            return Response.noContent().build(); // Modificato
         } catch (IllegalArgumentException e) {
             return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
         } catch (Exception e) {

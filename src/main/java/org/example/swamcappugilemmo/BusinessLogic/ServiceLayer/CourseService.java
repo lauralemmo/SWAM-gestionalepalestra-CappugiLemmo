@@ -74,9 +74,17 @@ public class CourseService {
         }
     }
 
-
-
-
-
-
+    @DELETE
+    @Path("/{id}/delete")
+    @Secured({"ADMIN"})
+    public Response deleteCourse(@PathParam("id") Long id) {
+        try {
+            courseController.deleteCourse(id);
+            return Response.noContent().build();
+        } catch (IllegalArgumentException e) {
+            return Response.status(Response.Status.NOT_FOUND).entity(e.getMessage()).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+        }
+    }
 }

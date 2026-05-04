@@ -89,13 +89,11 @@ public class OccurrenceController {
     }
 
     @Transactional
-    public OccurrenceResponseDTO deleteOccurrence(Long idOccurrence) {
+    public void deleteOccurrence(Long idOccurrence) {
         Occurrence occurrence = occurrenceDAO.getOccurrenceById(idOccurrence);
         if (occurrence == null) {
-            throw new IllegalArgumentException("Data lezione non trovata nel database");
+            throw new IllegalArgumentException("Occorrenza con ID " + idOccurrence + " lezione non trovata nel database");
         }
-        OccurrenceResponseDTO dto = occurrenceMapper.toDTO(occurrence);
         occurrenceDAO.deleteOccurrence(idOccurrence);
-        return dto;
     }
 }

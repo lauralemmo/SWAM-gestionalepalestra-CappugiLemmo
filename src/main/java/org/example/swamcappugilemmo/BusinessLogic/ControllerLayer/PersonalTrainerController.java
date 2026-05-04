@@ -72,9 +72,8 @@ public class PersonalTrainerController {
 
 
     @Transactional
-    public PersonalTrainerResponseDTO deletePersonalTrainer(Long id){
-        PersonalTrainer pt = personalTrainerDAO.deletePersonalTrainer(id);
-        return ptMapper.toDto(pt);
+    public void deletePersonalTrainer(Long id){
+        personalTrainerDAO.deletePersonalTrainer(id);
     }
 
 
