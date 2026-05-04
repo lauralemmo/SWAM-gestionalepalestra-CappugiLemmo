@@ -2,9 +2,7 @@ package org.example.swamcappugilemmo.DAO;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.LockModeType;
 import jakarta.persistence.PersistenceContext;
-import jakarta.transaction.Transactional;
 import org.example.swamcappugilemmo.DomainModel.Course;
 import org.example.swamcappugilemmo.DomainModel.Occurrence;
 import org.example.swamcappugilemmo.DomainModel.PersonalTrainer;
@@ -27,14 +25,14 @@ public class CourseDAO {
     public Course getCourseById(Long id){
         Course course = em.find(Course.class, id);
         if (course == null) {
-            throw new IllegalArgumentException("Course with name " + id + " not found.");
+            throw new IllegalArgumentException("Course with id " + id + " not found.");
         }
         return course;
     }
 
 
     public Course getCourseByIdforUpdate(Long id){
-        return em.find(Course.class, id, LockModeType.PESSIMISTIC_WRITE);
+        return em.find(Course.class, id);
     }
 
 
@@ -83,4 +81,3 @@ public class CourseDAO {
 
 
 }
-

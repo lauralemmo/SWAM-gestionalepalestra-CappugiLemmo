@@ -1,7 +1,6 @@
 package org.example.swamcappugilemmo.BusinessLogic.ServiceLayer;
 
 import jakarta.inject.Inject;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PessimisticLockException;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Context;
@@ -9,10 +8,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.SecurityContext;
 import org.example.swamcappugilemmo.BusinessLogic.ControllerLayer.BookingController;
-import org.example.swamcappugilemmo.BusinessLogic.DTO.BookingRequestDTO;
-import org.example.swamcappugilemmo.BusinessLogic.DTO.BookingResponseDTO;
-import org.example.swamcappugilemmo.BusinessLogic.DTO.ExerciseWorkoutPlanRequestDTO;
-import org.example.swamcappugilemmo.BusinessLogic.DTO.ExerciseWorkoutPlanResponseDTO;
+import org.example.swamcappugilemmo.BusinessLogic.DTO.BookingDTO;
 import org.example.swamcappugilemmo.Security.Secured;
 
 import java.util.List;
@@ -30,7 +26,7 @@ public class BookingService {
     @POST
     @Secured({"ATHLETE"})
     @Path("/register")
-    public Response registerBooking(BookingRequestDTO request, @Context SecurityContext securityContext) {
+    public Response registerBooking(BookingDTO request, @Context SecurityContext securityContext) {
         try {
             // Chi ha fatto la richiesta
             String callerUsername = securityContext.getUserPrincipal().getName();
@@ -65,7 +61,7 @@ public class BookingService {
     public Response getBooking(@PathParam("bookingId") Long bookingId) {
         try {
             // Delega al controller il recupero della prenotazione
-            BookingResponseDTO response = bookingController.getBookingDTOfromId(bookingId);
+            BookingDTO response = bookingController.getBookingDTOfromId(bookingId);
             return Response.ok(response).build();
         } catch (IllegalArgumentException e) {
             // Se la prenotazione non esiste, restituisce 404 Not Found
@@ -89,7 +85,7 @@ public class BookingService {
             String callerUsername = securityContext.getUserPrincipal().getName();
 
             // Chiediamo al controller la lista delle prenotazioni
-            List<BookingResponseDTO> myBookings = bookingController.getBookingsByAthleteUsername(callerUsername);
+            List<BookingDTO> myBookings = bookingController.getBookingsByAthleteUsername(callerUsername);
 
             // Restituiamo la lista al frontend
             return Response.ok(myBookings).build();
@@ -102,38 +98,14 @@ public class BookingService {
                     .build();
         }
     }
-
-
-
-
-    @PUT
-    @Path("/{id}")
-    public Response updateBooking(@PathParam("id") Long id, BookingRequestDTO request) {
-        try{
-            BookingResponseDTO response = bookingController.updateBooking(request, id);
-            return Response.ok(response).build();
-        }catch (EntityNotFoundException e) {
-            return Response.status(Response.Status.NOT_FOUND)
-                    .entity(e.getMessage())
-                    .build();
-        } catch (Exception e) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity("Errore interno del server")
-                    .build();
-        }
-    }
-
-
-
-
     @DELETE
     @Path("/{bookingId}/cancel")
     @Secured({"ATHLETE"})
-    public Response deleteBooking(@PathParam("bookingId") Long bookingId, @Context SecurityContext securityContext) {
+    public Response cancelBooking(@PathParam("bookingId") Long bookingId, @Context SecurityContext securityContext) {
         try {
             // Chi ha fatto la richiesta
             String callerUsername = securityContext.getUserPrincipal().getName();
-            bookingController.deleteBooking(bookingId, callerUsername);
+            bookingController.cancelBooking(bookingId, callerUsername);
             return Response.ok("Prenotazione cancellata con successo").build();
 
         }catch (SecurityException e) {
@@ -151,7 +123,5 @@ public class BookingService {
         }
 
     }
-
-
 }
 
