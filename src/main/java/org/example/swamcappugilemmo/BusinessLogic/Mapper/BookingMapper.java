@@ -2,8 +2,8 @@ package org.example.swamcappugilemmo.BusinessLogic.Mapper;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import org.example.swamcappugilemmo.BusinessLogic.DTO.AthleteResponseDTO;
-import org.example.swamcappugilemmo.BusinessLogic.DTO.BookingDTO;
+import org.example.swamcappugilemmo.BusinessLogic.DTO.BookingRequestDTO;
+import org.example.swamcappugilemmo.BusinessLogic.DTO.BookingResponseDTO;
 import org.example.swamcappugilemmo.DomainModel.Athlete;
 import org.example.swamcappugilemmo.DomainModel.Booking;
 import org.example.swamcappugilemmo.DomainModel.Course;
@@ -13,24 +13,23 @@ import java.time.LocalTime;
 
 @ApplicationScoped
 public class BookingMapper {
-    @Inject
-    AthleteMapper athleteMapper;
 
-    public Booking toEntity(LocalDate localDate, LocalTime h, Course course, Athlete athlete) {
-    //return new Booking(localDate ,h , course, athlete) ;
-    Booking booking = new Booking();
-    booking.setDate(localDate);
-    booking.setHours(h);
-    booking.setCourse(course);
-    booking.setAthlete(athlete);
-    return booking;
+    public Booking toEntity(BookingRequestDTO request, Course course, Athlete athlete) {
+        Booking b = new Booking();
+        b.setDate(request.getDate());
+        b.setHours(request.getHours());
+        b.setCourse(course);
+        b.setAthlete(athlete);
+        return b;
     }
-    public BookingDTO toDto(Booking booking) {
-        BookingDTO dto = new BookingDTO();
-        dto.setUsername(booking.getAthlete().getUsername());
-        dto.setIdCourse(booking.getCourse().getIdCourse());
+
+    public BookingResponseDTO toDto(Booking booking) {
+        BookingResponseDTO dto = new BookingResponseDTO();
+        dto.setId(booking.getIdBooking());
         dto.setDate(booking.getDate());
         dto.setHours(booking.getHours());
+        dto.setCourseId(booking.getCourse().getIdCourse());
+        dto.setAthleteId(booking.getAthlete().getIdUser());
 
         return dto;
     }
