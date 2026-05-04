@@ -1,7 +1,7 @@
 package org.example.swamcappugilemmo.BusinessLogic.ServiceLayer;
 
 import jakarta.inject.Inject;
-import jakarta.persistence.PessimisticLockException;
+import jakarta.persistence.OptimisticLockException;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
@@ -35,10 +35,10 @@ public class BookingService {
             return Response.status(Response.Status.CREATED)
                     .entity("Prenotazione registrata con successo")
                     .build();
-        } catch (PessimisticLockException e) {
-            // Il lock è fallito o è andato in timeout
+        } catch (OptimisticLockException e) {
+            // L'optimistic lock ha rilevato una modifica concorrente
             return Response.status(Response.Status.CONFLICT)
-                    .entity("Il sistema è sovraccarico di prenotazioni. Riprova tra qualche istante.")
+                    .entity("Il corso è stato modificato da un altro utente. Riprova.")
                     .build();
         } catch (IllegalArgumentException e) {
             // Gestisce errori di validazione (es. atleta o corso non trovati)
@@ -112,9 +112,9 @@ public class BookingService {
             return Response.status(Response.Status.FORBIDDEN).entity(e.getMessage()).build();
         } catch (IllegalArgumentException e) {
             return Response.status(Response.Status.NOT_FOUND).entity(e.getMessage()).build();
-        } catch (PessimisticLockException e) {
+        } catch (OptimisticLockException e) {
             return Response.status(Response.Status.CONFLICT)
-                    .entity("Il sistema è temporaneamente occupato. Riprova tra qualche istante.")
+                    .entity("Il corso è stato modificato da un altro utente. Riprova.")
                     .build();
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
@@ -124,4 +124,3 @@ public class BookingService {
 
     }
 }
-

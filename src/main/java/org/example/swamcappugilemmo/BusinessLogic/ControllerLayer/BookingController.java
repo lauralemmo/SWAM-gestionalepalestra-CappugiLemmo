@@ -36,7 +36,7 @@ public class BookingController {
     public void createBooking(BookingDTO request, String callerUsername) {
         // Recupero delle entità necessarie tramite i DAO
         Athlete athlete = athleteDAO.findAthleteByUsername(callerUsername);
-        Course course = courseDAO.getCourseByIdforUpdate(request.getIdCourse());
+        Course course = courseDAO.getCourseById(request.getIdCourse());
         request.setUsername(callerUsername);
 
         if (athlete == null || course == null) {
@@ -103,8 +103,7 @@ public class BookingController {
             throw new IllegalStateException("Non hai il permesso di cancellare questa prenotazione");
         }
 
-        // Blocchiamo il corso per assicurarci che nessuno si prenoti mentre liberiamo il posto
-        Course course = courseDAO.getCourseByIdforUpdate(booking.getCourse().getIdCourse());
+        Course course = courseDAO.getCourseById(booking.getCourse().getIdCourse());
         int current = course.getNumMembers();
         if (current <= 0) {
             throw new IllegalStateException("Numero membri non valido");
