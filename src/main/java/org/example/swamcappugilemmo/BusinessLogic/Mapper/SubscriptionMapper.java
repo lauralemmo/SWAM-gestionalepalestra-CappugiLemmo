@@ -10,8 +10,9 @@ import java.time.LocalDate;
 @ApplicationScoped
 public class SubscriptionMapper {
 
-    public SubscriptionResponseDTO toDto(Subscription s) {
+    public SubscriptionResponseDTO toDto(Subscription s, Long idUser) {
         SubscriptionResponseDTO dto = new SubscriptionResponseDTO();
+        dto.setIdUser(idUser); // Imposta l'ID dell'utente
         dto.setType(s.getType());
         dto.setPrice(s.getPrice());
         dto.setActive(s.isActive());

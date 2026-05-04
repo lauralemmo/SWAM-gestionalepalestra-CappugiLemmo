@@ -54,9 +54,9 @@ public class AthleteMapper {
         response.setHeight(athlete.getHeight());
         response.setWeight(athlete.getWeight());
 
-        // Mappa anche la lista delle sottoscrizioni
+        // Mappa anche la lista delle sottoscrizioni, passando l'ID dell'atleta
         response.setSubscriptions(athlete.getSubscriptions().stream()
-                .map(subscriptionMapper::toDto)
+                .map(sub -> subscriptionMapper.toDto(sub, athlete.getIdUser()))
                 .collect(Collectors.toList()));
 
         return response;

@@ -81,13 +81,13 @@ public class AthleteDAO {
             throw new IllegalArgumentException("Athlete with tax code " + tax_code + " not found.");
         }
     }
-    public List<Subscription> getSubscriptions(String tax_code){
-        Athlete athlete = findAthleteByTaxCode(tax_code);
+    public List<Subscription> getSubscriptions(Long id){
+        Athlete athlete = findById(id);
         if (athlete != null) {
             return athlete.getSubscriptions();
         }
         else {
-            throw new IllegalArgumentException("Athlete with tax code " + tax_code + " not found.");
+            throw new IllegalArgumentException("Athlete with id " + id + " not found.");
         }
     }
 
@@ -97,16 +97,6 @@ public class AthleteDAO {
             throw new RuntimeException("Update failed");
         }
         System.out.println("Atleta aggiornato");
-    }
-
-    public void deleteAthlete(String username){
-        //TODO correggere questo metodo, find non funziona con username, bisogna fare una query per trovare l'atleta con quel username e poi eliminarlo
-        Athlete a = em.find(Athlete.class, username);
-        if(a == null){
-            throw new RuntimeException("Atleta non trovato");
-        }
-        em.remove(a);
-        System.out.println("Atleta eliminato");
     }
 
     public void deleteAthlete(Long id){

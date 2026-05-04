@@ -10,6 +10,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 public class SubscriptionResponseDTO {
+    private Long idUser;
     private SubscriptionType type;
     private String price;
     private LocalDate startDate;

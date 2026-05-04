@@ -23,17 +23,31 @@ public class SubscriptionController {
 
     /// ////////////// SUBSCRIPTION MANAGEMENT ///////////////
 
-    // crea un nuovo abbonamento per un atleta, se ne ha già uno attivo, non ha senso crearne un altro, quindi prima di creare un nuovo abbonamento, bisogna verificare se l'atleta ha già un abbonamento attivo
     @Transactional
     public void crateNewSubscription(SubscriptionRequestDTO subscriptionRequestDTO) {
-        Athlete athlete = athleteDAO.findById(subscriptionRequestDTO.getIdUser());
-        Subscription activeSub = athleteDAO.getActiveSubscription(athlete.getTax_code());
-        if (activeSub != null && activeSub.isActive()) {
-            throw new IllegalStateException("Impossibile aggiungere un nuovo abbonamento: quello attuale è ancora attivo fino al " + activeSub.getEnd_date());
-        }
         if (subscriptionRequestDTO.getStartDate() == null || subscriptionRequestDTO.getStartDate().isBefore(LocalDate.now())) {
-            throw new IllegalArgumentException("Data di inizio non valida.");
+            throw new IllegalArgumentException("Data di inizio non valida: deve essere oggi o in futuro.");
         }
+
+        Athlete athlete = athleteDAO.findById(subscriptionRequestDTO.getIdUser());
+        
+        // Calcoliamo le date del nuovo abbonamento
+        LocalDate newStartDate = subscriptionRequestDTO.getStartDate();
+        LocalDate newEndDate = newStartDate.plusMonths(subscriptionRequestDTO.getType().getMonths());
+
+        // Controlliamo che il nuovo abbonamento non si sovrapponga a nessuno di quelli già esistenti
+        if (athlete.getSubscriptions() != null) {
+            for (Subscription existingSub : athlete.getSubscriptions()) {
+                boolean overlaps = !newStartDate.isAfter(existingSub.getEnd_date()) && 
+                                   !newEndDate.isBefore(existingSub.getStart_date());
+                
+                if (overlaps) {
+                    throw new IllegalStateException("Impossibile aggiungere l'abbonamento: si sovrappone con un abbonamento esistente (dal " 
+                            + existingSub.getStart_date() + " al " + existingSub.getEnd_date() + ").");
+                }
+            }
+        }
+
         Subscription sub = subscriptionMapper.toEntity(subscriptionRequestDTO);
         athleteDAO.createNewSubscription(athlete.getIdUser(), sub);
     }
@@ -45,8 +59,8 @@ public class SubscriptionController {
 
     // vedi lo storico delle sottoscrizioni di un atleta
     @Transactional
-    public List<Subscription> getSubscriptions(String tax_code) {
-        return athleteDAO.getSubscriptions(tax_code);
+    public List<Subscription> getSubscriptions(Long id) {
+        return athleteDAO.getSubscriptions(id);
     }
 
     @Transactional
@@ -57,7 +71,7 @@ public class SubscriptionController {
         return athlete.getSubscriptions().stream()
                 .filter(Subscription::isActive) // Usa la logica del Domain Model
                 .findFirst()
-                .map(subscriptionMapper::toDto)
+                .map(sub -> subscriptionMapper.toDto(sub, athlete.getIdUser())) // Passo l'ID dell'atleta
                 .orElse(null);
     }
 

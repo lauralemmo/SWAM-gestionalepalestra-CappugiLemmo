@@ -24,32 +24,6 @@ public class AthleteController {
     @Inject
     private AthleteMapper athleteMapper;
 
-    /// ////////////// ATHLETE MANAGEMENT ///////////////
-    /*@Transactional
-    public void registerNewAthlete(String name, String surname, String username, String password, String email, String phone_number,
-                                String tax_code, LocalDate birth_date, String height, String weight, SubscriptionType subscriptionType, LocalDate startDate) {
-        Subscription initialSubscription = new Subscription(subscriptionType, startDate);
-        Athlete newAthlete = new Athlete(tax_code,
-                name,
-                surname,
-                username,
-                password,
-                email,
-                phone_number,
-                birth_date,
-                height,
-                weight);
-        newAthlete.addSubscription(initialSubscription);
-        athleteDAO.saveAthlete(newAthlete);
-    } //vecchio metodo, ora uso quello con i mapper
-
-    @Transactional
-    public void registerNewAthlete(Athlete newAthlete, SubscriptionType subscriptionType, LocalDate startDate) {
-        Subscription initialSubscription = new Subscription(subscriptionType, startDate);
-        newAthlete.addSubscription(initialSubscription);
-        athleteDAO.saveAthlete(newAthlete);
-    }*/
-
     @Transactional
     public AthleteResponseDTO registerNewAthlete(AthleteRequestDTO request) {
         Athlete newAthlete = athleteMapper.toEntity(request);
@@ -112,17 +86,6 @@ public class AthleteController {
     }
 
     @Transactional
-    public void updateAthleteUsername(String username, String request) {
-        Athlete athlete = athleteDAO.findAthleteByUsername(username);
-        if (athlete != null && !request.isBlank()) {
-            athlete.setUsername(request);
-        } else {
-            throw new IllegalArgumentException("Atleta con username: " + username + " non trovato o username non valido.");
-        }
-    }
-
-
-    @Transactional
     public void deleteAthleta(Long Id){
         athleteDAO.deleteAthlete(Id);
     }
@@ -135,7 +98,6 @@ public class AthleteController {
 
         Athlete athlete = athleteDAO.findAthleteByUsername(username);
 
-        // Se l'atleta esiste e il nuovo username è valido, aggiorniamo; altrimenti lanciamo un'eccezione
         if (athlete != null && newUsername != null && !newUsername.isBlank()) {
             athlete.setUsername(newUsername);
 
@@ -145,43 +107,32 @@ public class AthleteController {
     }
 
     @Transactional
-    public AthleteResponseDTO updateAthlete(Long id, AthleteRequestDTO request) {
-        Athlete athlete = athleteDAO.findById(id);
+    public AthleteResponseDTO updateAthleteProfile(Long id, AthleteRequestDTO request, String callerUsername, boolean isAdmin) {
+        Athlete athleteToUpdate = athleteDAO.findById(id);
+        if (athleteToUpdate == null) {
+            throw new IllegalArgumentException("Atleta con ID " + id + " non trovato.");
+        }
 
-        athlete.setName(request.getName());
-        athlete.setSurname(request.getSurname());
-        athlete.setUsername(request.getUsername());
-        athlete.setEmail(request.getEmail());
-        athlete.setPhone_number(request.getPhone_number());
-        athlete.setTax_code(request.getTax_code());
-        athlete.setBirth_date(request.getBirth_date());
-        athlete.setHeight(request.getHeight());
-        athlete.setWeight(request.getWeight());
+        if (!isAdmin && !athleteToUpdate.getUsername().equals(callerUsername)) {
+            throw new SecurityException("Accesso negato: puoi modificare solo il tuo profilo.");
+        }
 
-        if (request.getPassword() != null && !request.getPassword().isEmpty()) {
+        athleteToUpdate.setName(request.getName());
+        athleteToUpdate.setSurname(request.getSurname());
+        athleteToUpdate.setUsername(request.getUsername());
+        athleteToUpdate.setEmail(request.getEmail());
+        athleteToUpdate.setPhone_number(request.getPhone_number());
+        athleteToUpdate.setTax_code(request.getTax_code());
+        athleteToUpdate.setBirth_date(request.getBirth_date());
+        athleteToUpdate.setHeight(request.getHeight());
+        athleteToUpdate.setWeight(request.getWeight());
+
+        if (request.getPassword() != null && !request.getPassword().isBlank()) {
             String hashedPassword = BCrypt.hashpw(request.getPassword(), BCrypt.gensalt());
-            athlete.setPassword(hashedPassword);
+            athleteToUpdate.setPassword(hashedPassword);
         }
 
-        athleteDAO.updateAthlete(athlete);
-        return athleteMapper.toDto(athlete);
+        athleteDAO.updateAthlete(athleteToUpdate);
+        return athleteMapper.toDto(athleteToUpdate);
     }
-   /* @Transactional
-    public void updateAthleteInfo(String tax_code, String height, String weight) {
-        Athlete athlete = athleteDAO.findAthleteByTaxCode(tax_code);
-        if (athlete != null) {
-            athlete.setHeight(height);
-            athlete.setWeight(weight);
-            athleteDAO.updateAthlete(athlete);
-        }
-    }*/
-
-   /* @Transactional
-    public void updateAthlete(String tax_code, String name, String surname, String username, String password, String email,
-                              String phone_number, LocalDate birth_date, String height, String weight,
-                              SubscriptionType subscriptionType, LocalDate startDate){
-        Athlete athlete = new Athlete(tax_code, name, surname, username, password, email, phone_number, birth_date, height, weight);
-        athleteDAO.updateAthlete(athlete);
-    }*/
-
 }

@@ -188,4 +188,34 @@ public class AthleteService {
         }
     }
 
+    @PUT
+    @Path("/id/{id}/profile")
+    @Secured({"ATHLETE", "ADMIN"})
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response updateAthleteProfile(
+            @PathParam("id") Long id,
+            AthleteRequestDTO requestDTO,
+            @Context SecurityContext securityContext) {
+
+        try {
+            // Estraiamo i dati dal contesto
+            String callerUsername = securityContext.getUserPrincipal().getName();
+            boolean isAdmin = securityContext.isUserInRole("ADMIN");
+
+            AthleteResponseDTO updatedAthlete = athleteController.updateAthleteProfile(id, requestDTO, callerUsername, isAdmin);
+            
+            return Response.status(Response.Status.OK).entity(updatedAthlete).build();
+
+        } catch (SecurityException e) {
+            // Se il controller blocca l'utente, restituiamo 403 Forbidden
+            return Response.status(Response.Status.FORBIDDEN).entity(e.getMessage()).build();
+        } catch (IllegalArgumentException e) {
+            // Se c'è un errore nei dati o l'atleta non esiste, restituiamo 404
+            return Response.status(Response.Status.NOT_FOUND).entity(e.getMessage()).build();
+        } catch (Exception e) {
+            // Rete di sicurezza per altri errori
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Errore interno del server: " + e.getMessage()).build();
+        }
+    }
+
 }
