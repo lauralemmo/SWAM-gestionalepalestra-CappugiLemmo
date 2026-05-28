@@ -59,12 +59,13 @@ public class AthleteDAO {
         return athlete;
     }
 
-    public void updateAthlete(Athlete athlete){
+    public Athlete updateAthlete(Athlete athlete){
         Athlete newA = em.merge(athlete);
         if(newA == null){
             throw new RuntimeException("Update failed");
         }
         System.out.println("Atleta aggiornato");
+        return newA;
     }
 
     public void deleteAthlete(Long id){

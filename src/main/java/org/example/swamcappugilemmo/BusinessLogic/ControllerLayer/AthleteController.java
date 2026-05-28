@@ -140,7 +140,7 @@ public class AthleteController {
             athleteToUpdate.setPassword(hashedPassword);
         }
 
-        athleteDAO.updateAthlete(athleteToUpdate);
-        return athleteMapper.toDto(athleteToUpdate);
+        Athlete updatedAthlete = athleteDAO.updateAthlete(athleteToUpdate);
+        return athleteMapper.toDto(updatedAthlete);
     }
 }
