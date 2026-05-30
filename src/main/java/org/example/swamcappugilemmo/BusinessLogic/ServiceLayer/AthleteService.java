@@ -29,7 +29,6 @@ public class AthleteService {
     //=================================================POST=================================================
     @POST
     @Path("/register")
-    @Consumes(MediaType.APPLICATION_JSON)
     public Response registerAthlete(AthleteRequestDTO request) {
         /*try {
             // Estrai i dati dal tuo DTO e passali al controller
@@ -56,7 +55,6 @@ public class AthleteService {
     @POST
     @Path("/registerNewSubscription")
     @Secured({"ADMIN"})
-    @Consumes(MediaType.APPLICATION_JSON)
     public Response registerNewSubscription(SubscriptionRequestDTO request) {
         try {
             SubscriptionResponseDTO response = subscriptionController.createNewSubscription(request);
@@ -161,7 +159,6 @@ public class AthleteService {
     @PUT
     @Path("/{username}/update")
     @Secured({"ATHLETE", "ADMIN"})
-    @Consumes(MediaType.APPLICATION_JSON)
     public Response updateAthleteUsername(
             @PathParam("username") String username,
             Map<String, String> body,
@@ -191,7 +188,6 @@ public class AthleteService {
     @PUT
     @Path("/id/{id}/profile")
     @Secured({"ATHLETE", "ADMIN"})
-    @Consumes(MediaType.APPLICATION_JSON)
     public Response updateAthleteProfile(
             @PathParam("id") Long id,
             AthleteRequestDTO requestDTO,
