@@ -54,10 +54,14 @@ public class AthleteService {
 
     @POST
     @Path("/registerNewSubscription")
-    @Secured({"ADMIN"})
-    public Response registerNewSubscription(SubscriptionRequestDTO request) {
+    @Secured({"ADMIN", "ATHLETE"})
+    public Response registerNewSubscription(SubscriptionRequestDTO request,
+                                            @Context SecurityContext securityContext){
         try {
-            SubscriptionResponseDTO response = subscriptionController.createNewSubscription(request);
+            String callerUsername = securityContext.getUserPrincipal().getName();
+            boolean isAdmin = securityContext.isUserInRole("ADMIN");
+
+            SubscriptionResponseDTO response = subscriptionController.createNewSubscription(request, callerUsername, isAdmin);
             return Response.status(Response.Status.CREATED).entity(response).build();
         } catch (IllegalArgumentException | IllegalStateException e) {
             return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();

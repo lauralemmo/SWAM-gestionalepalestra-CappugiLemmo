@@ -44,9 +44,9 @@ public class CourseService {
 
 
     @GET
-    @Path("/name")
+    @Path("/{id}}")
     //@Secured({"ADMIN", "ATHLETE", "PERSONAL_TRAINER"}) non serve dato che è una info pubblica
-    public Response getCourseName(@QueryParam("name") Long idCourse){
+    public Response getCourseByID(@PathParam("id") Long idCourse){
         try{
             CourseResponseDTO response = courseController.getCourseById(idCourse);
             return Response.ok(response).build();

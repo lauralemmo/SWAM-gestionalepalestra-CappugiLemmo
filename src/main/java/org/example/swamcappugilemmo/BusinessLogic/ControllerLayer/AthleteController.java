@@ -27,8 +27,9 @@ public class AthleteController {
 
 
     @Transactional
-    public AthleteResponseDTO registerNewAthlete(AthleteRequestDTO request) {
+    public AthleteResponseDTO registerNewAthlete(AthleteRequestDTO request ) {
         Athlete newAthlete = athleteMapper.toEntity(request);
+
 
         //cripta la password prima di salvarla
         String hashedPassword = BCrypt.hashpw(request.getPassword(), BCrypt.gensalt());
@@ -127,13 +128,16 @@ public class AthleteController {
 
         athleteToUpdate.setName(request.getName());
         athleteToUpdate.setSurname(request.getSurname());
-        athleteToUpdate.setUsername(request.getUsername());
         athleteToUpdate.setEmail(request.getEmail());
         athleteToUpdate.setPhone_number(request.getPhone_number());
-        athleteToUpdate.setTax_code(request.getTax_code());
         athleteToUpdate.setBirth_date(request.getBirth_date());
         athleteToUpdate.setHeight(request.getHeight());
         athleteToUpdate.setWeight(request.getWeight());
+
+        if (isAdmin) {
+            athleteToUpdate.setUsername(request.getUsername());
+            athleteToUpdate.setTax_code(request.getTax_code());
+        }
 
         if (request.getPassword() != null && !request.getPassword().isBlank()) {
             String hashedPassword = BCrypt.hashpw(request.getPassword(), BCrypt.gensalt());

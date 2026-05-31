@@ -24,13 +24,18 @@ public class SubscriptionController {
     /// ////////////// SUBSCRIPTION MANAGEMENT ///////////////
 
     @Transactional
-    public SubscriptionResponseDTO createNewSubscription(SubscriptionRequestDTO subscriptionRequestDTO) {
+    public SubscriptionResponseDTO createNewSubscription(SubscriptionRequestDTO subscriptionRequestDTO, String callerUsername, boolean isAdmin) {
         if (subscriptionRequestDTO.getStartDate() == null || subscriptionRequestDTO.getStartDate().isBefore(LocalDate.now())) {
             throw new IllegalArgumentException("Data di inizio non valida: deve essere oggi o in futuro.");
         }
 
+
         Athlete athlete = athleteDAO.findById(subscriptionRequestDTO.getIdUser());
-        
+
+        if (!isAdmin && !athlete.getUsername().equals(callerUsername)) {
+            throw new SecurityException("Accesso negato: puoi modificare solo il tuo profilo.");
+        }
+
         // Calcoliamo le date del nuovo abbonamento
         LocalDate newStartDate = subscriptionRequestDTO.getStartDate();
         LocalDate newEndDate = newStartDate.plusMonths(subscriptionRequestDTO.getType().getMonths());

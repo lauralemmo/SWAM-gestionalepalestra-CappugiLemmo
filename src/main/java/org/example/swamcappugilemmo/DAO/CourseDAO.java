@@ -78,6 +78,26 @@ public class CourseDAO {
 
     }
 
+    //Query atomica (un solo utente per volta puo farla)
+    public boolean bookPlaceOnACourse(Long id) {
+        int righeModificate = em.createQuery(
+                        "UPDATE Course c SET c.numMembers = c.numMembers + 1 " +
+                                "WHERE c.idCourse = :id AND c.numMembers < c.numMax")
+                .setParameter("id", id)
+                .executeUpdate();
+
+        return righeModificate > 0;
+    }
+
+    public boolean deleteReservedPlace(Long id){
+        int righeModificate = em.createQuery(
+                        "UPDATE Course c SET c.numMembers = c.numMembers - 1 " +
+                                "WHERE c.idCourse = :id AND c.numMembers > 0")
+                .setParameter("id",id)
+                .executeUpdate();
+
+        return righeModificate > 0;
+    }
 
 
 }
