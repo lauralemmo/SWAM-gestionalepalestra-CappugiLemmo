@@ -22,7 +22,6 @@ public class OccurrenceService {
 
     @POST
     @Secured({"ADMIN"})
-    @Consumes(MediaType.APPLICATION_JSON)
     public Response createOccurrence(OccurrenceRequestDTO requestDTO) {
         try {
             OccurrenceResponseDTO savedOccurrence = occurrenceController.addOccurrence(requestDTO);
@@ -36,7 +35,7 @@ public class OccurrenceService {
     @GET
     @Secured({"ATHLETE", "PT", "ADMIN"})
     @Path("/{idOccurrence}")
-    public Response getOccurrences(@PathParam("idOccurrence") Long idOccurrence) {
+    public Response getOccurrence(@PathParam("idOccurrence") Long idOccurrence) {
         try{
             OccurrenceResponseDTO occurrenceDTO = occurrenceController.getOccurrenceById(idOccurrence);
             if (occurrenceDTO == null) {

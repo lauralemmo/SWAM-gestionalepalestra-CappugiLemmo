@@ -34,12 +34,13 @@ public class OccurrenceDAO {
         return occurrence;
     }
 
-     public void updateOccurrence(Occurrence occurrence){
+     public Occurrence updateOccurrence(Occurrence occurrence){
          Occurrence newO = em.merge(occurrence);
          if(newO == null){
              throw new RuntimeException("Update failed");
          }
          System.out.println("Lezione aggiornata");
+         return newO;
      }
 
      public void deleteOccurrence(Long id){

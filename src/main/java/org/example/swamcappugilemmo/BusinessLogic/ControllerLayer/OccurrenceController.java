@@ -84,8 +84,8 @@ public class OccurrenceController {
         existingOccurrence.setHours(updatedData.getHours());
 
         // Salvataggio
-        occurrenceDAO.updateOccurrence(existingOccurrence);
-        return occurrenceMapper.toDTO(existingOccurrence);
+        Occurrence o = occurrenceDAO.updateOccurrence(existingOccurrence);
+        return occurrenceMapper.toDTO(o);
     }
 
     @Transactional

@@ -31,11 +31,6 @@ public class CourseDAO {
     }
 
 
-    public Course getCourseByIdforUpdate(Long id){
-        return em.find(Course.class, id);
-    }
-
-
     public Course getCourseByOccurrence(Occurrence occurrence){
         return occurrence.getCourse();
     }

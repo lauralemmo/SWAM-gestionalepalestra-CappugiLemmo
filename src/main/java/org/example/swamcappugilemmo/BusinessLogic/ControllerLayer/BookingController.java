@@ -37,7 +37,7 @@ public class BookingController {
     public void createBooking(BookingRequestDTO request) {
         // Recupero delle entità necessarie tramite i DAO
         Athlete athlete = athleteDAO.findById(request.getAthleteId());
-        Course course = courseDAO.getCourseByIdforUpdate(request.getCourseId());
+        Course course = courseDAO.getCourseById(request.getCourseId());
 
         if (athlete == null || course == null) {
             throw new IllegalArgumentException("Atleta o Corso non trovato");

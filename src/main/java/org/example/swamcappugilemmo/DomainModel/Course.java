@@ -34,8 +34,4 @@ public class Course {
     @OneToMany(mappedBy = "course")
     private List<Booking> bookings;
 
-
-    public void addBookings(Booking booking) {
-        this.bookings.add(booking);
-    }
 }
