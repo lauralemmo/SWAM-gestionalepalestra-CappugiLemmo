@@ -37,11 +37,7 @@ public class CourseDAO {
 
 
     public Course getCourseByOccurrence(Occurrence occurrence){
-        Course course = em.find(Course.class, occurrence);
-        if (course == null) {
-            throw new IllegalArgumentException("Course with occurrence " + occurrence + " not found.");
-        }
-        return course;
+        return occurrence.getCourse();
     }
 
 

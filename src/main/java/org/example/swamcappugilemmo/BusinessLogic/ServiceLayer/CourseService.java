@@ -44,7 +44,7 @@ public class CourseService {
 
 
     @GET
-    @Path("/{id}}")
+    @Path("/{id}")
     //@Secured({"ADMIN", "ATHLETE", "PERSONAL_TRAINER"}) non serve dato che è una info pubblica
     public Response getCourseByID(@PathParam("id") Long idCourse){
         try{

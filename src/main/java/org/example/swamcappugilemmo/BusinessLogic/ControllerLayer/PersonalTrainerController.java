@@ -57,7 +57,8 @@ public class PersonalTrainerController {
         pt.setName(request.getName());
         pt.setSurname(request.getSurname());
         pt.setUsername(request.getUsername());
-        pt.setPassword(request.getPassword());
+        String hashedPassword = BCrypt.hashpw(request.getPassword(), BCrypt.gensalt());
+        pt.setPassword(hashedPassword);
         pt.setEmail(request.getEmail());
         pt.setPhone_number(request.getPhone_number());
         pt.setBirth_date(request.getBirth_date());

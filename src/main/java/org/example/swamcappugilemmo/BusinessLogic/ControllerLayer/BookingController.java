@@ -111,8 +111,8 @@ public class BookingController {
 
             boolean postoDisponibile = courseDAO.bookPlaceOnACourse(newcourse.getIdCourse());
             if (!postoDisponibile) {
-                // Se il nuovo corso è pieno, dobbiamo rimettere a posto il vecchio corso prima di fallire
-                courseDAO.bookPlaceOnACourse(course.getIdCourse());
+                //non ripristino il posto poichè il sistema dovrebbe fare rollback automatico
+                //courseDAO.bookPlaceOnACourse(course.getIdCourse()); riga eliminata
                 throw new IllegalStateException("Il nuovo corso selezionato è pieno!");
             }
 
