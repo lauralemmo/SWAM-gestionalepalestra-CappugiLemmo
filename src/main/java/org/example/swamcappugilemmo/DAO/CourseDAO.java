@@ -51,9 +51,6 @@ public class CourseDAO {
 
     public Course updateCourse(Course course){
         Course newC = em.merge(course);
-        if(newC == null){
-            throw new RuntimeException("Update failed");
-        }
         System.out.println("Corso aggiornato");
         return newC;
     }

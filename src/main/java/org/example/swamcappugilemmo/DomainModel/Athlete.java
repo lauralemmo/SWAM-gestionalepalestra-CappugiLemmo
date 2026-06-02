@@ -26,16 +26,4 @@ public class Athlete extends User{
     @OneToMany(mappedBy = "athlete", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Booking> bookings;
 
-
-
-
-    public void addSubscription(Subscription subscription){
-        this.subscriptions.add(subscription);
-    }
-
-    public void addBookings(Booking booking) {
-        this.bookings.add(booking);
-    }
-
-
 }

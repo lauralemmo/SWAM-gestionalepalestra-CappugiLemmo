@@ -54,7 +54,8 @@ public class SubscriptionController {
         }
 
         Subscription sub = subscriptionMapper.toEntity(subscriptionRequestDTO);
-        athleteDAO.createNewSubscription(athlete.getIdUser(), sub);
+        athlete.getSubscriptions().add(sub);
+        athleteDAO.updateAthlete(athlete);
         return subscriptionMapper.toDto(sub, athlete.getIdUser());
     }
 

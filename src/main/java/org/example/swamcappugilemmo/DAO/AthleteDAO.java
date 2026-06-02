@@ -30,9 +30,6 @@ public class AthleteDAO {
 
     public Athlete findById(Long id) {
         Athlete athlete = em.find(Athlete.class, id);
-        if (athlete == null) {
-            throw new IllegalArgumentException("Athlete with id " + id + " not found.");
-        }
         return athlete;
     }
 
@@ -49,21 +46,19 @@ public class AthleteDAO {
     }
 
     public Athlete findAthleteByUsername(String username) {
-        Athlete athlete;
-        athlete = em.createQuery("SELECT a FROM Athlete a WHERE a.username = :un", Athlete.class)
-                .setParameter("un", username)
-                .getSingleResult();
-        if (athlete == null) {
-            throw new IllegalArgumentException("Athlete with username " + username + " not found.");
+        try{
+            return em.createQuery("SELECT a FROM Athlete a WHERE a.username = :un", Athlete.class)
+                    .setParameter("un", username)
+                    .getSingleResult();
+        } catch(jakarta.persistence.NoResultException e){
+            return null;
+        } catch (jakarta.persistence.NonUniqueResultException e) {
+            throw new RuntimeException("Errore critico: database corrotto, trovati più atleti con lo stesso username!");
         }
-        return athlete;
     }
 
     public Athlete updateAthlete(Athlete athlete){
         Athlete newA = em.merge(athlete);
-        if(newA == null){
-            throw new RuntimeException("Update failed");
-        }
         System.out.println("Atleta aggiornato");
         return newA;
     }
@@ -78,17 +73,6 @@ public class AthleteDAO {
     }
 
 
-
-    public void createNewSubscription(Long id, Subscription subscription) {
-        Athlete athlete = findById(id);
-        if (athlete != null) {
-            athlete.addSubscription(subscription);
-            em.merge(athlete);
-        }
-        else {
-            throw new IllegalArgumentException("Athlete with id " + id + " not found.");
-        }
-    }
 
     public Subscription getActiveSubscription(String tax_code) {
         Athlete athlete = findAthleteByTaxCode(tax_code);

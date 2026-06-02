@@ -19,9 +19,9 @@ import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class AthleteController {
+
     @Inject
     private AthleteDAO athleteDAO;
-
     @Inject
     private AthleteMapper athleteMapper;
 
@@ -29,7 +29,6 @@ public class AthleteController {
     @Transactional
     public AthleteResponseDTO registerNewAthlete(AthleteRequestDTO request ) {
         Athlete newAthlete = athleteMapper.toEntity(request);
-
 
         //cripta la password prima di salvarla
         String hashedPassword = BCrypt.hashpw(request.getPassword(), BCrypt.gensalt());
@@ -46,10 +45,13 @@ public class AthleteController {
             initialSubscription.setPrice(type.getDefaultPrice());
             initialSubscription.setEnd_date(start.plusMonths(type.getMonths()));
         }
-        newAthlete.addSubscription(initialSubscription);
+
+        newAthlete.getSubscriptions().add(initialSubscription);
         athleteDAO.saveAthlete(newAthlete);
         return athleteMapper.toDto(newAthlete);
     }
+
+
 
     @Transactional
     public AthleteResponseDTO loginAthlete(String username, String password) {
@@ -61,6 +63,8 @@ public class AthleteController {
         }
     }
 
+
+
     @Transactional
     public List<AthleteResponseDTO> getAllAthletes() {
         return athleteDAO.findAll()
@@ -69,15 +73,19 @@ public class AthleteController {
                 .collect(Collectors.toList());
     }
 
+
+
     @Transactional
     public AthleteResponseDTO getAthleteById(Long id) {
         Athlete athlete = athleteDAO.findById(id);
         if (athlete != null) {
             return athleteMapper.toDto(athlete);
         } else {
-            return null;
+            throw new IllegalArgumentException("Athlete with id " + id + " not found.");
         }
     }
+
+
 
     @Transactional
     public AthleteResponseDTO getAthleteByTaxCode(String tax_code) {
@@ -89,16 +97,15 @@ public class AthleteController {
         }
     }
 
+
+
     @Transactional
     public void deleteAthlete(Long Id){
         athleteDAO.deleteAthlete(Id);
     }
 
-    //SO CHE E VOID; LASCIALO COSI PER FAVORE
-    //SO CHE E VOID; LASCIALO COSI PER FAVORE
-    //SO CHE E VOID; LASCIALO COSI PER FAVORE
-    //SO CHE E VOID; LASCIALO COSI PER FAVORE
-    //SO CHE E VOID; LASCIALO COSI PER FAVORE
+
+
     @Transactional
     public void updateAthleteUsernameSecurely(String username, String newUsername, String callerUsername, boolean isAdmin) {
         if (!isAdmin && !username.equals(callerUsername)) {
@@ -114,6 +121,8 @@ public class AthleteController {
             throw new IllegalArgumentException("Atleta non trovato o nuovo username non valido.");
         }
     }
+
+
 
     @Transactional
     public AthleteResponseDTO updateAthleteProfile(Long id, AthleteRequestDTO request, String callerUsername, boolean isAdmin) {

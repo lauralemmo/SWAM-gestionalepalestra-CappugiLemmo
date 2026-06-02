@@ -10,6 +10,7 @@ import org.example.swamcappugilemmo.BusinessLogic.ControllerLayer.PersonalTraine
 import org.example.swamcappugilemmo.BusinessLogic.DTO.PersonalTrainerRequestDTO;
 import org.example.swamcappugilemmo.BusinessLogic.DTO.PersonalTrainerResponseDTO;
 import org.example.swamcappugilemmo.Security.JwtUtil;
+import org.example.swamcappugilemmo.Security.Secured;
 
 import java.util.List;
 import java.util.Map;
@@ -21,6 +22,24 @@ import java.util.Map;
 public class PersonalTrainerService {
     @Inject
     private PersonalTrainerController personalTrainerController;
+
+
+
+    @POST
+    @Secured("ADMIN") //solo l' admin può aggiungere un nuovo personal trainer (senno si puo scegliere da solo il salario!)
+    public Response registerPersonalTrainer(PersonalTrainerRequestDTO request) {
+        try {
+            PersonalTrainerResponseDTO response = personalTrainerController.addPersonalTrainer(request);
+            return Response.status(Response.Status.CREATED)
+                    .entity(response)
+                    .build();
+        }
+        catch (IllegalArgumentException e){
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity(e.getMessage())
+                    .build();
+        }
+    }
 
 
     @GET
@@ -58,21 +77,6 @@ public class PersonalTrainerService {
         }
     }
 
-
-    @POST
-    public Response registerPersonalTrainer(PersonalTrainerRequestDTO request) {
-        try {
-            PersonalTrainerResponseDTO response = personalTrainerController.addPersonalTrainer(request);
-            return Response.status(Response.Status.CREATED)
-                    .entity(response)
-                    .build();
-        }
-        catch (IllegalArgumentException e){
-            return Response.status(Response.Status.BAD_REQUEST)
-                    .entity(e.getMessage())
-                    .build();
-        }
-    }
 
 
     @PUT
