@@ -26,6 +26,7 @@ public class AthleteService {
     @Inject
     private SubscriptionController subscriptionController;
 
+
     //=================================================POST=================================================
     @POST
     @Path("/register")
@@ -55,20 +56,26 @@ public class AthleteService {
     @POST
     @Path("/registerNewSubscription")
     @Secured({"ADMIN", "ATHLETE"})
-    public Response registerNewSubscription(SubscriptionRequestDTO request,
-                                            @Context SecurityContext securityContext){
+    public Response registerNewSubscription(SubscriptionRequestDTO request, @Context SecurityContext securityContext){
         try {
             String callerUsername = securityContext.getUserPrincipal().getName();
             boolean isAdmin = securityContext.isUserInRole("ADMIN");
 
             SubscriptionResponseDTO response = subscriptionController.createNewSubscription(request, callerUsername, isAdmin);
-            return Response.status(Response.Status.CREATED).entity(response).build();
+            return Response.status(Response.Status.CREATED)
+                    .entity(response)
+                    .build();
         } catch (IllegalArgumentException | IllegalStateException e) {
-            return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity(e.getMessage())
+                    .build();
         } catch (Exception e) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Errore interno: " + e.getMessage()).build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Errore interno: " + e.getMessage())
+                    .build();
         }
     }
+
 
     //=================================================GET=================================================
     @GET
@@ -94,9 +101,12 @@ public class AthleteService {
             AthleteResponseDTO response = athleteController.getAthleteById(id);
             return Response.ok(response).build();
         } catch (IllegalArgumentException e) {
-            return Response.status(Response.Status.NOT_FOUND).entity(e.getMessage()).build();
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity(e.getMessage())
+                    .build();
         }
     }
+
 
     @GET
     @Secured({"ADMIN"})
@@ -108,7 +118,9 @@ public class AthleteService {
             return Response.ok(response).build();
         } catch (IllegalArgumentException e) {
             // Se l'atleta non esiste, restituisce 404 Not Found
-            return Response.status(Response.Status.NOT_FOUND).entity(e.getMessage()).build();
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity(e.getMessage())
+                    .build();
         }
     }
 
@@ -126,26 +138,35 @@ public class AthleteService {
                         .entity("Nessun abbonamento attivo trovato")
                         .build();
             }
+
             return Response.ok(activeSubscription).build();
         } catch (Exception e) {
-            return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity(e.getMessage())
+                    .build();
         }
     }
 
+
+    //=================================================DELETE=================================================
     @DELETE
     @Secured({"ADMIN"})
     @Path("/{id}/delete")
     public Response deleteAthlete(@PathParam("id") Long id) {
         try {
-            // Usiamo il metodo corretto che prende il Long id
             athleteController.deleteAthlete(id);
-            return Response.noContent().build(); // Modificato
+            return Response.noContent().build();
         } catch (IllegalArgumentException e) {
-            return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity(e.getMessage())
+                    .build();
         } catch (Exception e) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity(e.getMessage())
+                    .build();
         }
     }
+
 
 //=================================================PUT=================================================
     /*@POST
@@ -163,10 +184,7 @@ public class AthleteService {
     @PUT
     @Path("/{username}/update")
     @Secured({"ATHLETE", "ADMIN"})
-    public Response updateAthleteUsername(
-            @PathParam("username") String username,
-            Map<String, String> body,
-            @Context SecurityContext securityContext) {
+    public Response updateAthleteUsername(@PathParam("username") String username, Map<String, String> body, @Context SecurityContext securityContext) {
 
         try {
             // Estraiamo i dati dal contesto e dal body (Lavoro del Service)
@@ -179,23 +197,26 @@ public class AthleteService {
 
         } catch (SecurityException e) {
             // Se il controller blocca l'utente, intercettiamo e restituiamo 403 Forbidden
-            return Response.status(Response.Status.FORBIDDEN).entity(e.getMessage()).build();
+            return Response.status(Response.Status.FORBIDDEN)
+                    .entity(e.getMessage())
+                    .build();
         } catch (IllegalArgumentException e) {
             // Se c'è un errore nei dati, restituiamo 400 Bad Request
-            return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity(e.getMessage())
+                    .build();
         } catch (Exception e) {
             // Rete di sicurezza per altri errori
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Errore interno del server").build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Errore interno del server")
+                    .build();
         }
     }
 
     @PUT
     @Path("/id/{id}/profile")
     @Secured({"ATHLETE", "ADMIN"})
-    public Response updateAthleteProfile(
-            @PathParam("id") Long id,
-            AthleteRequestDTO requestDTO,
-            @Context SecurityContext securityContext) {
+    public Response updateAthleteProfile(@PathParam("id") Long id, AthleteRequestDTO requestDTO, @Context SecurityContext securityContext) {
 
         try {
             // Estraiamo i dati dal contesto
@@ -204,17 +225,25 @@ public class AthleteService {
 
             AthleteResponseDTO updatedAthlete = athleteController.updateAthleteProfile(id, requestDTO, callerUsername, isAdmin);
             
-            return Response.status(Response.Status.OK).entity(updatedAthlete).build();
+            return Response.status(Response.Status.OK)
+                    .entity(updatedAthlete)
+                    .build();
 
         } catch (SecurityException e) {
             // Se il controller blocca l'utente, restituiamo 403 Forbidden
-            return Response.status(Response.Status.FORBIDDEN).entity(e.getMessage()).build();
+            return Response.status(Response.Status.FORBIDDEN)
+                    .entity(e.getMessage())
+                    .build();
         } catch (IllegalArgumentException e) {
             // Se c'è un errore nei dati o l'atleta non esiste, restituiamo 404
-            return Response.status(Response.Status.NOT_FOUND).entity(e.getMessage()).build();
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity(e.getMessage())
+                    .build();
         } catch (Exception e) {
             // Rete di sicurezza per altri errori
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Errore interno del server: " + e.getMessage()).build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Errore interno del server: " + e.getMessage())
+                    .build();
         }
     }
 

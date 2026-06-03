@@ -29,8 +29,7 @@ public class AthleteDAO {
     }
 
     public Athlete findById(Long id) {
-        Athlete athlete = em.find(Athlete.class, id);
-        return athlete;
+        return em.find(Athlete.class, id);
     }
 
     public Athlete findAthleteByTaxCode(String taxCode) {
@@ -65,9 +64,6 @@ public class AthleteDAO {
 
     public void deleteAthlete(Long id){
         Athlete a = em.find(Athlete.class, id);
-        if(a == null){
-            throw new RuntimeException("Atleta non trovato");
-        }
         em.remove(a);
         System.out.println("Atleta eliminato");
     }

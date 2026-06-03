@@ -25,6 +25,7 @@ public class SubscriptionController {
 
     @Transactional
     public SubscriptionResponseDTO createNewSubscription(SubscriptionRequestDTO subscriptionRequestDTO, String callerUsername, boolean isAdmin) {
+
         if (subscriptionRequestDTO.getStartDate() == null || subscriptionRequestDTO.getStartDate().isBefore(LocalDate.now())) {
             throw new IllegalArgumentException("Data di inizio non valida: deve essere oggi o in futuro.");
         }
@@ -59,10 +60,14 @@ public class SubscriptionController {
         return subscriptionMapper.toDto(sub, athlete.getIdUser());
     }
 
+
+
     @Transactional
     public Subscription getActiveSubscription(String tax_code) {
         return athleteDAO.getActiveSubscription(tax_code);
     }
+
+
 
     // vedi lo storico delle sottoscrizioni di un atleta
     @Transactional
@@ -70,10 +75,14 @@ public class SubscriptionController {
         return athleteDAO.getSubscriptions(id);
     }
 
+
+
     @Transactional
     public SubscriptionResponseDTO getActiveSubscriptionDTO(String tax_code) {
         Athlete athlete = athleteDAO.findAthleteByTaxCode(tax_code); // Recupero entità
-        if (athlete == null) return null;
+        if (athlete == null) {
+            return null;
+        }
 
         return athlete.getSubscriptions().stream()
                 .filter(Subscription::isActive) // Usa la logica del Domain Model
