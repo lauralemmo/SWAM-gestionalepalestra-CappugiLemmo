@@ -126,12 +126,12 @@ public class AthleteService {
 
 
     @GET
-    @Path("/{taxCode}/activeSubscription")
+    @Path("/{id}/activeSubscription")
     @Secured({"ATHLETE", "ADMIN"})
-    public Response getActiveSubscription(@PathParam("taxCode") String taxCode) {
+    public Response getActiveSubscription(@PathParam("id") Long idAthlete) {
         try {
             // Iniezione di SubscriptionController anziché AthleteController
-            SubscriptionResponseDTO activeSubscription = subscriptionController.getActiveSubscriptionDTO(taxCode);
+            SubscriptionResponseDTO activeSubscription = subscriptionController.getActiveSubscriptionDTO(idAthlete);
 
             if (activeSubscription == null) {
                 return Response.status(Response.Status.NOT_FOUND)

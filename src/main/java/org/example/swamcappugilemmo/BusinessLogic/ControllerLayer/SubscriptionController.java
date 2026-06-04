@@ -62,7 +62,7 @@ public class SubscriptionController {
 
 
 
-    @Transactional
+    /*@Transactional
     public Subscription getActiveSubscription(String tax_code) {
         return athleteDAO.getActiveSubscription(tax_code);
     }
@@ -73,15 +73,15 @@ public class SubscriptionController {
     @Transactional
     public List<Subscription> getSubscriptions(Long id) {
         return athleteDAO.getSubscriptions(id);
-    }
+    }*/
 
 
 
     @Transactional
-    public SubscriptionResponseDTO getActiveSubscriptionDTO(String tax_code) {
-        Athlete athlete = athleteDAO.findAthleteByTaxCode(tax_code); // Recupero entità
+    public SubscriptionResponseDTO getActiveSubscriptionDTO(Long idAthlete) {
+        Athlete athlete = athleteDAO.findById(idAthlete); // Recupero entità
         if (athlete == null) {
-            return null;
+            throw new IllegalArgumentException("Athlete with id " + idAthlete + " not found.");
         }
 
         return athlete.getSubscriptions().stream()

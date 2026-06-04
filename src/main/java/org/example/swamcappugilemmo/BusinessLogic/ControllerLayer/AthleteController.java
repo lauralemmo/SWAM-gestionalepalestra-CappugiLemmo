@@ -105,7 +105,7 @@ public class AthleteController {
         if (athlete == null) {
             throw new IllegalArgumentException("Athlete with id " + id + " not found.");
         } else {
-            athleteDAO.deleteAthlete(id);
+            athleteDAO.deleteAthlete(athlete);
         }
     }
 

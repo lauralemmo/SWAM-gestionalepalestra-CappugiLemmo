@@ -62,15 +62,14 @@ public class AthleteDAO {
         return newA;
     }
 
-    public void deleteAthlete(Long id){
-        Athlete a = em.find(Athlete.class, id);
+    public void deleteAthlete(Athlete a){
         em.remove(a);
         System.out.println("Atleta eliminato");
     }
 
 
 
-    public Subscription getActiveSubscription(String tax_code) {
+    /*public Subscription getActiveSubscription(String tax_code) {
         Athlete athlete = findAthleteByTaxCode(tax_code);
         if (athlete != null) {
             return athlete.getSubscriptions().stream()
@@ -91,7 +90,7 @@ public class AthleteDAO {
         else {
             throw new IllegalArgumentException("Athlete with id " + id + " not found.");
         }
-    }
+    }*/
 
 
 
