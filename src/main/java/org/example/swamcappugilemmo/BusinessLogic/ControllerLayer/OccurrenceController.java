@@ -3,6 +3,7 @@ package org.example.swamcappugilemmo.BusinessLogic.ControllerLayer;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
+import org.example.swamcappugilemmo.BusinessLogic.DTO.ExerciseResponseDTO;
 import org.example.swamcappugilemmo.BusinessLogic.DTO.OccurrenceRequestDTO;
 import org.example.swamcappugilemmo.BusinessLogic.DTO.OccurrenceResponseDTO;
 import org.example.swamcappugilemmo.BusinessLogic.Mapper.OccurrenceMapper;
@@ -24,7 +25,7 @@ public class OccurrenceController {
     @Inject
     private OccurrenceMapper occurrenceMapper;
 
-    @Secured({"ADMIN"}) // Solo l' admin può aggiungere nuove date
+
     @Transactional
     public OccurrenceResponseDTO addOccurrence(OccurrenceRequestDTO requestDTO) {
         try {
@@ -62,6 +63,16 @@ public class OccurrenceController {
                .collect(Collectors.toList());
    }
 
+
+    @Transactional
+    public List<OccurrenceResponseDTO> getAllOccurrences(){
+        return occurrenceDAO.getAllOccurrences()
+                .stream()
+                .map(occurrenceMapper::toDTO)
+                .collect(Collectors.toList());
+    }
+
+
    @Transactional
     public OccurrenceResponseDTO updateOccurrenceSecurely(Long idOccurrence, OccurrenceRequestDTO updatedData, String callerUsername, boolean callerRole) {
 
@@ -80,7 +91,7 @@ public class OccurrenceController {
         }
 
         // Modifica dei dati sicura
-        existingOccurrence.setDate(updatedData.getDate());
+        existingOccurrence.setDayOfWeek(updatedData.getDayOfWeek());
         existingOccurrence.setHours(updatedData.getHours());
 
         // Salvataggio

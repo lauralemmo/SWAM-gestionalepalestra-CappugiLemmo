@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Objects;
@@ -19,7 +20,10 @@ public class Occurrence {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idOccurrence;
 
-    private LocalDate date;
+    //private LocalDate date;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "dayOfWeek")
+    private DayOfWeek dayOfWeek;
     private LocalTime hours;
 
     @ManyToOne

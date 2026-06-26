@@ -4,6 +4,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.example.swamcappugilemmo.DomainModel.Course;
+import org.example.swamcappugilemmo.DomainModel.Exercise;
 import org.example.swamcappugilemmo.DomainModel.Occurrence;
 import org.example.swamcappugilemmo.DomainModel.PersonalTrainer;
 
@@ -32,6 +33,10 @@ public class OccurrenceDAO {
             throw new IllegalArgumentException("Occurrence with name " + id + " not found.");
         }
         return occurrence;
+    }
+
+    public List<Occurrence> getAllOccurrences() {
+        return em.createQuery("SELECT o FROM Occurrence o", Occurrence.class).getResultList();
     }
 
      public Occurrence updateOccurrence(Occurrence occurrence){

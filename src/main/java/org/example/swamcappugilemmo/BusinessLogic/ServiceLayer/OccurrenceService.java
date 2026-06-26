@@ -6,10 +6,13 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.SecurityContext;
 import org.example.swamcappugilemmo.BusinessLogic.ControllerLayer.OccurrenceController;
+import org.example.swamcappugilemmo.BusinessLogic.DTO.ExerciseResponseDTO;
 import org.example.swamcappugilemmo.BusinessLogic.DTO.OccurrenceRequestDTO;
 import org.example.swamcappugilemmo.BusinessLogic.DTO.OccurrenceResponseDTO;
 import org.example.swamcappugilemmo.Security.Secured;
 import jakarta.ws.rs.core.Context;
+
+import java.util.List;
 
 
 @Path("/occurrences")
@@ -47,6 +50,21 @@ public class OccurrenceService {
             return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
         }
     }
+
+
+    @GET
+    @Path("/all")
+    public Response getAllOccurrences(){
+        try{
+            List<OccurrenceResponseDTO> os = occurrenceController.getAllOccurrences();
+            return Response.ok(os).build();
+        } catch(Exception e){
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("errore interno del server")
+                    .build();
+        }
+    }
+
 
     @PUT
     @Path("/{idOccurrence}/update")

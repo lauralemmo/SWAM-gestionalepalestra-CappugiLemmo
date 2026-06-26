@@ -14,7 +14,7 @@ public class OccurrenceMapper {
             }
             OccurrenceResponseDTO dto = new OccurrenceResponseDTO();
             dto.setIdOccurrence(occurrence.getIdOccurrence());
-            dto.setDate(occurrence.getDate());
+            dto.setDayOfWeek(occurrence.getDayOfWeek());
             dto.setHours(occurrence.getHours());
             if(occurrence.getCourse() != null) {
                 dto.setCourseId(occurrence.getCourse().getIdCourse());
@@ -28,7 +28,7 @@ public class OccurrenceMapper {
                 return null;
             }
             Occurrence occurrence = new Occurrence();
-            occurrence.setDate(occurrenceRequestDTO.getDate());
+            occurrence.setDayOfWeek(occurrenceRequestDTO.getDayOfWeek());
             occurrence.setHours(occurrenceRequestDTO.getHours());
             occurrence.setCourse(course);
             return occurrence;

@@ -51,8 +51,9 @@ public class BookingController {
             throw new IllegalStateException("Sei già iscritto a questo corso!");
         }
 
-        if (course.getOccurrences().stream().noneMatch(occurrence -> occurrence.getDate()
-                .equals(request.getDate()) && occurrence.getHours().equals(request.getHours()))) {
+        if (course.getOccurrences().stream().noneMatch(occurrence ->
+                occurrence.getDayOfWeek().equals(request.getDate().getDayOfWeek())
+                        && occurrence.getHours().equals(request.getHours()))) {
             throw new IllegalArgumentException("Il corso non è disponibile in quella data e ora");
         }
 
@@ -120,8 +121,9 @@ public class BookingController {
             booking.setCourse(newcourse);
         }
 
-        if (booking.getCourse().getOccurrences().stream().noneMatch(o -> o.getDate()
-                .equals(request.getDate()) && o.getHours().equals(request.getHours()))) {
+        if (booking.getCourse().getOccurrences().stream().noneMatch(o ->
+                o.getDayOfWeek().equals(request.getDate().getDayOfWeek())
+                        && o.getHours().equals(request.getHours()))) {
             throw new IllegalArgumentException("Il corso non è disponibile nella data e ora selezionate");
         }
 
