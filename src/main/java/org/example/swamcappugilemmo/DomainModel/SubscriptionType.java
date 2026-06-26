@@ -1,10 +1,10 @@
 package org.example.swamcappugilemmo.DomainModel;
 
 public enum SubscriptionType {
-    MONTHLY(1, "9.99"),
-    QUARTERLY(3, "25.99"),
-    SEMI_ANNUAL(6, "49.99"),
-    ANNUAL(12, "89.99");
+    MONTHLY(1, "49.99"),
+    QUARTERLY(3, "119.99"),
+    SEMI_ANNUAL(6, "219.99"),
+    ANNUAL(12, "369.99");
 
     private final int months;
     private final String defaultPrice;
