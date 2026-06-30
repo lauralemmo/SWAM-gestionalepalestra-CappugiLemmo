@@ -34,9 +34,10 @@ public class BookingController {
 
 
     @Transactional
-    public void createBooking(BookingRequestDTO request) {
+    public void createBooking(BookingRequestDTO request, String callerUsername) {
         // Recupero delle entità necessarie tramite i DAO
-        Athlete athlete = athleteDAO.findById(request.getAthleteId());
+        Athlete athlete = athleteDAO.findAthleteByUsername(callerUsername);
+        request.setAthleteId(athlete.getIdUser());
         Course course = courseDAO.getCourseById(request.getCourseId());
 
         if (athlete == null || course == null) {
@@ -45,7 +46,9 @@ public class BookingController {
 
         // true se l'atleta ha già una prenotazione per quel corso
         boolean alreadyBooked = athlete.getBookings().stream()
-                .anyMatch(b -> b.getCourse().getIdCourse().equals(course.getIdCourse()));
+                .anyMatch(b -> b.getCourse().getIdCourse().equals(course.getIdCourse())
+                        && b.getDate().equals(request.getDate())
+                        && b.getHours().equals(request.getHours()));
         // se true, lancia eccezione
         if (alreadyBooked) {
             throw new IllegalStateException("Sei già iscritto a questo corso!");

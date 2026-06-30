@@ -30,9 +30,11 @@ public class BookingService {
     @POST
     @Secured({"ATHLETE"})
     @Path("/register")
-    public Response registerBooking(BookingRequestDTO request) {
+    public Response registerBooking(@Context SecurityContext securityContext,BookingRequestDTO request) {
         try {
-            bookingController.createBooking(request);
+            // Chi ha fatto la richiesta
+            String callerUsername = securityContext.getUserPrincipal().getName();
+            bookingController.createBooking(request, callerUsername);
 
             return Response.status(Response.Status.CREATED)
                     .entity("Prenotazione registrata con successo")
