@@ -79,7 +79,9 @@ public class BookingController {
         athlete.addBookings(booking);
         // Aggiunta della prenotazione al corso
         course.addBookings(booking);*/
-
+        if (request.getDate().isBefore(LocalDate.now())) {
+            throw new IllegalArgumentException("Non è possibile prenotarsi a lezioni con una data già passata");
+        }
         // Salvataggio tramite DAO
         bookingDAO.saveBooking(booking);
     }
