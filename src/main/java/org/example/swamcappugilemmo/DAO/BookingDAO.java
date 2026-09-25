@@ -6,6 +6,8 @@ import jakarta.persistence.PersistenceContext;
 import org.example.swamcappugilemmo.DomainModel.Booking;
 import org.example.swamcappugilemmo.DomainModel.Exercise;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 @ApplicationScoped
@@ -45,5 +47,12 @@ public class BookingDAO {
         System.out.println("Prenotazione eliminata");
     }
 
-
+    public long countBookingsForLesson(Long courseId, LocalDate date, LocalTime hours) {
+        return em.createQuery(
+                        "SELECT COUNT(b) FROM Booking b WHERE b.course.idCourse = :courseId AND b.date = :date AND b.hours = :hours", Long.class)
+                .setParameter("courseId", courseId)
+                .setParameter("date", date)
+                .setParameter("hours", hours)
+                .getSingleResult();
+    }
 }

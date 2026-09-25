@@ -58,6 +58,26 @@ public class BookingService {
     }
 
 //=================================================GET=================================================
+    @GET
+    @Path("/lesson-occupancy")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getLessonOccupancy(
+            @QueryParam("courseId") Long courseId,
+            @QueryParam("date") String dateStr,
+            @QueryParam("hours") String hoursStr) {
+        try {
+            java.time.LocalDate date = java.time.LocalDate.parse(dateStr);
+            java.time.LocalTime hours = java.time.LocalTime.parse(hoursStr);
+
+            // Chiedi al controller (che a sua volta userà il BookingDAO) il conteggio
+            long bookedMembers = bookingController.getBookingCountForLesson(courseId, date, hours);
+
+            // Ritorniamo una mappa che JAX-RS convertirà automaticamente in JSON: {"booked": X}
+            return Response.ok(java.util.Map.of("booked", bookedMembers)).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.BAD_REQUEST).entity("Dati non validi").build();
+        }
+    }
 
     @GET
     @Secured ({"ATHLETE", "ADMIN"})

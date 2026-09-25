@@ -29,6 +29,7 @@ public class BookingMapper {
         dto.setDate(booking.getDate());
         dto.setHours(booking.getHours());
         dto.setCourseId(booking.getCourse().getIdCourse());
+        dto.setCourseName(booking.getCourse().getName());
         dto.setAthleteId(booking.getAthlete().getIdUser());
 
         return dto;

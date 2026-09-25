@@ -19,7 +19,9 @@ public class OccurrenceMapper {
             if(occurrence.getCourse() != null) {
                 dto.setCourseId(occurrence.getCourse().getIdCourse());
                 dto.setCourseName(occurrence.getCourse().getName());
+                dto.setNumMax(occurrence.getCourse().getNumMax());
             }
+
             return dto;
         }
 

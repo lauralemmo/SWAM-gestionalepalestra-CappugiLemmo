@@ -15,4 +15,5 @@ public class OccurrenceResponseDTO {
     private LocalTime hours;
     private Long courseId;
     private String courseName;
+    private int numMax;
 }

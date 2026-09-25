@@ -13,5 +13,6 @@ public class BookingResponseDTO {
     private LocalDate date;
     private LocalTime hours;
     private Long courseId;
+    private String courseName;
     private Long athleteId;
 }

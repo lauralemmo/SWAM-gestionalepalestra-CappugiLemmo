@@ -14,6 +14,8 @@ import org.example.swamcappugilemmo.DAO.CourseDAO;
 import org.example.swamcappugilemmo.DAO.BookingDAO;
 import org.example.swamcappugilemmo.DomainModel.*;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -60,9 +62,14 @@ public class BookingController {
             throw new IllegalArgumentException("Il corso non è disponibile in quella data e ora");
         }
 
-        boolean bookPace = courseDAO.bookPlaceOnACourse(request.getCourseId());
+       /* boolean bookPace = courseDAO.bookPlaceOnACourse(request.getCourseId());
         if (!bookPace) {
             throw new IllegalStateException("Il corso è pieno");
+        }*/
+
+        long currentBookings = bookingDAO.countBookingsForLesson(request.getCourseId(), request.getDate(), request.getHours());
+        if (currentBookings >= course.getNumMax()) {
+            throw new IllegalStateException("La lezione selezionata è già al completo!");
         }
 
         // Utilizzo del Mapper per creare l'entità Booking
@@ -106,33 +113,37 @@ public class BookingController {
             throw new IllegalArgumentException("Prenotazione non trovata");
         }
 
-        Course course = booking.getCourse();
-        Course newcourse = courseDAO.getCourseById(request.getCourseId());
+        Course currentCourse = booking.getCourse();
+        Course newCourse = courseDAO.getCourseById(request.getCourseId());
 
-        if (!course.getIdCourse().equals(newcourse.getIdCourse())) {
-
-            courseDAO.deleteReservedPlace(course.getIdCourse());
-
-            boolean postoDisponibile = courseDAO.bookPlaceOnACourse(newcourse.getIdCourse());
-            if (!postoDisponibile) {
-                //non ripristino il posto poichè il sistema dovrebbe fare rollback automatico
-                //courseDAO.bookPlaceOnACourse(course.getIdCourse()); riga eliminata
-                throw new IllegalStateException("Il nuovo corso selezionato è pieno!");
-            }
-
-            // Aggiorniamo il corso all'interno dell'entità booking
-            booking.setCourse(newcourse);
+        if (newCourse == null) {
+            throw new IllegalArgumentException("Il corso selezionato non esiste");
         }
 
-        if (booking.getCourse().getOccurrences().stream().noneMatch(o ->
-                o.getDayOfWeek().equals(request.getDate().getDayOfWeek())
-                        && o.getHours().equals(request.getHours()))) {
-            throw new IllegalArgumentException("Il corso non è disponibile nella data e ora selezionate");
+        boolean lessonChanged = !currentCourse.getIdCourse().equals(newCourse.getIdCourse())
+                || !booking.getDate().equals(request.getDate())
+                || !booking.getHours().equals(request.getHours());
+
+        if (lessonChanged) {
+            // Verifichiamo se la nuova data e ora corrispondono a una lezione (occorrenza) reale del nuovo corso
+            boolean orarioValido = newCourse.getOccurrences().stream().anyMatch(o ->
+                    o.getDayOfWeek().equals(request.getDate().getDayOfWeek())
+                            && o.getHours().equals(request.getHours()));
+
+            if (!orarioValido) {
+                throw new IllegalArgumentException("Il corso non è disponibile nella data e ora selezionate");
+            }
+
+            // verifichiamo se ci sono posti disponibili nella NUOVA lezione destinazione
+            long currentBookings = bookingDAO.countBookingsForLesson(newCourse.getIdCourse(), request.getDate(), request.getHours());
+            if (currentBookings >= newCourse.getNumMax()) {
+                throw new IllegalStateException("La nuova lezione selezionata è già al completo!");
+            }
         }
 
         booking.setDate(request.getDate());
         booking.setHours(request.getHours());
-
+        booking.setCourse(newCourse);
         booking.setAthlete(athleteDAO.findById(request.getAthleteId()));
 
         Booking updatedB = bookingDAO.updateBooking(booking);
@@ -141,7 +152,7 @@ public class BookingController {
 
     @Transactional
     public void deleteBooking(Long bookingId, String callerUsername) {
-        Booking booking = bookingDAO.findBookingById(bookingId);
+        /*Booking booking = bookingDAO.findBookingById(bookingId);
 
         if (booking == null) {
             throw new IllegalArgumentException("Prenotazione non trovata");
@@ -164,8 +175,29 @@ public class BookingController {
         course.getBookings().remove(booking);
 
         // Cancellazione vera e propria della prenotazione
+        bookingDAO.deleteBooking(bookingId);*/
+        Booking booking = bookingDAO.findBookingById(bookingId);
+
+        if (booking == null) {
+            throw new IllegalArgumentException("Prenotazione non trovata");
+        }
+        if (!booking.getAthlete().getUsername().equals(callerUsername)) {
+            throw new SecurityException("Non hai il permesso di cancellare questa prenotazione");
+        }
+        if (booking.getAthlete() != null) {
+            booking.getAthlete().getBookings().remove(booking);
+        }
+
+        Course course = courseDAO.getCourseById(booking.getCourse().getIdCourse());
+        if (course != null) {
+            course.getBookings().remove(booking);
+        }
+        // Questo farà scendere automaticamente il conteggio dei posti della lezione al prossimo 'COUNT'
         bookingDAO.deleteBooking(bookingId);
     }
 
 
+    public long getBookingCountForLesson(Long courseId, LocalDate date, LocalTime hours) {
+        return bookingDAO.countBookingsForLesson(courseId, date, hours);
+    }
 }

@@ -20,7 +20,7 @@ public class Course {
     private Long version;
 
     private String name;
-    private int numMembers;
+    // private int numMembers;
     private int numMax;
 
 

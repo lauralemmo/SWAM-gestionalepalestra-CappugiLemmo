@@ -86,7 +86,7 @@ public class CourseController {
         PersonalTrainer pt = personalTrainerDAO.getPersonalTrainerById(request.getIdPersonalTrainer());
         Course course = courseDAO.getCourseById(id);
         course.setName(request.getName());
-        course.setNumMembers(request.getNumMembers());
+        //course.setNumMembers(request.getNumMembers());
         course.setNumMax(request.getNumMax());
         course.setPersonalTrainer(pt);
         Course updatedCourse = courseDAO.updateCourse(course);
