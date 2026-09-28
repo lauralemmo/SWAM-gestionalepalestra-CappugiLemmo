@@ -12,6 +12,6 @@ import java.time.LocalTime;
 public class BookingRequestDTO {
     private LocalDate date;
     private LocalTime hours;
-    private Long courseId;
+    private Long occurrenceId;
     private Long athleteId;
 }

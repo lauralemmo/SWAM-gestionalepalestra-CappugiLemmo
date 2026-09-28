@@ -8,6 +8,7 @@ import lombok.Setter;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -25,6 +26,9 @@ public class Occurrence {
     @Column(name = "dayOfWeek")
     private DayOfWeek dayOfWeek;
     private LocalTime hours;
+
+    @OneToMany(mappedBy = "occurrence")
+    private List<Booking> bookings;
 
     @ManyToOne
     @JoinColumn(name = "course_id")

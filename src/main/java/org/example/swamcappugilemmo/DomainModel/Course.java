@@ -31,7 +31,7 @@ public class Course {
     @JoinColumn(name = "personal_trainer_tax_code")
     private PersonalTrainer personalTrainer;
 
-    @OneToMany(mappedBy = "course")
-    private List<Booking> bookings;
+//    @OneToMany(mappedBy = "course")
+//    private List<Booking> bookings;
 
 }

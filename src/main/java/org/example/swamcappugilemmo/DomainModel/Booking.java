@@ -17,11 +17,14 @@ public class Booking {
     private Long idBooking;
 
     private LocalDate date;
-    private LocalTime hours;
+//    private LocalTime hours;
 
+//    @ManyToOne
+//    @JoinColumn(name = "course_id")
+//    private Course course;
     @ManyToOne
-    @JoinColumn(name = "course_id")
-    private Course course;
+    @JoinColumn(name = "occurrence_id") // Questa sarà la Foreign Key nel DB
+    private Occurrence occurrence;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "athlete_id") // Questa sarà la Foreign Key nel DB
