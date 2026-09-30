@@ -12,6 +12,8 @@ import org.example.swamcappugilemmo.DomainModel.User;
 import org.example.swamcappugilemmo.DomainModel.PersonalTrainer;
 import org.example.swamcappugilemmo.DomainModel.Athlete;
 import org.example.swamcappugilemmo.Security.JwtUtil;
+
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,7 +36,11 @@ public class AuthenticationController {
                 if (user instanceof PersonalTrainer) {
                     role = "PT";
                 } else if (user instanceof Athlete) {
-                    role = "ATHLETE";
+                    if (((Athlete) user).getSubscriptions().getLast().getStart_date().isBefore(LocalDate.now()))
+                        role = "ATHLETE";
+                    else {
+                        throw new IllegalArgumentException("Abbonamento non ancora attivo: si attiva " + ((Athlete) user).getSubscriptions().getLast().getStart_date());
+                    }
                 } else if (user instanceof Admin) {
                     role = "ADMIN";
                 } else {

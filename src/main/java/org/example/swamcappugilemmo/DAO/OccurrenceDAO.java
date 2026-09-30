@@ -2,6 +2,7 @@ package org.example.swamcappugilemmo.DAO;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.LockModeType;
 import jakarta.persistence.PersistenceContext;
 import org.example.swamcappugilemmo.DomainModel.Course;
 import org.example.swamcappugilemmo.DomainModel.Exercise;
@@ -28,7 +29,7 @@ public class OccurrenceDAO {
     }
 
     public Occurrence getOccurrenceById(Long id){
-        Occurrence occurrence = em.find(Occurrence.class, id);
+        Occurrence occurrence = em.find(Occurrence.class, id, LockModeType.PESSIMISTIC_WRITE);
         if (occurrence == null) {
             throw new IllegalArgumentException("Occurrence with name " + id + " not found.");
         }
